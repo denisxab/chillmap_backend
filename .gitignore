@@ -4,3 +4,4 @@ venv
 /html
 .vscode
 /dist
+*.sqlite3
