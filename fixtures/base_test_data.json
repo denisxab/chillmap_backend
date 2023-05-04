@@ -1,0 +1,760 @@
+[
+    {
+        "model": "admin.logentry",
+        "pk": 1,
+        "fields": {
+            "action_time": "2023-05-03T20:58:15.020Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "b89b7241-efcc-4a1a-9701-3c4401ee7f4c",
+            "object_repr": "Бар Героев: 59.86369521994118,30.159816757278403",
+            "action_flag": 2,
+            "change_message": "[]"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 1,
+        "fields": {
+            "name": "Can add log entry",
+            "content_type": 1,
+            "codename": "add_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 2,
+        "fields": {
+            "name": "Can change log entry",
+            "content_type": 1,
+            "codename": "change_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 3,
+        "fields": {
+            "name": "Can delete log entry",
+            "content_type": 1,
+            "codename": "delete_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 4,
+        "fields": {
+            "name": "Can view log entry",
+            "content_type": 1,
+            "codename": "view_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 5,
+        "fields": {
+            "name": "Can add permission",
+            "content_type": 2,
+            "codename": "add_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 6,
+        "fields": {
+            "name": "Can change permission",
+            "content_type": 2,
+            "codename": "change_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 7,
+        "fields": {
+            "name": "Can delete permission",
+            "content_type": 2,
+            "codename": "delete_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 8,
+        "fields": {
+            "name": "Can view permission",
+            "content_type": 2,
+            "codename": "view_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 9,
+        "fields": {
+            "name": "Can add group",
+            "content_type": 3,
+            "codename": "add_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 10,
+        "fields": {
+            "name": "Can change group",
+            "content_type": 3,
+            "codename": "change_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 11,
+        "fields": {
+            "name": "Can delete group",
+            "content_type": 3,
+            "codename": "delete_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 12,
+        "fields": {
+            "name": "Can view group",
+            "content_type": 3,
+            "codename": "view_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 13,
+        "fields": {
+            "name": "Can add user",
+            "content_type": 4,
+            "codename": "add_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 14,
+        "fields": {
+            "name": "Can change user",
+            "content_type": 4,
+            "codename": "change_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 15,
+        "fields": {
+            "name": "Can delete user",
+            "content_type": 4,
+            "codename": "delete_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 16,
+        "fields": {
+            "name": "Can view user",
+            "content_type": 4,
+            "codename": "view_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 17,
+        "fields": {
+            "name": "Can add content type",
+            "content_type": 5,
+            "codename": "add_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 18,
+        "fields": {
+            "name": "Can change content type",
+            "content_type": 5,
+            "codename": "change_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 19,
+        "fields": {
+            "name": "Can delete content type",
+            "content_type": 5,
+            "codename": "delete_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 20,
+        "fields": {
+            "name": "Can view content type",
+            "content_type": 5,
+            "codename": "view_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 21,
+        "fields": {
+            "name": "Can add session",
+            "content_type": 6,
+            "codename": "add_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 22,
+        "fields": {
+            "name": "Can change session",
+            "content_type": 6,
+            "codename": "change_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 23,
+        "fields": {
+            "name": "Can delete session",
+            "content_type": 6,
+            "codename": "delete_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 24,
+        "fields": {
+            "name": "Can view session",
+            "content_type": 6,
+            "codename": "view_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 25,
+        "fields": {
+            "name": "Can add Группа мест на карте",
+            "content_type": 7,
+            "codename": "add_groupplace"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 26,
+        "fields": {
+            "name": "Can change Группа мест на карте",
+            "content_type": 7,
+            "codename": "change_groupplace"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 27,
+        "fields": {
+            "name": "Can delete Группа мест на карте",
+            "content_type": 7,
+            "codename": "delete_groupplace"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 28,
+        "fields": {
+            "name": "Can view Группа мест на карте",
+            "content_type": 7,
+            "codename": "view_groupplace"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 29,
+        "fields": {
+            "name": "Can add Чем можно заняться в этом месте на карте",
+            "content_type": 8,
+            "codename": "add_whattodo"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 30,
+        "fields": {
+            "name": "Can change Чем можно заняться в этом месте на карте",
+            "content_type": 8,
+            "codename": "change_whattodo"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 31,
+        "fields": {
+            "name": "Can delete Чем можно заняться в этом месте на карте",
+            "content_type": 8,
+            "codename": "delete_whattodo"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 32,
+        "fields": {
+            "name": "Can view Чем можно заняться в этом месте на карте",
+            "content_type": 8,
+            "codename": "view_whattodo"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 33,
+        "fields": {
+            "name": "Can add Место на карте",
+            "content_type": 9,
+            "codename": "add_placeinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 34,
+        "fields": {
+            "name": "Can change Место на карте",
+            "content_type": 9,
+            "codename": "change_placeinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 35,
+        "fields": {
+            "name": "Can delete Место на карте",
+            "content_type": 9,
+            "codename": "delete_placeinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 36,
+        "fields": {
+            "name": "Can view Место на карте",
+            "content_type": 9,
+            "codename": "view_placeinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 37,
+        "fields": {
+            "name": "Can add Справочник места расположения",
+            "content_type": 10,
+            "codename": "add_arialinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 38,
+        "fields": {
+            "name": "Can change Справочник места расположения",
+            "content_type": 10,
+            "codename": "change_arialinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 39,
+        "fields": {
+            "name": "Can delete Справочник места расположения",
+            "content_type": 10,
+            "codename": "delete_arialinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 40,
+        "fields": {
+            "name": "Can view Справочник места расположения",
+            "content_type": 10,
+            "codename": "view_arialinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 41,
+        "fields": {
+            "name": "Can add Мета информация о месте",
+            "content_type": 11,
+            "codename": "add_metageom"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 42,
+        "fields": {
+            "name": "Can change Мета информация о месте",
+            "content_type": 11,
+            "codename": "change_metageom"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 43,
+        "fields": {
+            "name": "Can delete Мета информация о месте",
+            "content_type": 11,
+            "codename": "delete_metageom"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 44,
+        "fields": {
+            "name": "Can view Мета информация о месте",
+            "content_type": 11,
+            "codename": "view_metageom"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 45,
+        "fields": {
+            "name": "Can add Справочник места расположения",
+            "content_type": 9,
+            "codename": "add_arialinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 46,
+        "fields": {
+            "name": "Can change Справочник места расположения",
+            "content_type": 9,
+            "codename": "change_arialinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 47,
+        "fields": {
+            "name": "Can delete Справочник места расположения",
+            "content_type": 9,
+            "codename": "delete_arialinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 48,
+        "fields": {
+            "name": "Can view Справочник места расположения",
+            "content_type": 9,
+            "codename": "view_arialinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 49,
+        "fields": {
+            "name": "Can add Группа предназначения мест на карте",
+            "content_type": 8,
+            "codename": "add_groupplace"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 50,
+        "fields": {
+            "name": "Can change Группа предназначения мест на карте",
+            "content_type": 8,
+            "codename": "change_groupplace"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 51,
+        "fields": {
+            "name": "Can delete Группа предназначения мест на карте",
+            "content_type": 8,
+            "codename": "delete_groupplace"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 52,
+        "fields": {
+            "name": "Can view Группа предназначения мест на карте",
+            "content_type": 8,
+            "codename": "view_groupplace"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 53,
+        "fields": {
+            "name": "Can add Мета информация о месте",
+            "content_type": 10,
+            "codename": "add_metageom"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 54,
+        "fields": {
+            "name": "Can change Мета информация о месте",
+            "content_type": 10,
+            "codename": "change_metageom"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 55,
+        "fields": {
+            "name": "Can delete Мета информация о месте",
+            "content_type": 10,
+            "codename": "delete_metageom"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 56,
+        "fields": {
+            "name": "Can view Мета информация о месте",
+            "content_type": 10,
+            "codename": "view_metageom"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 57,
+        "fields": {
+            "name": "Can add Чем можно заняться в этом месте на карте",
+            "content_type": 7,
+            "codename": "add_whattodo"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 58,
+        "fields": {
+            "name": "Can change Чем можно заняться в этом месте на карте",
+            "content_type": 7,
+            "codename": "change_whattodo"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 59,
+        "fields": {
+            "name": "Can delete Чем можно заняться в этом месте на карте",
+            "content_type": 7,
+            "codename": "delete_whattodo"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 60,
+        "fields": {
+            "name": "Can view Чем можно заняться в этом месте на карте",
+            "content_type": 7,
+            "codename": "view_whattodo"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 61,
+        "fields": {
+            "name": "Can add Место на карте",
+            "content_type": 11,
+            "codename": "add_placeinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 62,
+        "fields": {
+            "name": "Can change Место на карте",
+            "content_type": 11,
+            "codename": "change_placeinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 63,
+        "fields": {
+            "name": "Can delete Место на карте",
+            "content_type": 11,
+            "codename": "delete_placeinmap"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 64,
+        "fields": {
+            "name": "Can view Место на карте",
+            "content_type": 11,
+            "codename": "view_placeinmap"
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$3ASdDQCSbwnGDfzmFnXcIa$sH61I32RGjdmPMQLWBiiCz9kDrxKAR1gPqREw+sLwGY=",
+            "last_login": "2023-05-03T20:55:18.024Z",
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-05-03T20:55:13.168Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 1,
+        "fields": { "app_label": "admin", "model": "logentry" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 2,
+        "fields": { "app_label": "auth", "model": "permission" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 3,
+        "fields": { "app_label": "auth", "model": "group" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 4,
+        "fields": { "app_label": "auth", "model": "user" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 5,
+        "fields": { "app_label": "contenttypes", "model": "contenttype" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 6,
+        "fields": { "app_label": "sessions", "model": "session" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 7,
+        "fields": { "app_label": "api", "model": "whattodo" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 8,
+        "fields": { "app_label": "api", "model": "groupplace" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 9,
+        "fields": { "app_label": "api", "model": "arialinmap" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 10,
+        "fields": { "app_label": "api", "model": "metageom" }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 11,
+        "fields": { "app_label": "api", "model": "placeinmap" }
+    },
+    {
+        "model": "sessions.session",
+        "pk": "dgoq6n11mhjyjv280vcwr5r656svshc7",
+        "fields": {
+            "session_data": ".eJxVjDsOwjAQBe_iGln24h-U9DmDtbu2cQA5UpxUiLuTSCmgfTPz3iLiutS49jzHMYmr0OL0uxHyM7cdpAe2-yR5ass8ktwVedAuhynl1-1w_w4q9rrVxlEmwGDNBcCSghScQzDelFwSoaMARisfwsaArdPqzIWLB0YkzOLzBdayOBo:1puJVO:ViTYqp-fjdhyjwyMT51VOD6f50pysiAzHebqV2jCsSM",
+            "expire_date": "2023-05-17T20:55:18.109Z"
+        }
+    },
+    {
+        "model": "api.whattodo",
+        "pk": "3ac9e968-2f12-4235-8b6c-312e11d36ae9",
+        "fields": { "todo": "Подумать" }
+    },
+    {
+        "model": "api.whattodo",
+        "pk": "5645c385-23f3-42bf-b5bb-bdb98f0f15c3",
+        "fields": { "todo": "Выпить" }
+    },
+    {
+        "model": "api.whattodo",
+        "pk": "8ae8fb78-23b0-4965-b7f6-932a3397bb9a",
+        "fields": { "todo": "Потанцевать" }
+    },
+    {
+        "model": "api.whattodo",
+        "pk": "e9b99ec5-a125-4195-8097-c2d6dc0b286a",
+        "fields": { "todo": "Помыслить" }
+    },
+    {
+        "model": "api.whattodo",
+        "pk": "f68d1442-84fc-4470-8490-d7b6b4b49d38",
+        "fields": { "todo": "Поесть" }
+    },
+    {
+        "model": "api.groupplace",
+        "pk": "7accf2fd-f2c3-44b8-bd45-4c93c10d7afb",
+        "fields": { "name": "Бар" }
+    },
+    {
+        "model": "api.groupplace",
+        "pk": "e483747b-78b6-4a05-a95f-b769805b10e3",
+        "fields": { "name": "Продуктовый_Магазин" }
+    },
+    {
+        "model": "api.arialinmap",
+        "pk": "a65f5895-472d-44be-bb10-dfda4aa3bf5c",
+        "fields": {
+            "name": "Санкт-Петербург - радиус 200км от дворцовой площади"
+        }
+    },
+    {
+        "model": "api.metageom",
+        "pk": "4e8cb2d4-0b9c-453e-96dd-10454420892a",
+        "fields": {
+            "name": "Пивные СПБ",
+            "arial_in_map": "a65f5895-472d-44be-bb10-dfda4aa3bf5c",
+            "shard": 1
+        }
+    },
+    {
+        "model": "api.metageom",
+        "pk": "5c0ed002-dba8-4363-96cf-c22c77896e96",
+        "fields": {
+            "name": "Продуктовые СПБ",
+            "arial_in_map": "a65f5895-472d-44be-bb10-dfda4aa3bf5c",
+            "shard": 1
+        }
+    },
+    {
+        "model": "api.placeinmap",
+        "pk": "6f598670-38b1-4524-bd09-0ed6314a353c",
+        "fields": {
+            "cord_x": "59.865411294740454",
+            "cord_y": "30.159816757278403",
+            "simpl_name": "Пивная",
+            "rating": 1,
+            "address": "просп. Героев, 23, Санкт-Петербург",
+            "meta_geomap": "4e8cb2d4-0b9c-453e-96dd-10454420892a",
+            "what_todo": "3ac9e968-2f12-4235-8b6c-312e11d36ae9",
+            "group_place": []
+        }
+    },
+    {
+        "model": "api.placeinmap",
+        "pk": "9ed82d2b-b9a1-43c9-b177-2fce189c2e10",
+        "fields": {
+            "cord_x": "59.86369521994118",
+            "cord_y": "30.16211789237823",
+            "simpl_name": "Бар Героев",
+            "rating": 1,
+            "address": "просп. Героев, 23, Санкт-Петербург",
+            "meta_geomap": "4e8cb2d4-0b9c-453e-96dd-10454420892a",
+            "what_todo": "3ac9e968-2f12-4235-8b6c-312e11d36ae9",
+            "group_place": ["e483747b-78b6-4a05-a95f-b769805b10e3"]
+        }
+    }
+]

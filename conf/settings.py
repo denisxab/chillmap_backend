@@ -28,6 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
+LOG_DIR = BASE_DIR / "log"
+LOG_DIR.mkdir(exist_ok=True)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "django_filters",
     "api",
 ]
 
@@ -132,3 +136,24 @@ if DEBUG:
     }
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+
+    # Логировать все SQL запросы
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+            },
+            "file": {
+                "class": "logging.FileHandler",
+                "filename": str(LOG_DIR / "logfile_sql.log"),
+            },
+        },
+        "loggers": {
+            "django.db.backends": {
+                "handlers": ["console", "file"],
+                "level": "DEBUG",
+            },
+        },
+    }

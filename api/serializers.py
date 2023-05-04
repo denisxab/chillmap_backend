@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import serializers
 
-from api.models.geomap import GroupPlace, PlaceInMap, WhatTodo
+from api.models.geomap import ArialInMap, GroupPlace, MetaGeom, PlaceInMap, WhatTodo
 
 
 class BaseSerializers(serializers.ModelSerializer):
@@ -42,6 +42,32 @@ class GroupPlaceSerializers(BaseSerializers):
         url = "group_place"
 
 
+class ArialInMapSerializers(BaseSerializers):
+    """Сериализация модели ArialInMap"""
+
+    class Meta:
+        model = ArialInMap
+        fields = (*BaseSerializers.Meta.fields, "name")
+        url = "arial_in_map"
+
+
+class MetaGeomSerializers(BaseSerializers):
+    """Сериализация модели  MetaGeom"""
+
+    arial_in_map_obj = ArialInMapSerializers(source="arial_in_map", read_only=True)
+
+    class Meta:
+        model = MetaGeom
+        fields = (
+            *BaseSerializers.Meta.fields,
+            "name",
+            "arial_in_map",
+            "arial_in_map_obj",
+            "shard",
+        )
+        url = "meta_geomap"
+
+
 class PlaceInMapSerializers(BaseSerializers):
     """Сериализация модели PlaceInMap"""
 
@@ -49,6 +75,8 @@ class PlaceInMapSerializers(BaseSerializers):
     group_place_obj = GroupPlaceSerializers(
         source="group_place", read_only=True, many=True
     )
+
+    meta_geomap_obj = MetaGeomSerializers(source="meta_geomap", read_only=True)
 
     class Meta:
         model = PlaceInMap
@@ -59,6 +87,8 @@ class PlaceInMapSerializers(BaseSerializers):
             "simpl_name",
             "rating",
             "address",
+            "meta_geomap",
+            "meta_geomap_obj",
             "what_todo",
             "what_todo_obj",
             "group_place",

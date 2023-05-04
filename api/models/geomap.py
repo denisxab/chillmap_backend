@@ -1,8 +1,6 @@
 import uuid
-from typing import Type
 
 from django.contrib.gis.db import models
-from django.db.models.manager import BaseManager
 
 
 class BaseModel(models.Model):
@@ -32,14 +30,48 @@ class WhatTodo(BaseModel):
 
 
 class GroupPlace(BaseModel):
-    """Группа мест на карте"""
+    """Группа предназначения мест на карте"""
 
-    name = models.CharField("Короткое группы", max_length=30, default="")
+    name = models.CharField(
+        "Короткое имя предназначения группы", max_length=30, default=""
+    )
 
     class Meta:
-        verbose_name = "Группа мест на карте"
-        verbose_name_plural = "Группы мест на карте"
+        verbose_name = "Группа предназначения мест на карте"
+        verbose_name_plural = "Группы предназначения мест на карте"
         db_table = "group_place"
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class ArialInMap(BaseModel):
+    """Справочник места расположения"""
+
+    name = models.CharField("Имя места расположения мест", max_length=254)
+
+    class Meta:
+        verbose_name = "Справочник места расположения"
+        verbose_name_plural = "Справочник мест расположения"
+        db_table = "arial_in_map"
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class MetaGeom(BaseModel):
+    """Мета информация о месте"""
+
+    name = models.CharField("Имя группы мест", max_length=254)
+    arial_in_map = models.ForeignKey(
+        to=ArialInMap, related_name="arial_in_map", on_delete=models.PROTECT
+    )
+    shard = models.SmallIntegerField("Номер шарда", default=1)
+
+    class Meta:
+        verbose_name = "Мета информация о месте"
+        verbose_name_plural = "Мета информация о местах"
+        db_table = "meta_geomap"
 
     def __str__(self) -> str:
         return self.name
@@ -53,13 +85,20 @@ class PlaceInMap(BaseModel):
     cord_x = models.CharField(max_length=18)
     cord_y = models.CharField(max_length=18)
 
-    simpl_name = models.CharField("Короткое имя", max_length=30, default="")
+    simpl_name = models.CharField("Короткое имя", max_length=30)
     rating = models.SmallIntegerField(
         "Рейтинг места",
         default=1,
         choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")],
     )
     address = models.CharField("Адрес места", max_length=255, default="")
+    meta_geomap = models.ForeignKey(
+        to=MetaGeom,
+        related_name="meta_geomap",
+        on_delete=models.PROTECT,
+        blank=True,
+    )
+
     what_todo = models.ForeignKey(
         to=WhatTodo,
         related_name="what_todo",
