@@ -19,3 +19,6 @@ build_dev:
 
 run_dev:
 	make _mv_dev_to_root ; docker-compose -f ./docker-compose_dev.yml up & sleep 5 && make _mv_root_to_dev
+
+down_dev:
+	make _mv_dev_to_root ; docker-compose -f ./docker-compose_dev.yml down & sleep 5 && make _mv_root_to_dev
