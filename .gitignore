@@ -8,3 +8,4 @@ venv
 .vagrant
 *.log
 /pgdata
+front_vue/node_modules
