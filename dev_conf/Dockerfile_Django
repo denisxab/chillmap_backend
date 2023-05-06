@@ -16,13 +16,13 @@ RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi --no-root
 
 # Копирование остальных файлов приложения в рабочую директорию
-COPY . .
+COPY ./backend/ .
 
 # Установка переменной среды, чтобы вывод не буферизовался
 ENV PYTHONUNBUFFERED=1
 
 # Запуск команды по умолчанию
-CMD python ./backend/manage.py migrate && \ 
+CMD python manage.py migrate && \ 
     make css_to_drf && \
     make loaddata_api && \
-    python ./backend/manage.py runserver 0.0.0.0:8181
+    python manage.py runserver 0.0.0.0:8181

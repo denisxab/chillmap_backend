@@ -92,8 +92,8 @@ class PlaceInMap(ModelUUID):
     Место на карте
     """
 
-    cord_x = models.CharField(max_length=18)
-    cord_y = models.CharField(max_length=18)
+    cord_x = models.CharField(max_length=20)
+    cord_y = models.CharField(max_length=20)
 
     simpl_name = models.CharField("Короткое имя", max_length=30)
     rating = models.SmallIntegerField(
