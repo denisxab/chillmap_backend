@@ -1,0 +1,10 @@
+__pycache__
+log
+venv
+/html
+.vscode
+/dist
+*.sqlite3
+.vagrant
+*.log
+/pgdata

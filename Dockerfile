@@ -7,6 +7,8 @@ WORKDIR /app
 # Копирование файла зависимостей в рабочую директорию
 COPY pyproject.toml poetry.lock ./
 
+RUN apt install -y make
+
 # Установка Poetry
 RUN pip install --no-cache-dir poetry
 
@@ -21,4 +23,7 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # Запуск команды по умолчанию
-CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8181"]
+CMD python manage.py migrate && \ 
+    make css_to_drf && \
+    make loaddata && \
+    python manage.py runserver 0.0.0.0:8181

@@ -1,26 +1,45 @@
+# Версия Docker Compose
 version: '3.8'
 
+# Описание сервисов
 services:
+  # Описание сервиса "app"
   app:
-    build: .
+    # Настройки сборки образа
+    build:
+      context: .
+    # Автоматически перезапускать контейнер при его остановке
     restart: always
+    # Пробрасывание порта
     ports:
       - "8181:8181"
+    # Примонтирование локальной директории к контейнеру
     volumes:
       - .:/app
+    # Переменные окружения
     environment:
-      - PYTHONUNBUFFERED=1
-      - POSTGRES_HOST=db
-      - POSTGRES_PORT=5432
+      POSTGRES_HOST: db # Хост для подключения к БД
+      POSTGRES_USER: ${POSTGRES_USER} # Пользователь для подключения к БД (переменная из файла .env)
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Пароль для подключения к БД (переменная из файла .env)
+      POSTGRES_DB: ${POSTGRES_DB} # Имя БД (переменная из файла .env)
+      POSTGRES_PORT: ${POSTGRES_PORT} # Порт для подключения к БД (переменная из файла .env)
+    depends_on:
+      - db
 
+  # Описание сервиса "db"
   db:
+    # Использование готового образа
     image: postgres:12
+    # Автоматически перезапускать контейнер при его остановке
     restart: always
+    # Переменные окружения
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: app
+      POSTGRES_USER: ${POSTGRES_USER} # Пользователь для подключения к БД (переменная из файла .env)
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Пароль для подключения к БД (переменная из файла .env)
+      POSTGRES_DB: ${POSTGRES_DB} # Имя БД (переменная из файла .env)
+    # Примонтирование локальной директории к контейнеру
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    # Пробрасывание порта
     ports:
       - "8182:5432"

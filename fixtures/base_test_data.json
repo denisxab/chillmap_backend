@@ -638,23 +638,8 @@
     },
     {
         "model": "contenttypes.contenttype",
-        "pk": 7,
-        "fields": { "app_label": "api", "model": "whattodo" }
-    },
-    {
-        "model": "contenttypes.contenttype",
         "pk": 8,
         "fields": { "app_label": "api", "model": "groupplace" }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 9,
-        "fields": { "app_label": "api", "model": "arialinmap" }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 10,
-        "fields": { "app_label": "api", "model": "metageom" }
     },
     {
         "model": "contenttypes.contenttype",
