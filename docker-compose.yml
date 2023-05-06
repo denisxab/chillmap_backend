@@ -47,28 +47,29 @@ services:
 
   # Описание сервиса "vue-dev"
   vue-dev:
-    # Использование готового образа
-    image: node:alpine
-    # Команда для запуска dev сервера для Vue
-    command: sh -c "npm install && npm run serve"
+    build:
+      context: .
+      dockerfile: Dockerfile_Vue
+    volumes:
+      - ./front_vue:/app
+      - /app/node_modules
+    ports:
+      - "${HOST_PORT_VUE_SERVER}:8080"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  # Описание сервиса "nginx"
+  nginx:
+    # Использование готового оброза
+    image: nginx:alpine
     # Автоматически перезапускать контейнер при его остановке
     restart: always
     # Пробрасывание порта
     ports:
-      - "${HOST_PORT_VUE_SERVER}:8080"
+      - "${HOST_PORT_NGINX}:80"
     # Примонтирование локальной директории к контейнеру
     volumes:
-      - ./front_vue:/app
+      - ./front_vue/static:/usr/share/nginx/html
 
-  # Описание сервиса "nginx"
-  # nginx:
-  #   # Использование готового оброза
-  #   image: nginx:alpine
-  #   # Автоматически перезапускать контейнер при его остановке
-  #   restart: always
-  #   # Пробрасывание порта
-  #   ports:
-  #     - "${HOST_PORT_NGINX}:80"
-  #   # Примонтирование локальной директории к контейнеру
-  #   volumes:
-  #     - ./front_vue/static:/usr/share/nginx/html
+networks:
+  default:

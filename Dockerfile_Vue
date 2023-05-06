@@ -1,0 +1,20 @@
+# Используйте LTS-версию образа node на базе alpine
+FROM node:alpine
+
+# Установите рабочую директорию
+WORKDIR /app
+
+# Копируйте package.json и package-lock.json
+COPY front_vue/package*.json ./
+
+# Удалите .npmrc, если он существует, и очистите кэш npm
+RUN rm -f .npmrc && npm cache clean --force
+
+# Установите зависимости
+RUN npm install --force
+
+# Копируйте остальные файлы проекта
+COPY front_vue/ .
+
+# Запустите dev сервер Vue.js
+CMD ["npm", "run", "serve"]
