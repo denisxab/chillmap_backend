@@ -5,3 +5,6 @@ venv
 .vscode
 /dist
 *.sqlite3
+.vagrant
+*.log
+/pgdata
