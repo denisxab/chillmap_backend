@@ -4,46 +4,46 @@ version: '3.8'
 # Описание сервисов
 services:
   # Описание сервиса "app"
-  # app:
-  #   # Настройки сборки образа
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile_Django
-  #   # Автоматически перезапускать контейнер при его остановке
-  #   restart: always
-  #   # Пробрасывание порта
-  #   ports:
-  #     - "${HOST_PORT_DJANGO}:8181"
-  #   # Примонтирование локальной директории к контейнеру
-  #   volumes:
-  #     - .:/app
-  #   # Переменные окружения
-  #   environment:
-  #     POSTGRES_HOST: db # Хост для подключения к БД
-  #     POSTGRES_USER: ${POSTGRES_USER} # Пользователь для подключения к БД (переменная из файла .env)
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Пароль для подключения к БД (переменная из файла .env)
-  #     POSTGRES_DB: ${POSTGRES_DB} # Имя БД (переменная из файла .env)
-  #     POSTGRES_PORT: ${POSTGRES_PORT} # Порт для подключения к БД (переменная из файла .env)
-  #   depends_on:
-  #     - db
+  app:
+    # Настройки сборки образа
+    build:
+      context: .
+      dockerfile: Dockerfile_Django
+    # Автоматически перезапускать контейнер при его остановке
+    restart: always
+    # Пробрасывание порта
+    ports:
+      - "${HOST_PORT_DJANGO}:8181"
+    # Примонтирование локальной директории к контейнеру
+    volumes:
+      - .:/app
+    # Переменные окружения
+    environment:
+      POSTGRES_HOST: db # Хост для подключения к БД
+      POSTGRES_USER: ${POSTGRES_USER} # Пользователь для подключения к БД (переменная из файла .env)
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Пароль для подключения к БД (переменная из файла .env)
+      POSTGRES_DB: ${POSTGRES_DB} # Имя БД (переменная из файла .env)
+      POSTGRES_PORT: ${POSTGRES_PORT} # Порт для подключения к БД (переменная из файла .env)
+    depends_on:
+      - db
 
-  # # Описание сервиса "db"
-  # db:
-  #   # Использование готового образа
-  #   image: postgres:12-alpine
-  #   # Автоматически перезапускать контейнер при его остановке
-  #   restart: always
-  #   # Переменные окружения
-  #   environment:
-  #     POSTGRES_USER: ${POSTGRES_USER} # Пользователь для подключения к БД (переменная из файла .env)
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Пароль для подключения к БД (переменная из файла .env)
-  #     POSTGRES_DB: ${POSTGRES_DB} # Имя БД (переменная из файла .env)
-  #   # Примонтирование локальной директории к контейнеру
-  #   volumes:
-  #     - ./pgdata:/var/lib/postgresql/data
-  #   # Пробрасывание порта
-  #   ports:
-  #     - "${HOST_PORT_POSTGRESQL}:5432"
+  # Описание сервиса "db"
+  db:
+    # Использование готового образа
+    image: postgres:12-alpine
+    # Автоматически перезапускать контейнер при его остановке
+    restart: always
+    # Переменные окружения
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER} # Пользователь для подключения к БД (переменная из файла .env)
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Пароль для подключения к БД (переменная из файла .env)
+      POSTGRES_DB: ${POSTGRES_DB} # Имя БД (переменная из файла .env)
+    # Примонтирование локальной директории к контейнеру
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    # Пробрасывание порта
+    ports:
+      - "${HOST_PORT_POSTGRESQL}:5432"
 
   # Описание сервиса "vue-dev"
   vue-dev:
