@@ -1,8 +1,8 @@
-dump:
-	python manage.py dumpdata > fixtures/base_test_data.json
+dump_api:
+	python manage.py dumpdata api > fixtures/api.json
 
-loaddata:
-	python manage.py loaddata fixtures/base_test_data.json
+loaddata_api:
+	python manage.py loaddata fixtures/api.json
 
 # Установить стили для панели DRF
 css_to_drf:

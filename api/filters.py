@@ -10,4 +10,4 @@ class PlaceInMapFilter(filters.FilterSet):
 
     class Meta:
         model = PlaceInMap
-        fields = ("simpl_name", "what_todo")
+        fields = ("simpl_name", "what_todo", "group_place", "meta_geomap")

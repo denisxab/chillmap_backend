@@ -3,11 +3,11 @@ import uuid
 from django.db import models
 
 
-class BaseModel(models.Model):
+class ModelUUID(models.Model):
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
-        verbose_name="Идентификатор записи",
+        verbose_name="Идентификатор записи UUIDv4",
         editable=True,
     )
 
@@ -15,21 +15,31 @@ class BaseModel(models.Model):
         abstract = True
 
 
-class WhatTodo(BaseModel):
+class ModelInteger(models.Model):
+    id = models.IntegerField(
+        primary_key=True,
+        verbose_name="Идентификатор записи Int",
+    )
+
+    class Meta:
+        abstract = True
+
+
+class WhatTodo(ModelInteger):
     """Чем можно заняться в этом месте на карте"""
 
     todo = models.CharField(max_length=30)
 
     class Meta:
-        verbose_name = "Чем можно заняться в этом месте на карте"
-        verbose_name_plural = "Чем можно заняться в этих местах на карте"
+        verbose_name = "Чем можно заняться в этом месте"
+        verbose_name_plural = "Чем можно заняться в этих местах"
         db_table = "what_todo"
 
     def __str__(self) -> str:
         return self.todo
 
 
-class GroupPlace(BaseModel):
+class GroupPlace(ModelInteger):
     """Группа предназначения мест на карте"""
 
     name = models.CharField(
@@ -37,15 +47,15 @@ class GroupPlace(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Группа предназначения мест на карте"
-        verbose_name_plural = "Группы предназначения мест на карте"
+        verbose_name = "Группа предназначения места"
+        verbose_name_plural = "Группы предназначения мест"
         db_table = "group_place"
 
     def __str__(self) -> str:
         return self.name
 
 
-class ArialInMap(BaseModel):
+class ArialInMap(ModelInteger):
     """Справочник места расположения"""
 
     name = models.CharField("Имя места расположения мест", max_length=254)
@@ -59,7 +69,7 @@ class ArialInMap(BaseModel):
         return self.name
 
 
-class MetaGeom(BaseModel):
+class MetaGeom(ModelInteger):
     """Мета информация о месте"""
 
     name = models.CharField("Имя группы мест", max_length=254)
@@ -77,7 +87,7 @@ class MetaGeom(BaseModel):
         return self.name
 
 
-class PlaceInMap(BaseModel):
+class PlaceInMap(ModelUUID):
     """
     Место на карте
     """
@@ -113,8 +123,8 @@ class PlaceInMap(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Место на карте"
-        verbose_name_plural = "Места на карте"
+        verbose_name = "Место"
+        verbose_name_plural = "Места"
         db_table = "place_in_map"
         unique_together = ("cord_x", "cord_y")
 

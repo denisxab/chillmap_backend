@@ -4,13 +4,11 @@ from rest_framework import serializers
 from api.models.geomap import ArialInMap, GroupPlace, MetaGeom, PlaceInMap, WhatTodo
 
 
-class BaseSerializers(serializers.ModelSerializer):
-    id = serializers.UUIDField(read_only=True, label="Идентификатор записи.")
+class MixinUrl(serializers.Serializer):
     self_url = serializers.SerializerMethodField(label="Ссылка на текущий объект.")
 
     class Meta:
-        model = GroupPlace
-        fields = ("id", "self_url")
+        fields = ("self_url",)
 
     def get_self_url(self, obj):
         request = self.context.get("request")
@@ -18,40 +16,60 @@ class BaseSerializers(serializers.ModelSerializer):
         return request.build_absolute_uri(url)
 
 
-class WhatTodoSerializers(BaseSerializers):
+class MixinUUIDv4(serializers.Serializer):
+    id = serializers.UUIDField(read_only=True, label="Идентификатор записи UUIDv4.")
+
+    class Meta:
+        fields = ("id",)
+
+
+class MixinInteger(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True, label="Идентификатор записи Int.")
+
+    class Meta:
+        fields = ("id",)
+
+
+class WhatTodoSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
     """Сериализация модели WhatTodo"""
 
     class Meta:
         model = WhatTodo
         fields = (
-            *BaseSerializers.Meta.fields,
+            *MixinInteger.Meta.fields,
+            *MixinUrl.Meta.fields,
             "todo",
         )
         url = "what_todo"
 
 
-class GroupPlaceSerializers(BaseSerializers):
+class GroupPlaceSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
     """Сериализация модели GroupPlace"""
 
     class Meta:
         model = GroupPlace
         fields = (
-            *BaseSerializers.Meta.fields,
+            *MixinInteger.Meta.fields,
+            *MixinUrl.Meta.fields,
             "name",
         )
         url = "group_place"
 
 
-class ArialInMapSerializers(BaseSerializers):
+class ArialInMapSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
     """Сериализация модели ArialInMap"""
 
     class Meta:
         model = ArialInMap
-        fields = (*BaseSerializers.Meta.fields, "name")
+        fields = (
+            *MixinInteger.Meta.fields,
+            *MixinUrl.Meta.fields,
+            "name",
+        )
         url = "arial_in_map"
 
 
-class MetaGeomSerializers(BaseSerializers):
+class MetaGeomSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
     """Сериализация модели  MetaGeom"""
 
     arial_in_map_obj = ArialInMapSerializers(source="arial_in_map", read_only=True)
@@ -59,7 +77,8 @@ class MetaGeomSerializers(BaseSerializers):
     class Meta:
         model = MetaGeom
         fields = (
-            *BaseSerializers.Meta.fields,
+            *MixinInteger.Meta.fields,
+            *MixinUrl.Meta.fields,
             "name",
             "arial_in_map",
             "arial_in_map_obj",
@@ -68,7 +87,7 @@ class MetaGeomSerializers(BaseSerializers):
         url = "meta_geomap"
 
 
-class PlaceInMapSerializers(BaseSerializers):
+class PlaceInMapSerializers(MixinUUIDv4, MixinUrl, serializers.ModelSerializer):
     """Сериализация модели PlaceInMap"""
 
     what_todo_obj = WhatTodoSerializers(source="what_todo", read_only=True)
@@ -81,7 +100,8 @@ class PlaceInMapSerializers(BaseSerializers):
     class Meta:
         model = PlaceInMap
         fields = (
-            *BaseSerializers.Meta.fields,
+            *MixinUUIDv4.Meta.fields,
+            *MixinUrl.Meta.fields,
             "cord_x",
             "cord_y",
             "simpl_name",
