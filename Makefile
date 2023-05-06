@@ -9,7 +9,7 @@ css_to_drf:
 	cat ./utils/css_base_drf.css > /usr/local/lib/python3.11/site-packages/rest_framework/static/rest_framework/css/default.css
 
 build_dev:
-	sudo docker-compose build
+	docker-compose build
 
 run_dev:
 	docker-compose up
