@@ -1,0 +1,42 @@
+{
+    "WhenPossibleVisit": {
+        "type": "StaticWorkSchedule",
+        "data": {
+            "weekday": {
+                "Monday": { "start": "12:00", "end": "01:00" },
+                "Tuesday": { "start": "12:00", "end": "01:00" },
+                "Wednesday": { "start": "12:00", "end": "01:00" },
+                "Thursday": { "start": "12:00", "end": "01:00" },
+                "Friday": { "start": "12:00", "end": "01:00" },
+                "Saturday": { "start": "12:00", "end": "01:00" },
+                "Sunday": { "start": "12:00", "end": "01:00" }
+            }
+        }
+    },
+    "AverageCostVisit": {
+        "currency": "RUB",
+        "value": 800
+    },
+    "AveragePopulation": "ComfortableCrowd",
+    "InternetСontacts": {
+        "phones": [
+            "+7 (981) 845-14-25",
+            "+7 (981) 845-13-25",
+            "+7 (981) 845-15-25",
+            "+7 (981) 845-16-25"
+        ],
+        "website": "нету",
+        "tg": "https://t.me/Heroes_Bar_bot",
+        "vk": "https://vk.com/heroes_bar",
+        "any_social": [
+            "https://api.whatsapp.com/send/?phone=79818451425&text&type=phone_number&app_absent=0",
+            "@ints_bar"
+        ],
+        "yandex_map": "https://yandex.ru/maps/-/CCUrUXXQwC",
+        "any_link": [
+            "https://viber.click/79818451425",
+            "https://viber.click/79818451425"
+        ]
+    },
+    "FavoritesCountMore": 4
+}

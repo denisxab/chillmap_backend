@@ -1,0 +1,9 @@
+{
+    "names_radius": {
+        "1": {
+            "hum": "Санкт-Петербург - радиус 200км от дворцовой площади",
+            "name_path": "@/geomap/geomap_SPB_11.json",
+            "shard": 1
+        }
+    }
+}
