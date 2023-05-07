@@ -4,11 +4,25 @@
     { "model": "api.whattodo", "pk": 3, "fields": { "todo": "Потанцевать" } },
     { "model": "api.whattodo", "pk": 4, "fields": { "todo": "Помыслить" } },
     { "model": "api.whattodo", "pk": 5, "fields": { "todo": "Поесть" } },
-    { "model": "api.groupplace", "pk": 1, "fields": { "name": "Бар" } },
+    {
+        "model": "api.groupplace",
+        "pk": 1,
+        "fields": {
+            "name": "Бар",
+            "img_url": "@/img/point.png",
+            "img_size_w": 0.3,
+            "img_size_h": 0.3
+        }
+    },
     {
         "model": "api.groupplace",
         "pk": 2,
-        "fields": { "name": "Продуктовый_Магазин" }
+        "fields": {
+            "name": "Продуктовый_Магазин",
+            "img_url": "@/img/point.png",
+            "img_size_w": 0.3,
+            "img_size_h": 0.3
+        }
     },
     {
         "model": "api.arialinmap",

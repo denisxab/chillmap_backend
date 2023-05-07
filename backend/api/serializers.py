@@ -1,7 +1,6 @@
+from api.models.geomap import ArialInMap, GroupPlace, MetaGeom, PlaceInMap, WhatTodo
 from django.urls import reverse
 from rest_framework import serializers
-
-from api.models.geomap import ArialInMap, GroupPlace, MetaGeom, PlaceInMap, WhatTodo
 
 
 class MixinUrl(serializers.Serializer):
@@ -52,6 +51,9 @@ class GroupPlaceSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer)
             *MixinInteger.Meta.fields,
             *MixinUrl.Meta.fields,
             "name",
+            "img_url",
+            "img_size_w",
+            "img_size_h",
         )
         url = "group_place"
 

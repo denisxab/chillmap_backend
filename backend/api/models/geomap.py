@@ -8,7 +8,7 @@ class ModelUUID(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         verbose_name="Идентификатор записи UUIDv4",
-        editable=True,
+        editable=False,
     )
 
     class Meta:
@@ -18,7 +18,9 @@ class ModelUUID(models.Model):
 class ModelInteger(models.Model):
     id = models.IntegerField(
         primary_key=True,
+        default=int,
         verbose_name="Идентификатор записи Int",
+        editable=False,
     )
 
     class Meta:
@@ -45,6 +47,9 @@ class GroupPlace(ModelInteger):
     name = models.CharField(
         "Короткое имя предназначения группы", max_length=30, default=""
     )
+    img_url = models.CharField("Путь к фото маркера", default="@/img/point.png")
+    img_size_w = models.FloatField("Размер фото маркера W%", default=0.3)
+    img_size_h = models.FloatField("Размер фото маркера H%", default=0.3)
 
     class Meta:
         verbose_name = "Группа предназначения места"
@@ -92,10 +97,11 @@ class PlaceInMap(ModelUUID):
     Место на карте
     """
 
+    simpl_name = models.CharField("Короткое имя", max_length=30)
+
     cord_x = models.CharField(max_length=20)
     cord_y = models.CharField(max_length=20)
 
-    simpl_name = models.CharField("Короткое имя", max_length=30)
     rating = models.SmallIntegerField(
         "Рейтинг места",
         default=1,
