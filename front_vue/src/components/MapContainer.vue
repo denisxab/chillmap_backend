@@ -27,7 +27,7 @@ import Icon from "ol/style/Icon";
 import { toSize } from "ol/size";
 import Layer from "ol/layer/Layer";
 import Fill from "ol/style/Fill";
-import { DownloadStatic, ParseUrlSrc, TDownloadStatic } from "@/helper";
+import { DownloadFromUrl, ParseUrlSrc, TDownloadFromUrl } from "@/helper";
 import Stroke from "ol/style/Stroke";
 import MapEvent from "ol/MapEvent";
 import MapBrowserEvent from "ol/MapBrowserEvent";
@@ -279,7 +279,7 @@ export default {
         },
         // Загрузить geomap_ИмяТочкиРадиусов.json и обновить все маркеры мест на карте, в соответствие с этим файлом
         async updateSelectGeomap(url_download: string) {
-            const geomap: TDownloadStatic = await DownloadStatic(url_download);
+            const geomap: TDownloadFromUrl = await DownloadFromUrl(url_download);
             if (geomap.ok) {
                 const geomap_json = JSON.parse(await geomap.text);
                 // Убираем с карты маркеры от прошлых места
@@ -287,6 +287,7 @@ export default {
                 // Заносим Geomap в глобальное хранилище
                 this.$store.commit("geomap/Update_geomap_json", geomap_json);
                 // Отображаем места на карте
+                // TODO: !!!
                 this.ShowPlaceFromExternal(
                     this.markersLayer,
                     this.$store.state.geomap.geomap_json

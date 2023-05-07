@@ -2,10 +2,7 @@
     <div id="main_box">
         <!-- Всплывающий слой -->
         <div v-show="view_component" class="over_box">
-            <OverBox
-                @hidden_over_box="hidden_over_box"
-                :view_component="view_component"
-            />
+            <OverBox @hidden_over_box="hidden_over_box" :view_component="view_component" />
         </div>
         <!-- Блок с картой -->
         <div class="up_box">
@@ -20,30 +17,15 @@
             <!-- Кнопка для показания большей информации -->
             <div ref="d_show_map_detail" class="d_show_map_detail">
                 <!-- Стрелка вверх.  -->
-                <input
-                    class="show_map_detail"
-                    type="image"
-                    ref="show_map_detail"
-                    v-show="is_show_map_detail"
-                />
+                <input class="show_map_detail" type="image" ref="show_map_detail" v-show="is_show_map_detail" />
                 <!-- Иконка для перехода в подробную информацию о месте -->
-                <input
-                    class="show_map_detail"
-                    type="image"
-                    v-show="!is_show_map_detail"
-                    ref="show_map_detail_place"
-                    @click="ShowPlaceDetailsInfo"
-                />
+                <input class="show_map_detail" type="image" v-show="!is_show_map_detail" ref="show_map_detail_place"
+                    @click="ShowPlaceDetailsInfo" />
             </div>
             <!-- Отображает координаты, на которые было совершено нажатие мышью -->
             <div class="map_coord_click">
-                <input
-                    type="text"
-                    :value="coordinat_click"
-                    id="map_coord_click_input"
-                    placeholder="широта,долгота"
-                    readonly
-                />
+                <input type="text" :value="coordinat_click" id="map_coord_click_input" placeholder="широта,долгота"
+                    readonly />
             </div>
             <!-- Поверхностная информация о месте -->
             <div v-show="is_show_FacileFromMarker" class="map_facile_div">
@@ -74,7 +56,7 @@ import MapContainer from "@/components/MapContainer.vue";
 import FacileFromMarker from "@/components/FacileFromMarker.vue";
 import OverBox from "@/components/OverBox.vue";
 import MapBrowserEvent from "ol/MapBrowserEvent";
-import { DownloadStatic, ParseUrlSrc, TDownloadStatic, clone } from "@/helper";
+import { DownloadFromUrl, ParseUrlSrc, ParseUrlBackend, TDownloadFromUrl, clone } from "@/helper";
 import {
     TPropertiesMark,
     UrlGetParams,
@@ -88,7 +70,8 @@ import {
 export const arrow_up = ParseUrlSrc("@/img/arrow_up.svg");
 const info_from_place = ParseUrlSrc("@/img/info_from_place.svg");
 // URL для скачивания мета данных о geomap
-const meta_geomap_url = ParseUrlSrc("@/meta_data/meta_geomap_11.json");
+const meta_geomap_url = ParseUrlBackend("@/api/v1/meta_geomap/");
+const geomap_list_from_meta_url = ParseUrlBackend("@/api/v1/place/?meta_geomap=");
 
 export default {
     name: "MapApp",
@@ -159,19 +142,25 @@ export default {
         //
         this.$refs["show_map_detail"].src = arrow_up;
         this.$refs["show_map_detail_place"].src = info_from_place;
+
+
+        let default_url_geomap = null
         //
-        // Скачиваем мета данные
         //
-        const meta_geomap: TDownloadStatic = await DownloadStatic(
+        // 1. Скачиваем мета данные
+        const meta_geomap: TDownloadFromUrl = await DownloadFromUrl(
             meta_geomap_url
         );
-        let meta_geoma_josn = <Tmeta_geomapJson>{};
+        let meta_geomap_json = <Tmeta_geomapJson>{};
         if (meta_geomap.ok) {
-            meta_geoma_josn = JSON.parse(await meta_geomap.text);
-            // Обновляем в глобальном хранилище
-            this.$store.commit(`geomap/Update_meta_data_json`, meta_geoma_josn);
+            meta_geomap_json = JSON.parse(await meta_geomap.text);
+            // Сохраняем мета данные в store
+            this.$store.commit(`geomap/Update_meta_data_json`, meta_geomap_json.results);
+            // TODO: Сделать не выбор первых, а как то умнее
+            // 2. Получаем список мест в группе (* первый попавшейся)
+            default_url_geomap = geomap_list_from_meta_url + meta_geomap_json.results[0].id
         } else {
-            console.error("Ошибка: Мето данные пустые");
+            console.error("Ошибка: Мета данные пустые");
         }
         //
         // Текущие GET параметры в URL
@@ -192,9 +181,9 @@ export default {
             coord:
                 query[UrlGetParams.latitude] && query[UrlGetParams.longitude]
                     ? {
-                          latitude: query[UrlGetParams.latitude],
-                          longitude: query[UrlGetParams.longitude],
-                      }
+                        latitude: query[UrlGetParams.latitude],
+                        longitude: query[UrlGetParams.longitude],
+                    }
                     : this.$store.state.geomap.coordinat_click,
             router: this.$router,
             route: this.$route,
@@ -203,29 +192,30 @@ export default {
         // Берем ID geomap из GET параметров если есть
         //
         // Ссылка на радиус интересных мест по умолчанию
-        let default_url_geomap = undefined;
-        let id_geomap = query[UrlGetParams.geomap];
-        // Пробуем взять geomap из GET параметра
-        if (id_geomap) {
-            // Путь к файлу с geomap.json
-            default_url_geomap =
-                meta_geoma_josn.names_radius[id_geomap].name_path;
-        }
+        // let default_url_geomap = undefined;
+        // let id_geomap = query[UrlGetParams.geomap];
+        // // Пробуем взять geomap из GET параметра
+        // if (id_geomap) {
+        //     // Путь к файлу с geomap.json
+        //     default_url_geomap =
+        //         meta_geomap_json.names_radius[id_geomap].name_path;
+        // }
         // Иначе, по умолчанию берем первый geomap из мета данных
-        else {
-            const geomap = <[string, Tmeta_geomapJson_names_radius]>(
-                Object.entries(meta_geoma_josn.names_radius)[0]
-            );
-            // Путь к файлу с geomap.json
-            default_url_geomap = geomap[1].name_path;
-            // Обновляем выделенную группу
-            this.$store.dispatch(`geomap/Update_select_geomap_id`, {
-                // Фокусируемся на координатах которые были переданы в GET параметрах
-                geomap_id: geomap[0],
-                router: this.$router,
-                route: this.$route,
-            });
-        }
+        // else {
+        //     // TODO: Исправить
+        //     const geomap = <[string, Tmeta_geomapJson_names_radius]>(
+        //         Object.entries(meta_geomap_json.names_radius)[0]
+        //     );
+        //     // Путь к файлу с geomap.json
+        //     default_url_geomap = geomap[1].name_path;
+        //     // Обновляем выделенную группу
+        //     this.$store.dispatch(`geomap/Update_select_geomap_id`, {
+        //         // Фокусируемся на координатах которые были переданы в GET параметрах
+        //         geomap_id: geomap[0],
+        //         router: this.$router,
+        //         route: this.$route,
+        //     });
+        // }
         this.$store.commit(`geomap/Update_url_geomap`, default_url_geomap);
         //
         // Обновляем  GET параметры в URL
@@ -265,6 +255,7 @@ export default {
     .up_box {
         flex-basis: 100%;
     }
+
     .down_box {
         position: absolute;
         left: 0px;
@@ -276,6 +267,7 @@ export default {
         .d_show_map_detail {
             margin-bottom: 3px;
             text-align: end;
+
             .show_map_detail {
                 border: none;
                 width: 3rem;
@@ -284,11 +276,13 @@ export default {
                 right: 4px;
             }
         }
+
         .map_coord_click,
         .map_set_coord {
             text-align: center;
             background-color: $ЦветФона;
             padding-top: 4px;
+
             input {
                 font-size: medium;
                 border-radius: 4px;
@@ -301,6 +295,7 @@ export default {
                 outline: none;
             }
         }
+
         .map_set_coord {
             input {
                 color: $ЯркоеВыделение2;
@@ -310,8 +305,8 @@ export default {
         .map_facile_div {
             background: $ЦветФона;
         }
-        .map_detail {
-        }
+
+        .map_detail {}
     }
 }
 </style>

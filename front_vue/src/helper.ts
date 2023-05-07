@@ -8,13 +8,19 @@ export function ParseUrlSrc(url_src: string) {
     return url_src.replace("@/", ENV_default_host_to_src);
 }
 
+// Если в url нет `@/` то тогда оставить его без изменений
+export function ParseUrlBackend(url_src: string) {
+    // @ts-ignore
+    return url_src.replace("@/", ENV_default_host_to_backend);
+}
+
 // Скачать статический файл указанному URL
-export interface TDownloadStatic {
+export interface TDownloadFromUrl {
     text: Promise<string>;
     ok: boolean;
     status: number;
 }
-export async function DownloadStatic(url_src: string) {
+export async function DownloadFromUrl(url_src: string) {
     const response = await fetch(url_src, {
         method: "GET",
     });

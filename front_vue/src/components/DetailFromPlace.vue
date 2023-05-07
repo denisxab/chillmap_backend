@@ -40,9 +40,9 @@ import {
     TInternetСontacts,
 } from "@/interface";
 import {
-    DownloadStatic,
+    DownloadFromUrl,
     ParseUrlSrc,
-    TDownloadStatic,
+    TDownloadFromUrl,
     whattodoIdFromName,
 } from "@/helper";
 import ParamsList from "@/components/ParamsList.vue";
@@ -105,7 +105,7 @@ export default {
             // Отчистить прошлые значения подробных данных
             this.clear_ppd();
             // Получаем новые подробные данные о месте
-            const ppd_file: TDownloadStatic = await DownloadStatic(
+            const ppd_file: TDownloadFromUrl = await DownloadFromUrl(
                 template_download_ppd_file(props.id)
             );
             if (ppd_file.ok) {

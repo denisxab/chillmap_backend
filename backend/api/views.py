@@ -1,6 +1,3 @@
-from django_filters import rest_framework as filters
-from rest_framework.viewsets import ModelViewSet
-
 from api.filters import PlaceInMapFilter
 from api.models.geomap import ArialInMap, GroupPlace, MetaGeom, PlaceInMap, WhatTodo
 from api.pagination import PointPagination
@@ -11,6 +8,8 @@ from api.serializers import (
     PlaceInMapSerializers,
     WhatTodoSerializers,
 )
+from django_filters import rest_framework as filters
+from rest_framework.viewsets import ModelViewSet
 
 
 class PlaceInMapViewSet(ModelViewSet):

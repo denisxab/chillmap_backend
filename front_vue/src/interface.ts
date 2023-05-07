@@ -63,9 +63,9 @@ export interface Tgeom_place_coord {
     [key: NameGeom]: Tgeom_place_coord_list;
 }
 export interface Tgeomap {
-    projection: string;
+    // projection: string;
     geom_place_style: Tgeom_place_style;
-    geom_whattodo_det: { [key: string | number]: string };
+    // geom_whattodo_det: { [key: string | number]: string };
     geom_place_coord: Tgeom_place_coord;
 }
 // ------------------------------------------------- //
@@ -80,11 +80,32 @@ export interface Tmeta_geomapJson_names_radius {
     // ID БД шарда, где храниться группа
     shard: number;
 }
-export interface Tmeta_geomapJson {
-    names_radius: {
-        [key: number]: Tmeta_geomapJson_names_radius;
-    };
+
+
+export interface Tmeta_geomapJson_Item {
+    // names_radius: {
+    //     [key: number]: Tmeta_geomapJson_names_radius;
+    // };
+    id: number,
+    self_url: string,
+    name: string,
+    arial_in_map: number,
+    // arial_in_map_obj: {
+    //     "id": 1,
+    //     "self_url": "http://localhost:8181/api/v1/arial_in_map/1/",
+    //     "name": "Санкт-Петербург - радиус 200км от дворцовой площади"
+    // },
+    shard: number
 }
+export interface Tmeta_geomapJson {
+    // names_radius: {
+    //     [key: number]: Tmeta_geomapJson_names_radius;
+    // };
+    // TODO: Учесть пагинацию !
+    results: Tmeta_geomapJson_Item[];
+}
+
+
 // ------------------------------------------------- //
 
 // ------------ public_place_details -----------

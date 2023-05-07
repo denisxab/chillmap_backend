@@ -1,8 +1,8 @@
 dump_api:
 	python manage.py dumpdata api > ./fixtures/api.json
 
-loaddata_api:
-	python manage.py loaddata ./fixtures/api.json
+loaddata:
+	python manage.py loaddata ./fixtures/api.json ./fixtures/user.json
 
 # Установить стили для панели DRF
 css_to_drf:

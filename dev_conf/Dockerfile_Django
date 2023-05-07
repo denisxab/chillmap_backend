@@ -24,5 +24,5 @@ ENV PYTHONUNBUFFERED=1
 # Запуск команды по умолчанию
 CMD python manage.py migrate && \ 
     make css_to_drf && \
-    make loaddata_api && \
+    make loaddata && \
     python manage.py runserver 0.0.0.0:8181
