@@ -13,7 +13,7 @@ export const geomap = {
     state() {
         return {
             // Поверхностная информация о местах
-            geomap_json: <Tgeomap>{},
+            geomap_json: <Tgeomap[]>{},
             // Мета данные
             meta_data_json: <Tmeta_geomapJson>{},
             // Текущие выбранное место
@@ -34,7 +34,7 @@ export const geomap = {
         };
     },
     mutations: {
-        Update_geomap_json(state, newValue: Tgeomap) {
+        Update_geomap_json(state, newValue: Tgeomap[]) {
             state.geomap_json = newValue;
         },
         Update_meta_data_json(state, newValue: Tmeta_geomapJson) {

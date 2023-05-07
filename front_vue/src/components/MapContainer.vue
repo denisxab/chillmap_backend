@@ -281,13 +281,13 @@ export default {
         async updateSelectGeomap(url_download: string) {
             const geomap: TDownloadFromUrl = await DownloadFromUrl(url_download);
             if (geomap.ok) {
-                const geomap_json = JSON.parse(await geomap.text);
+                // TODO: сделать чтобы работала пагинация
+                const geomap_json: Tgeomap[] = JSON.parse(await geomap.text).results;
                 // Убираем с карты маркеры от прошлых места
                 this.ClearMarkers(this.markersLayer);
                 // Заносим Geomap в глобальное хранилище
                 this.$store.commit("geomap/Update_geomap_json", geomap_json);
                 // Отображаем места на карте
-                // TODO: !!!
                 this.ShowPlaceFromExternal(
                     this.markersLayer,
                     this.$store.state.geomap.geomap_json
@@ -301,15 +301,21 @@ export default {
             layer.getSource().clear();
         },
         // Отобразить места на карте из формата `Tgeomap`
-        ShowPlaceFromExternal(layer: Layer, self_geomap: Tgeomap) {
+        ShowPlaceFromExternal(layer: Layer, self_geomap: Tgeomap[]) {
             // layer: На какой слой добавить маркеры.
             // self_geomap: Объект с данными имеющий координаты и стили для маркеров.
 
             // 1. Показать слой
             layer.setVisible(true);
+
+            self_geomap.forEach(element => {
+                element.group_place_obj
+                
+            });
+
             // 2. Парсим список координат
             for (const [name_group, value_group] of Object.entries(
-                self_geomap.geom_place_coord
+                self_geomap
             )) {
                 // 2.1 Получаем стили для текущей группы
                 let style = {};
@@ -329,10 +335,10 @@ export default {
                     style["labelText"] = `${
                         // Максимум 12 баллов
                         value_place.rating % 13
-                    }:${
+                        }:${
                         // Максимальная длинна названия 16 символов
                         value_place.simpl_name.substring(0, 16)
-                    }`;
+                        }`;
                     // Своиства которы будут храниться в маркере
                     let PropertiesMark = <TPropertiesMark>value_place;
                     PropertiesMark["name_marker"] = style_geom.name_marker;

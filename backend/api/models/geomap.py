@@ -114,17 +114,16 @@ class PlaceInMap(ModelUUID):
         on_delete=models.PROTECT,
         blank=True,
     )
-
-    what_todo = models.ForeignKey(
+    what_todo = models.ManyToManyField(
         to=WhatTodo,
         related_name="what_todo",
-        on_delete=models.PROTECT,
-        null=True,
         blank=True,
     )
-    group_place = models.ManyToManyField(
+    group_place = models.ForeignKey(
         to=GroupPlace,
         related_name="group_place",
+        on_delete=models.PROTECT,
+        null=True,
         blank=True,
     )
 

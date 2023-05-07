@@ -53,20 +53,27 @@ export interface Tgeom_place_coord_list {
     [key: NameGeom]: Tgeom_place_coord_list_item;
 }
 export interface Tgeom_place_style {
-    [key: NameGeom]: {
-        name_marker: string;
-        img_url: string;
-        img_size: [number, number];
-    };
+    id: number;
+    self_url: string;
+    name: string;
+    img_url: string;
+    img_size_w: number;
+    img_size_h: number;
 }
 export interface Tgeom_place_coord {
     [key: NameGeom]: Tgeom_place_coord_list;
 }
 export interface Tgeomap {
     // projection: string;
-    geom_place_style: Tgeom_place_style;
+    // geom_place_style: Tgeom_place_style;
     // geom_whattodo_det: { [key: string | number]: string };
-    geom_place_coord: Tgeom_place_coord;
+    // geom_place_coord: Tgeom_place_coord;
+    id: string;
+    self_url: string;
+    cord_x: string;
+    cord_y: string;
+    simpl_name: string;
+    group_place_obj: Tgeom_place_style;
 }
 // ------------------------------------------------- //
 

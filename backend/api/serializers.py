@@ -92,11 +92,8 @@ class MetaGeomSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
 class PlaceInMapSerializers(MixinUUIDv4, MixinUrl, serializers.ModelSerializer):
     """Сериализация модели PlaceInMap"""
 
-    what_todo_obj = WhatTodoSerializers(source="what_todo", read_only=True)
-    group_place_obj = GroupPlaceSerializers(
-        source="group_place", read_only=True, many=True
-    )
-
+    what_todo_obj = WhatTodoSerializers(source="what_todo", read_only=True, many=True)
+    group_place_obj = GroupPlaceSerializers(source="group_place", read_only=True)
     meta_geomap_obj = MetaGeomSerializers(source="meta_geomap", read_only=True)
 
     class Meta:

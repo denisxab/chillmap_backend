@@ -51,8 +51,8 @@
             "rating": 1,
             "address": "просп. Героев, 23, Санкт-Петербург",
             "meta_geomap": 1,
-            "what_todo": 1,
-            "group_place": [2]
+            "what_todo": [1],
+            "group_place": 2
         }
     },
     {
@@ -65,8 +65,8 @@
             "rating": 1,
             "address": "просп. Героев, 23, Санкт-Петербург",
             "meta_geomap": 1,
-            "what_todo": 1,
-            "group_place": [2]
+            "what_todo": [1],
+            "group_place": 2
         }
     }
 ]
