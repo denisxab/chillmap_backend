@@ -309,44 +309,68 @@ export default {
             layer.setVisible(true);
 
             self_geomap.forEach(element => {
-                element.group_place_obj
-                
-            });
-
-            // 2. Парсим список координат
-            for (const [name_group, value_group] of Object.entries(
-                self_geomap
-            )) {
-                // 2.1 Получаем стили для текущей группы
                 let style = {};
-                const style_geom = self_geomap.geom_place_style[name_group];
+                let style_geom = element.group_place_obj
                 if (style_geom) {
+                    let img_url = element.group_place_obj.img_url
+                    let img_size = [element.group_place_obj.img_size_w, element.group_place_obj.img_size_h]
                     style = {
-                        imgUrl: ParseUrlSrc(style_geom.img_url),
-                        imgSize: style_geom.img_size,
+                        imgUrl: ParseUrlSrc(img_url),
+                        imgSize: img_size
                     };
-                }
-                // 2.2 Перебираем список координат для текущей группы
-                for (const [key_coord, value_place] of Object.entries(
-                    value_group
-                )) {
-                    const coord = this._parseCoordFromOpenstreetmap(key_coord);
+                    const coord = this._parseCoordFromOpenstreetmap(`${element.cord_x},${element.cord_y}`);
+
                     // Формируем краткую информацию о месте. Рейтинг:Имя
                     style["labelText"] = `${
                         // Максимум 12 баллов
-                        value_place.rating % 13
+                        element.rating % 13
                         }:${
                         // Максимальная длинна названия 16 символов
-                        value_place.simpl_name.substring(0, 16)
+                        element.simpl_name.substring(0, 16)
                         }`;
                     // Своиства которы будут храниться в маркере
-                    let PropertiesMark = <TPropertiesMark>value_place;
-                    PropertiesMark["name_marker"] = style_geom.name_marker;
+                    let PropertiesMark = <TPropertiesMark>element;
+                    PropertiesMark["name_marker"] = element.group_place_obj.name;
                     PropertiesMark["coord"] = [coord.latitude, coord.longitude];
                     // 2.2.1 Устанавливаем маркеры
                     this.setMarkers(coord, PropertiesMark, style);
                 }
-            }
+            });
+
+            // // 2. Парсим список координат
+            // for (const [name_group, value_group] of Object.entries(
+            //     self_geomap
+            // )) {
+            //     // 2.1 Получаем стили для текущей группы
+            //     let style = {};
+            //     const style_geom = self_geomap.geom_place_style[name_group];
+            //     if (style_geom) {
+            //         style = {
+            //             imgUrl: ParseUrlSrc(style_geom.img_url),
+            //             imgSize: style_geom.img_size,
+            //         };
+            //     }
+            //     // 2.2 Перебираем список координат для текущей группы
+            //     for (const [key_coord, value_place] of Object.entries(
+            //         value_group
+            //     )) {
+            //         const coord = this._parseCoordFromOpenstreetmap(key_coord);
+            //         // Формируем краткую информацию о месте. Рейтинг:Имя
+            //         style["labelText"] = `${
+            //             // Максимум 12 баллов
+            //             value_place.rating % 13
+            //             }:${
+            //             // Максимальная длинна названия 16 символов
+            //             value_place.simpl_name.substring(0, 16)
+            //             }`;
+            //         // Своиства которы будут храниться в маркере
+            //         let PropertiesMark = <TPropertiesMark>value_place;
+            //         PropertiesMark["name_marker"] = style_geom.name_marker;
+            //         PropertiesMark["coord"] = [coord.latitude, coord.longitude];
+            //         // 2.2.1 Устанавливаем маркеры
+            //         this.setMarkers(coord, PropertiesMark, style);
+            //     }
+            // }
         },
         //  ---------- Обработчики событий на карте  ------------------ //
 

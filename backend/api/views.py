@@ -15,8 +15,8 @@ from rest_framework.viewsets import ModelViewSet
 class PlaceInMapViewSet(ModelViewSet):
     queryset = (
         PlaceInMap.objects.all()
-        .select_related("what_todo", "meta_geomap")
-        .prefetch_related("group_place")
+        .select_related("group_place", "meta_geomap")
+        .prefetch_related("what_todo")
     )
     serializer_class = PlaceInMapSerializers
     pagination_class = PointPagination

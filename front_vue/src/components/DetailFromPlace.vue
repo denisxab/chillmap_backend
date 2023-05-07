@@ -4,25 +4,16 @@
         <!-- Информация вв иде ключ значения -->
         <div class="row" v-for="(item, index) in view_list" :key="index">
             <div class="title">{{ item.title }}</div>
-            <div
-                class="view_list_data"
-                v-for="(item2, index2) in item.data"
-                :key="index2"
-            >
+            <div class="view_list_data" v-for="(item2, index2) in item.data" :key="index2">
                 <div class="name" v-if="item2.name">{{ item2.name }}</div>
                 <div class="value">
                     <div class="list" v-if="typeof item2.value == 'object'">
                         <ParamsList :params_list="item2.value" />
                     </div>
-                    <a
-                        target="_blank"
-                        :href="item2.value"
-                        v-else-if="
-                            typeof item2.value == 'string' &&
-                            item2.value.includes('://')
-                        "
-                        >{{ item2.value }}</a
-                    >
+                    <a target="_blank" :href="item2.value" v-else-if="
+                        typeof item2.value == 'string' &&
+                        item2.value.includes('://')
+                    ">{{ item2.value }}</a>
                     <span v-else>
                         {{ item2.value }}
                     </span>
@@ -105,22 +96,22 @@ export default {
             // Отчистить прошлые значения подробных данных
             this.clear_ppd();
             // Получаем новые подробные данные о месте
-            const ppd_file: TDownloadFromUrl = await DownloadFromUrl(
-                template_download_ppd_file(props.id)
-            );
-            if (ppd_file.ok) {
-                // Распарсить подробные данные, и сохранить значения по нужным переменным
-                this.parse_ppd(JSON.parse(await ppd_file.text));
-            } else {
-                console.error("Ошибка: ppd файл пустой !");
-            }
+            // TODO: Переделать
+            // const ppd_file: TDownloadFromUrl = await DownloadFromUrl(
+            //     template_download_ppd_file(props.id)
+            // );
+            // if (ppd_file.ok) {
+            //     // Распарсить подробные данные, и сохранить значения по нужным переменным
+            //     this.parse_ppd(JSON.parse(await ppd_file.text));
+            // } else {
+            //     console.error("Ошибка: ppd файл пустой !");
+            // }
         },
         // Распарсить подробные данные о месте, и записать их в нужные переменные
         parse_ppd(ppd: Tpublic_place_details) {
             this.AveragePopulation = EAveragePopulation[ppd.AveragePopulation];
-            this.AverageCostVisit = `${ppd.AverageCostVisit.value} ${
-                EAverageCostVisit[ppd.AverageCostVisit.currency]
-            }`;
+            this.AverageCostVisit = `${ppd.AverageCostVisit.value} ${EAverageCostVisit[ppd.AverageCostVisit.currency]
+                }`;
             this.InternetСontacts = ppd.InternetСontacts;
             this.FavoritesCountMore = `более ${ppd.FavoritesCountMore}`;
         },
@@ -249,16 +240,20 @@ export default {
             margin-top: 0.2rem;
             margin-bottom: 0.2rem;
         }
+
         .view_list_data {
             display: flex;
             flex-direction: row;
             margin-bottom: 0.2rem;
             padding: 0.1rem;
+
             .name {
                 color: $h_color;
+
                 &::after {
                     content: ":";
                 }
+
                 //
                 padding-right: 0.3rem;
                 //  Запрет выделения текста
@@ -274,12 +269,15 @@ export default {
                 bottom: 0;
                 margin: auto 0;
             }
+
             .value {
                 overflow: auto;
             }
         }
     }
+
     a {
+
         /*
         Псевдокласс	Описание
         a:link	Определяет стиль для обычной не посещенной ссылки.
@@ -287,16 +285,16 @@ export default {
         a:active	Определяет стиль для активной ссылки. Активной ссылка становится при нажатии на нее.
         a:hover	Определяет стиль для ссылки при наведении на нее мышью.
         */
-        &:link {
-        }
-        &:visited {
-        }
-        &:focus {
-        }
-        &:hover {
-        }
-        &:active {
-        }
+        &:link {}
+
+        &:visited {}
+
+        &:focus {}
+
+        &:hover {}
+
+        &:active {}
+
         //  Убрать подчёркивание ссылки
         text-decoration: none;
         color: $БазовыйЦветТекста;
