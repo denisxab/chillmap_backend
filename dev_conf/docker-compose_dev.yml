@@ -46,18 +46,18 @@ services:
       - "${HOST_PORT_POSTGRESQL}:5432"
 
   # Описание сервиса "vue-dev"
-  # vue-dev:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile_Vue
-  #   restart: always
-  #   volumes:
-  #     - ./front_vue:/app
-  #     - /app/node_modules
-  #   ports:
-  #     - "${HOST_PORT_VUE_SERVER}:8080"
-  #   environment:
-  #     - CHOKIDAR_USEPOLLING=true
+  vue-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile_Vue
+    restart: always
+    volumes:
+      - ./front_vue:/app
+      - /app/node_modules
+    ports:
+      - "${HOST_PORT_VUE_SERVER}:8080"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
 
   # Описание сервиса "nginx"
   nginx:

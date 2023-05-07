@@ -1,1 +1,58 @@
-[{"model": "api.whattodo", "pk": 1, "fields": {"todo": "Подумать"}}, {"model": "api.whattodo", "pk": 2, "fields": {"todo": "Выпить"}}, {"model": "api.whattodo", "pk": 3, "fields": {"todo": "Потанцевать"}}, {"model": "api.whattodo", "pk": 4, "fields": {"todo": "Помыслить"}}, {"model": "api.whattodo", "pk": 5, "fields": {"todo": "Поесть"}}, {"model": "api.groupplace", "pk": 1, "fields": {"name": "Бар"}}, {"model": "api.groupplace", "pk": 2, "fields": {"name": "Продуктовый_Магазин"}}, {"model": "api.arialinmap", "pk": 1, "fields": {"name": "Санкт-Петербург - радиус 200км от дворцовой площади"}}, {"model": "api.metageom", "pk": 1, "fields": {"name": "Пивные СПБ", "arial_in_map": 1, "shard": 1}}, {"model": "api.metageom", "pk": 2, "fields": {"name": "Продуктовые СПБ", "arial_in_map": 1, "shard": 1}}, {"model": "api.placeinmap", "pk": "6f598670-38b1-4524-bd09-0ed6314a353c", "fields": {"cord_x": "59.865411294740454", "cord_y": "30.159816757278403", "simpl_name": "Пивная", "rating": 1, "address": "просп. Героев, 23, Санкт-Петербург", "meta_geomap": 1, "what_todo": 1, "group_place": []}}, {"model": "api.placeinmap", "pk": "9ed82d2b-b9a1-43c9-b177-2fce189c2e10", "fields": {"cord_x": "59.86369521994118", "cord_y": "30.16211789237823", "simpl_name": "Бар Героев", "rating": 1, "address": "просп. Героев, 23, Санкт-Петербург", "meta_geomap": 1, "what_todo": 1, "group_place": [2]}}]
+[
+    { "model": "api.whattodo", "pk": 1, "fields": { "todo": "Подумать" } },
+    { "model": "api.whattodo", "pk": 2, "fields": { "todo": "Выпить" } },
+    { "model": "api.whattodo", "pk": 3, "fields": { "todo": "Потанцевать" } },
+    { "model": "api.whattodo", "pk": 4, "fields": { "todo": "Помыслить" } },
+    { "model": "api.whattodo", "pk": 5, "fields": { "todo": "Поесть" } },
+    { "model": "api.groupplace", "pk": 1, "fields": { "name": "Бар" } },
+    {
+        "model": "api.groupplace",
+        "pk": 2,
+        "fields": { "name": "Продуктовый_Магазин" }
+    },
+    {
+        "model": "api.arialinmap",
+        "pk": 1,
+        "fields": {
+            "name": "Санкт-Петербург - радиус 200км от дворцовой площади"
+        }
+    },
+    {
+        "model": "api.metageom",
+        "pk": 1,
+        "fields": { "name": "Пивные СПБ", "arial_in_map": 1, "shard": 1 }
+    },
+    {
+        "model": "api.metageom",
+        "pk": 2,
+        "fields": { "name": "Продуктовые СПБ", "arial_in_map": 1, "shard": 1 }
+    },
+    {
+        "model": "api.placeinmap",
+        "pk": "6f598670-38b1-4524-bd09-0ed6314a353c",
+        "fields": {
+            "cord_x": "59.865411294740454",
+            "cord_y": "30.159816757278403",
+            "simpl_name": "Пивная",
+            "rating": 1,
+            "address": "просп. Героев, 23, Санкт-Петербург",
+            "meta_geomap": 1,
+            "what_todo": 1,
+            "group_place": [2]
+        }
+    },
+    {
+        "model": "api.placeinmap",
+        "pk": "9ed82d2b-b9a1-43c9-b177-2fce189c2e10",
+        "fields": {
+            "cord_x": "59.86369521994118",
+            "cord_y": "30.16211789237823",
+            "simpl_name": "Бар Героев",
+            "rating": 1,
+            "address": "просп. Героев, 23, Санкт-Петербург",
+            "meta_geomap": 1,
+            "what_todo": 1,
+            "group_place": [2]
+        }
+    }
+]
