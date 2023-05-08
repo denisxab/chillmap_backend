@@ -1,5 +1,5 @@
 dump_api:
-	python manage.py dumpdata api > ./fixtures/api.json
+	python manage.py dumpdata api --indent 4 > ./fixtures/api.json
 
 loaddata:
 	python manage.py loaddata ./fixtures/api.json ./fixtures/user.json
