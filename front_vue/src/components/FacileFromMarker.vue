@@ -39,10 +39,7 @@
         </div>
         <!-- Чем тут можно заняться -->
         <div class="cel">
-            <ParamsList
-                v-if="whattodo && whattodo.length > 0"
-                :params_list="whattodo"
-            />
+            <ParamsList v-if="whattodo && whattodo.length > 0" :params_list="whattodo" />
         </div>
     </div>
 </template>
@@ -77,14 +74,11 @@ export default {
         props_component: {
             handler(newValue: TPropertiesMark) {
                 // Эти данные берутся из поверхностной информации
-                this.name_marker = newValue.name_marker;
+                this.name_marker = newValue.type_place_obj.name;
                 this.simpl_name = newValue.simpl_name;
                 this.rating = newValue.rating;
                 this.address = newValue.address;
-                this.whattodo = whattodoIdFromName(
-                    newValue,
-                    this.$store.state.geomap.geomap_json.geom_whattodo_det
-                );
+                this.whattodo = whattodoIdFromName(newValue);
             },
             deep: true,
         },
@@ -103,10 +97,13 @@ export default {
 .map_facile {
     color: $ПриглушенныйЦветТекста;
     margin: 0.6rem;
+
     .cel {
         display: flex;
+
         .img {
             margin-right: 10px;
+
             img {
                 width: 1rem;
                 height: 1rem;

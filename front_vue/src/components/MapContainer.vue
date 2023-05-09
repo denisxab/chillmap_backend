@@ -31,7 +31,7 @@ import { DownloadFromUrl, ParseUrlSrc, TDownloadFromUrl } from "@/helper";
 import Stroke from "ol/style/Stroke";
 import MapEvent from "ol/MapEvent";
 import MapBrowserEvent from "ol/MapBrowserEvent";
-import { Tgeomap, TCoord, TPropertiesMark } from "@/interface";
+import { TGeomap, TCoord } from "@/interface";
 
 // Картинка маркера по умолчанию
 const imgPont = ParseUrlSrc("@/img/default_point.png");
@@ -99,17 +99,19 @@ export default {
     },
 
     methods: {
-        // Инициализировать карту. Используется такой вариант для того чтобы дождаться `async mounted`
+        // Инициализировать карту. Используется такой вариант для того чтобы дождаться async mounted`
         _initMap(
             default_coord: TCoord,
             default_zoom: number,
             default_url_geomap: string
         ) {
-            // default_coord: Координаты на которые происходит фокусировки по умолчанию
-            // default_zoom: Приближение карты по умолчанию
-            // default_url_geomap: URL для скачивания geomap
+            /*
+                default_coord: Координаты на которые происходит фокусировки по умолчанию
+                default_zoom: Приближение карты по умолчанию
+                default_url_geomap: URL для скачивания geomap
+            */
 
-            // Инициализация карты
+            // Инициализация объект с картой
             this.map = new olMap({
                 // HTML объект в который вставиться карта
                 target: this.$refs["map-root"],
@@ -160,15 +162,15 @@ export default {
         // Приблизить карту
         ZoomMap() {
             this.$store.commit(
-                `geomap/Update_zoom_select`,
-                this.$store.state.geomap.zoom_select + 1
+                `geomap/Update_select_zoom`,
+                this.$store.state.geomap.select_zoom + 1
             );
         },
         // отдалить карту
         UnZoomMap() {
             this.$store.commit(
-                `geomap/Update_zoom_select`,
-                this.$store.state.geomap.zoom_select - 1
+                `geomap/Update_select_zoom`,
+                this.$store.state.geomap.select_zoom - 1
             );
         },
         // Сфокусировать карту в указанные координаты
@@ -281,8 +283,7 @@ export default {
         async updateSelectGeomap(url_download: string) {
             const geomap: TDownloadFromUrl = await DownloadFromUrl(url_download);
             if (geomap.ok) {
-                // TODO: сделать чтобы работала пагинация
-                const geomap_json: Tgeomap[] = JSON.parse(await geomap.text).results;
+                const geomap_json: TGeomap[] = JSON.parse(await geomap.text);
                 // Убираем с карты маркеры от прошлых места
                 this.ClearMarkers(this.markersLayer);
                 // Заносим Geomap в глобальное хранилище
@@ -301,25 +302,26 @@ export default {
             layer.getSource().clear();
         },
         // Отобразить места на карте из формата `Tgeomap`
-        ShowPlaceFromExternal(layer: Layer, self_geomap: Tgeomap[]) {
-            // layer: На какой слой добавить маркеры.
-            // self_geomap: Объект с данными имеющий координаты и стили для маркеров.
+        ShowPlaceFromExternal(layer: Layer, self_geomap: TGeomap[]) {
+            /*
+                layer: На какой слой добавить маркеры.
+                self_geomap: Объект с данными имеющий координаты и стили для маркеров.
+            */
 
             // 1. Показать слой
             layer.setVisible(true);
-
+            // Перебрать места и отобразить их на месте
             self_geomap.forEach(element => {
                 let style = {};
-                let style_geom = element.group_place_obj
+                let style_geom = element.type_place_obj
                 if (style_geom) {
-                    let img_url = element.group_place_obj.img_url
-                    let img_size = [element.group_place_obj.img_size_w, element.group_place_obj.img_size_h]
+                    let img_url = element.type_place_obj.img_url
+                    let img_size = [element.type_place_obj.img_size_w, element.type_place_obj.img_size_h]
                     style = {
                         imgUrl: ParseUrlSrc(img_url),
                         imgSize: img_size
                     };
                     const coord = this._parseCoordFromOpenstreetmap(`${element.cord_x},${element.cord_y}`);
-
                     // Формируем краткую информацию о месте. Рейтинг:Имя
                     style["labelText"] = `${
                         // Максимум 12 баллов
@@ -329,48 +331,13 @@ export default {
                         element.simpl_name.substring(0, 16)
                         }`;
                     // Своиства которы будут храниться в маркере
-                    let PropertiesMark = <TPropertiesMark>element;
-                    PropertiesMark["name_marker"] = element.group_place_obj.name;
+                    let PropertiesMark = element;
+                    PropertiesMark["name_marker"] = element.type_place_obj.name;
                     PropertiesMark["coord"] = [coord.latitude, coord.longitude];
                     // 2.2.1 Устанавливаем маркеры
                     this.setMarkers(coord, PropertiesMark, style);
                 }
             });
-
-            // // 2. Парсим список координат
-            // for (const [name_group, value_group] of Object.entries(
-            //     self_geomap
-            // )) {
-            //     // 2.1 Получаем стили для текущей группы
-            //     let style = {};
-            //     const style_geom = self_geomap.geom_place_style[name_group];
-            //     if (style_geom) {
-            //         style = {
-            //             imgUrl: ParseUrlSrc(style_geom.img_url),
-            //             imgSize: style_geom.img_size,
-            //         };
-            //     }
-            //     // 2.2 Перебираем список координат для текущей группы
-            //     for (const [key_coord, value_place] of Object.entries(
-            //         value_group
-            //     )) {
-            //         const coord = this._parseCoordFromOpenstreetmap(key_coord);
-            //         // Формируем краткую информацию о месте. Рейтинг:Имя
-            //         style["labelText"] = `${
-            //             // Максимум 12 баллов
-            //             value_place.rating % 13
-            //             }:${
-            //             // Максимальная длинна названия 16 символов
-            //             value_place.simpl_name.substring(0, 16)
-            //             }`;
-            //         // Своиства которы будут храниться в маркере
-            //         let PropertiesMark = <TPropertiesMark>value_place;
-            //         PropertiesMark["name_marker"] = style_geom.name_marker;
-            //         PropertiesMark["coord"] = [coord.latitude, coord.longitude];
-            //         // 2.2.1 Устанавливаем маркеры
-            //         this.setMarkers(coord, PropertiesMark, style);
-            //     }
-            // }
         },
         //  ---------- Обработчики событий на карте  ------------------ //
 
@@ -442,11 +409,15 @@ export default {
         // Обработка нажатия на маркер
         HandleMarkerClick(feat: Feature) {
             // Кастомные свойства у нажатого маркера
-            const PropertiesMark = <TPropertiesMark>feat.getProperties();
+            const PropertiesMark = feat.getProperties();
             // Сохраняем в ГХ текущие выбранное место;
-            this.$store.commit(
+            this.$store.dispatch(
                 `geomap/Update_select_PropertiesMark`,
-                PropertiesMark
+                {
+                    mark: PropertiesMark,
+                    router: this.$router,
+                    route: this.$route,
+                }
             );
             // Координаты фокусировки равны = координатам нажатого места
             this.$store.dispatch(`geomap/Update_coordinat_click`, {
@@ -464,7 +435,7 @@ export default {
         // Обработка изменение масштаба карты
         HandleZoom(evt: MapEvent) {
             this.$store.commit(
-                `geomap/Update_zoom_select`,
+                `geomap/Update_select_zoom`,
                 this.view_select.values_.zoom
             );
         },

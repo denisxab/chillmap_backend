@@ -1,4 +1,4 @@
-from api.models.geomap import ArialInMap, GroupPlace, MetaGeom, PlaceInMap, WhatTodo
+from api.models.geomap import ArialInMap, ChannelGeomap, PlaceInMap, TypePlace, WhatTodo
 from django.urls import reverse
 from rest_framework import serializers
 
@@ -42,11 +42,11 @@ class WhatTodoSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
         url = "what_todo"
 
 
-class GroupPlaceSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
-    """Сериализация модели GroupPlace"""
+class TypePlaceSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
+    """Сериализация модели TypePlace"""
 
     class Meta:
-        model = GroupPlace
+        model = TypePlace
         fields = (
             *MixinInteger.Meta.fields,
             *MixinUrl.Meta.fields,
@@ -55,7 +55,7 @@ class GroupPlaceSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer)
             "img_size_w",
             "img_size_h",
         )
-        url = "group_place"
+        url = "type_place"
 
 
 class ArialInMapSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
@@ -71,13 +71,13 @@ class ArialInMapSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer)
         url = "arial_in_map"
 
 
-class MetaGeomSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
-    """Сериализация модели  MetaGeom"""
+class ChannelGeomapSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
+    """Сериализация модели  ChannelGeomap"""
 
     arial_in_map_obj = ArialInMapSerializers(source="arial_in_map", read_only=True)
 
     class Meta:
-        model = MetaGeom
+        model = ChannelGeomap
         fields = (
             *MixinInteger.Meta.fields,
             *MixinUrl.Meta.fields,
@@ -86,15 +86,17 @@ class MetaGeomSerializers(MixinInteger, MixinUrl, serializers.ModelSerializer):
             "arial_in_map_obj",
             "shard",
         )
-        url = "meta_geomap"
+        url = "channel_geomap"
 
 
 class PlaceInMapSerializers(MixinUUIDv4, MixinUrl, serializers.ModelSerializer):
     """Сериализация модели PlaceInMap"""
 
     what_todo_obj = WhatTodoSerializers(source="what_todo", read_only=True, many=True)
-    group_place_obj = GroupPlaceSerializers(source="group_place", read_only=True)
-    meta_geomap_obj = MetaGeomSerializers(source="meta_geomap", read_only=True)
+    type_place_obj = TypePlaceSerializers(source="type_place", read_only=True)
+    channel_geomap_obj = ChannelGeomapSerializers(
+        source="channel_geomap", read_only=True
+    )
 
     class Meta:
         model = PlaceInMap
@@ -106,11 +108,11 @@ class PlaceInMapSerializers(MixinUUIDv4, MixinUrl, serializers.ModelSerializer):
             "simpl_name",
             "rating",
             "address",
-            "meta_geomap",
-            "meta_geomap_obj",
+            "channel_geomap",
+            "channel_geomap_obj",
             "what_todo",
             "what_todo_obj",
-            "group_place",
-            "group_place_obj",
+            "type_place",
+            "type_place_obj",
         )
         url = "place"

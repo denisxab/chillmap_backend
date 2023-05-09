@@ -1,30 +1,6 @@
-import uuid
-
 from django.db import models
 
-
-class ModelUUID(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        verbose_name="Идентификатор записи UUIDv4",
-        editable=False,
-    )
-
-    class Meta:
-        abstract = True
-
-
-class ModelInteger(models.Model):
-    id = models.IntegerField(
-        primary_key=True,
-        default=int,
-        verbose_name="Идентификатор записи Int",
-        editable=False,
-    )
-
-    class Meta:
-        abstract = True
+from .base_model import ModelInteger, ModelUUID
 
 
 class WhatTodo(ModelInteger):
@@ -41,8 +17,8 @@ class WhatTodo(ModelInteger):
         return self.todo
 
 
-class GroupPlace(ModelInteger):
-    """Группа предназначения мест на карте"""
+class TypePlace(ModelInteger):
+    """Типы мест"""
 
     name = models.CharField(
         "Короткое имя предназначения группы", max_length=30, default=""
@@ -52,30 +28,30 @@ class GroupPlace(ModelInteger):
     img_size_h = models.FloatField("Размер фото маркера H%", default=0.3)
 
     class Meta:
-        verbose_name = "Группа предназначения места"
-        verbose_name_plural = "Группы предназначения мест"
-        db_table = "group_place"
+        verbose_name = "Тип места"
+        verbose_name_plural = "Типы мест"
+        db_table = "type_place"
 
     def __str__(self) -> str:
         return self.name
 
 
 class ArialInMap(ModelInteger):
-    """Справочник места расположения"""
+    """Ареал мест"""
 
     name = models.CharField("Имя места расположения мест", max_length=254)
 
     class Meta:
-        verbose_name = "Справочник места расположения"
-        verbose_name_plural = "Справочник мест расположения"
+        verbose_name = "Ареал места"
+        verbose_name_plural = "Ареал мест"
         db_table = "arial_in_map"
 
     def __str__(self) -> str:
         return self.name
 
 
-class MetaGeom(ModelInteger):
-    """Мета информация о месте"""
+class ChannelGeomap(ModelInteger):
+    """Каналы с местами"""
 
     name = models.CharField("Имя группы мест", max_length=254)
     arial_in_map = models.ForeignKey(
@@ -84,18 +60,16 @@ class MetaGeom(ModelInteger):
     shard = models.SmallIntegerField("Номер шарда", default=1)
 
     class Meta:
-        verbose_name = "Мета информация о месте"
-        verbose_name_plural = "Мета информация о местах"
-        db_table = "meta_geomap"
+        verbose_name = "Канал с местами"
+        verbose_name_plural = "Каналы с местами"
+        db_table = "channel_geomap"
 
     def __str__(self) -> str:
         return self.name
 
 
 class PlaceInMap(ModelUUID):
-    """
-    Место на карте
-    """
+    """Место на карте"""
 
     simpl_name = models.CharField("Короткое имя", max_length=30)
 
@@ -107,24 +81,20 @@ class PlaceInMap(ModelUUID):
         default=1,
         choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")],
     )
-    address = models.CharField("Адрес места", max_length=255, default="")
-    meta_geomap = models.ForeignKey(
-        to=MetaGeom,
-        related_name="meta_geomap",
+    address = models.CharField("Адрес места", max_length=255, default="", blank=True)
+    channel_geomap = models.ForeignKey(
+        to=ChannelGeomap,
+        related_name="channel_geomap",
         on_delete=models.PROTECT,
-        blank=True,
     )
     what_todo = models.ManyToManyField(
         to=WhatTodo,
         related_name="what_todo",
-        blank=True,
     )
-    group_place = models.ForeignKey(
-        to=GroupPlace,
-        related_name="group_place",
+    type_place = models.ForeignKey(
+        to=TypePlace,
+        related_name="type_place",
         on_delete=models.PROTECT,
-        null=True,
-        blank=True,
     )
 
     class Meta:
@@ -135,3 +105,9 @@ class PlaceInMap(ModelUUID):
 
     def __str__(self) -> str:
         return f"{self.simpl_name}: {self.cord_x},{self.cord_y}"
+
+    def save(self, *args, **kwargs):
+        # Если не указан адрес то тогда указываем координаты
+        if not self.address:
+            self.address = f"{self.cord_x},{self.cord_y}"
+        super().save(*args, **kwargs)

@@ -44,13 +44,10 @@ export function clone(value) {
 // Конвертировать id в понятные имена для whattodo
 export function whattodoIdFromName(
     newValue: TPropertiesMark,
-    geom_whattodo_det: { [key: number]: string }
 ): string[] {
     let whattodo: string[] = [];
-    if (newValue && newValue["whattodo"]) {
-        for (let i of newValue["whattodo"]) {
-            whattodo.push(geom_whattodo_det[i]);
-        }
-    }
+    newValue.what_todo_obj.forEach(element => {
+        whattodo.push(element.todo)
+    });
     return whattodo;
 }

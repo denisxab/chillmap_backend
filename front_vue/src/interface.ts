@@ -14,116 +14,121 @@ export enum UrlGetParams {
     zoom = "z",
     // Режим отображения
     type_view = "v",
-    // Идентификатор `ИмяТочкиРадиусов` из которого будут получены `geomap`
-    geomap = "g",
+    // Идентификатор канала
+    channel = "c",
+    // Идентификатор выбранного места(маркера)
+    mark = 'm'
 }
 // -------------------------------------------------
 
 // ----- geomap ---------------------------------------- //
-// Тип для хранения координат
 export interface TCoord {
     // широта
     latitude: number;
     // долгота
     longitude: number;
 }
-// Алиас для ИмяГруппы мест
-export type NameGeom = string;
 
-// Тип для списка координат из внешних источников
-export interface Tgeom_place_coord_list_item {
-    // Уникальный идентификатор места
+export interface TTypePlaceObj {
+    // Уникальный идентификатор типа
     id: number;
-    // Рейтинг места
-    rating: number;
-    // Короткое название места. Максимальная длинна 16 символов
-    simpl_name: string;
-    // Адрес места
-    address: string;
-    // Названия для фильтрации, отвечающая на вопрос что делать в этом месте
-    whattodo: number[];
-}
-
-export interface Tgeomap {
-    // projection: string;
-    // geom_place_style: Tgeom_place_style;
-    // geom_whattodo_det: { [key: string | number]: string };
-    // geom_place_coord: Tgeom_place_coord;
-
-    // Уникальный идентификатор места
-    id: string;
     self_url: string;
-    // Адрес места
-    address: string;
-    cord_x: string;
-    cord_y: string;
-    // Рейтинг места
-    rating: number;
-    // Короткое название места. Максимальная длинна 16 символов
-    simpl_name: string;
-    // 
-    group_place_obj: Tgeom_place_style;
-    // Названия для фильтрации, отвечающая на вопрос что делать в этом месте
-    what_todo: number[];
+    // Имя типа
+    name: string;
+    // Путь к иконке маркера
+    img_url: string;
+    // Широта фота в 0.3
+    img_size_w: number;
+    // Высота фота в 0.3
+    img_size_h: number;
 }
 
-export interface TPropertiesMark extends Tgeomap {
-    // Названия группы маркеров
-    name_marker: string;
-    // Координаты места [широта,долгота]
-    coord: [number, number];
+export interface TWhatTodoObj {
+    // Чем можно заняться в этом места
+    id: number;
+    self_url: string;
+    todo: string;
 }
-export interface Tgeom_place_coord_list {
-    [key: NameGeom]: Tgeom_place_coord_list_item;
-}
-export interface Tgeom_place_style {
+
+export interface TArialObj {
+    // Уникальный идентификатор ареала
     id: number;
     self_url: string;
     name: string;
-    img_url: string;
-    img_size_w: number;
-    img_size_h: number;
-}
-export interface Tgeom_place_coord {
-    [key: NameGeom]: Tgeom_place_coord_list;
 }
 
-// ------------------------------------------------- //
-
-// ----- meta_geomap ---------------------------------------- //
-
-export interface Tmeta_geomapJson_names_radius {
-    // По этому имени пользователи будут фильтровать "Имена точек радиуса".
-    hum: string;
-    // Путь к статическому файлу, который хранить в себе информацию обо всех местах в этом радиусе.
-    name_path: string;
-    // ID БД шарда, где храниться группа
+export interface TChannelGeomapObj {
+    // Уникальный идентификатор канала
+    id: number;
+    self_url: string;
+    name: string;
+    arial_in_map: number;
+    arial_in_map_obj: TArialObj;
     shard: number;
 }
 
+export interface TGeomap {
+    // Уникальный идентификатор места
+    id: string;
+    self_url: string;
+    // Координаты места Широта
+    cord_x: string;
+    // Координаты места Долгота
+    cord_y: string;
+    // Короткое название места. Максимальная длинна 16 символов
+    simpl_name: string;
+    // Рейтинг места
+    rating: number;
+    // Адрес места
+    address: string;
+    // Id канала к которому принадлежит место
+    channel_geomap: number;
+    channel_geomap_obj: TChannelGeomapObj;
+    // Чем можно заняться в этом месте
+    what_todo: number[];
+    what_todo_obj: TWhatTodoObj[];
+    // Тип места
+    type_place: number;
+    type_place_obj: TTypePlaceObj;
+}
+export interface TPropertiesMark extends TGeomap { };
+export interface Tchannel_geomapJson { }
 
-export interface Tmeta_geomapJson_Item {
-    // names_radius: {
-    //     [key: number]: Tmeta_geomapJson_names_radius;
-    // };
-    id: number,
-    self_url: string,
-    name: string,
-    arial_in_map: number,
-    // arial_in_map_obj: {
-    //     "id": 1,
-    //     "self_url": "http://localhost:8181/api/v1/arial_in_map/1/",
-    //     "name": "Санкт-Петербург - радиус 200км от дворцовой площади"
-    // },
-    shard: number
-}
-export interface Tmeta_geomapJson {
-    // names_radius: {
-    //     [key: number]: Tmeta_geomapJson_names_radius;
-    // };
-    // TODO: Учесть пагинацию !
-    results: Tmeta_geomapJson_Item[];
-}
+// export interface TPropertiesMark extends TGeomap {
+//     // Названия группы маркеров
+//     name_marker: string;
+//     // Координаты места [широта,долгота]
+//     coord: [number, number];
+// }
+// export interface Tgeom_place_coord_list {
+//     [key: NameGeom]: Tgeom_place_coord_list_item;
+// }
+
+// export interface Tgeom_place_coord {
+//     [key: NameGeom]: Tgeom_place_coord_list;
+// }
+
+// ------------------------------------------------- //
+
+// ----- channel_geomap ---------------------------------------- //
+
+// export interface Tchannel_geomapJson_names_radius {
+//     // По этому имени пользователи будут фильтровать "Имена точек радиуса".
+//     hum: string;
+//     // Путь к статическому файлу, который хранить в себе информацию обо всех местах в этом радиусе.
+//     name_path: string;
+//     // ID БД шарда, где храниться группа
+//     shard: number;
+// }
+
+
+
+// export interface Tchannel_geomapJson {
+//     // names_radius: {
+//     //     [key: number]: Tchannel_geomapJson_names_radius;
+//     // };
+//     results: TChannelGeomap[];
+// }
 
 
 // ------------------------------------------------- //

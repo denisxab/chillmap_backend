@@ -1,6 +1,13 @@
 [
 {
     "model": "api.whattodo",
+    "pk": 0,
+    "fields": {
+        "todo": "Закупиться"
+    }
+},
+{
+    "model": "api.whattodo",
     "pk": 1,
     "fields": {
         "todo": "Подумать"
@@ -35,7 +42,7 @@
     }
 },
 {
-    "model": "api.groupplace",
+    "model": "api.typeplace",
     "pk": 0,
     "fields": {
         "name": "Спортзалы",
@@ -45,7 +52,7 @@
     }
 },
 {
-    "model": "api.groupplace",
+    "model": "api.typeplace",
     "pk": 1,
     "fields": {
         "name": "Бар",
@@ -55,7 +62,7 @@
     }
 },
 {
-    "model": "api.groupplace",
+    "model": "api.typeplace",
     "pk": 2,
     "fields": {
         "name": "Продуктовый_Магазин",
@@ -72,7 +79,7 @@
     }
 },
 {
-    "model": "api.metageom",
+    "model": "api.channelgeomap",
     "pk": 1,
     "fields": {
         "name": "Пивные СПБ",
@@ -81,12 +88,28 @@
     }
 },
 {
-    "model": "api.metageom",
+    "model": "api.channelgeomap",
     "pk": 2,
     "fields": {
         "name": "Продуктовые СПБ",
         "arial_in_map": 1,
         "shard": 1
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "64f61d77-5af1-4714-b43b-2977e9fbecb1",
+    "fields": {
+        "simpl_name": "Клубника",
+        "cord_x": "60.007825659750466",
+        "cord_y": "30.25983803",
+        "rating": 2,
+        "address": "Комендантский проспект",
+        "channel_geomap": 2,
+        "type_place": 2,
+        "what_todo": [
+            0
+        ]
     }
 },
 {
@@ -98,8 +121,8 @@
         "cord_y": "30.151752705497124",
         "rating": 3,
         "address": "просп. Героев, 18, Санкт-Петербург",
-        "meta_geomap": 1,
-        "group_place": 1,
+        "channel_geomap": 1,
+        "type_place": 1,
         "what_todo": [
             2,
             3
@@ -115,8 +138,8 @@
         "cord_y": "30.159816757278403",
         "rating": 1,
         "address": "просп. Героев, 23, Санкт-Петербург",
-        "meta_geomap": 1,
-        "group_place": 2,
+        "channel_geomap": 1,
+        "type_place": 2,
         "what_todo": [
             1
         ]
@@ -131,10 +154,26 @@
         "cord_y": "30.16211789237823",
         "rating": 1,
         "address": "просп. Героев, 23, Санкт-Петербург",
-        "meta_geomap": 1,
-        "group_place": 2,
+        "channel_geomap": 1,
+        "type_place": 2,
         "what_todo": [
             1
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "b1bb8473-5e07-48f1-be1a-349aa6af4481",
+    "fields": {
+        "simpl_name": "Пиво на коменде",
+        "cord_x": "60.01432498404287",
+        "cord_y": "30.250756954",
+        "rating": 3,
+        "address": "Комендантский проспект",
+        "channel_geomap": 1,
+        "type_place": 1,
+        "what_todo": [
+            2
         ]
     }
 },
@@ -147,8 +186,8 @@
         "cord_y": "30.232515388583685",
         "rating": 5,
         "address": "Южная дорога",
-        "meta_geomap": 1,
-        "group_place": 1,
+        "channel_geomap": 1,
+        "type_place": 1,
         "what_todo": [
             2,
             3,

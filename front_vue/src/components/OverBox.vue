@@ -9,12 +9,7 @@
         <!-- Пустой div чтобы можно было больше проскролить вниз -->
         <div class="empty"></div>
         <!-- Кнопка для скрытия всплывающего окна -->
-        <input
-            ref="hidden_over_box"
-            class="hidden_over_box"
-            type="image"
-            @click="hiddenOverBox"
-        />
+        <input ref="hidden_over_box" class="hidden_over_box" type="image" @click="hiddenOverBox" />
     </div>
 </template>
 <script lang="ts">
@@ -49,8 +44,9 @@ export default {
     color: $БазовыйЦветТекста;
     width: 100%;
     min-height: 100%;
-    .over_box_body {
-    }
+
+    .over_box_body {}
+
     .hidden_over_box {
         position: fixed;
         border: none;
@@ -64,6 +60,7 @@ export default {
         -ms-transform: rotate(90deg);
         transform: rotate(90deg);
     }
+
     .empty {
         height: 10rem;
     }

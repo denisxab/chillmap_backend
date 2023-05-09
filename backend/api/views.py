@@ -1,11 +1,10 @@
 from api.filters import PlaceInMapFilter
-from api.models.geomap import ArialInMap, GroupPlace, MetaGeom, PlaceInMap, WhatTodo
-from api.pagination import PointPagination
+from api.models.geomap import ArialInMap, ChannelGeomap, PlaceInMap, TypePlace, WhatTodo
 from api.serializers import (
     ArialInMapSerializers,
-    GroupPlaceSerializers,
-    MetaGeomSerializers,
+    ChannelGeomapSerializers,
     PlaceInMapSerializers,
+    TypePlaceSerializers,
     WhatTodoSerializers,
 )
 from django_filters import rest_framework as filters
@@ -15,11 +14,10 @@ from rest_framework.viewsets import ModelViewSet
 class PlaceInMapViewSet(ModelViewSet):
     queryset = (
         PlaceInMap.objects.all()
-        .select_related("group_place", "meta_geomap")
+        .select_related("type_place", "channel_geomap")
         .prefetch_related("what_todo")
     )
     serializer_class = PlaceInMapSerializers
-    pagination_class = PointPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = PlaceInMapFilter
 
@@ -27,22 +25,18 @@ class PlaceInMapViewSet(ModelViewSet):
 class WhatTodoViewSet(ModelViewSet):
     queryset = WhatTodo.objects.all()
     serializer_class = WhatTodoSerializers
-    pagination_class = PointPagination
 
 
-class GroupPlaceViewSet(ModelViewSet):
-    queryset = GroupPlace.objects.all()
-    serializer_class = GroupPlaceSerializers
-    pagination_class = PointPagination
+class TypePlaceViewSet(ModelViewSet):
+    queryset = TypePlace.objects.all()
+    serializer_class = TypePlaceSerializers
 
 
 class ArialInMapViewSet(ModelViewSet):
     queryset = ArialInMap.objects.all()
     serializer_class = ArialInMapSerializers
-    pagination_class = PointPagination
 
 
-class MetaGeomViewSet(ModelViewSet):
-    queryset = MetaGeom.objects.all()
-    serializer_class = MetaGeomSerializers
-    pagination_class = PointPagination
+class ChannelGeomapViewSet(ModelViewSet):
+    queryset = ChannelGeomap.objects.all()
+    serializer_class = ChannelGeomapSerializers

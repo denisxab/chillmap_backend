@@ -1,7 +1,7 @@
 import {
     TCoord,
-    Tgeomap,
-    Tmeta_geomapJson,
+    TGeomap,
+    Tchannel_geomapJson,
     TPropertiesMark,
     UrlGetParams,
     UrlGetParamsTypeView,
@@ -13,9 +13,9 @@ export const geomap = {
     state() {
         return {
             // Поверхностная информация о местах
-            geomap_json: <Tgeomap[]>{},
-            // Мета данные
-            meta_data_json: <Tmeta_geomapJson>{},
+            geomap_json: <TGeomap[]>{},
+            // Все каналы данные
+            channel_geomap_json: <Tchannel_geomapJson>{},
             // Текущие выбранное место
             select_PropertiesMark: <TPropertiesMark>undefined,
             // Координаты на которое совершено нажатие, или фокусировка
@@ -24,40 +24,42 @@ export const geomap = {
                 longitude: 30.169246265131953,
             },
             // Текущие приближение карты
-            zoom_select: <number>16,
+            select_zoom: <number>16,
             // Режим просмотра
             type_view: <string>UrlGetParamsTypeView.main_map,
-            // Текущий id группы для просмотра
-            select_geomap_id: <number>undefined,
+            // Текущий id канала для просмотра
+            select_channel_geomap: <number>1,
             // Ссылка для скачивания geomap
             url_geomap: <string>undefined,
         };
     },
     mutations: {
-        Update_geomap_json(state, newValue: Tgeomap[]) {
-            state.geomap_json = newValue;
+        // ----------------
+        AUpdate_select_channel(state, newValue: number) {
+            state.select_channel_geomap = newValue;
         },
-        Update_meta_data_json(state, newValue: Tmeta_geomapJson) {
-            state.meta_data_json = newValue;
-        },
-        Update_select_PropertiesMark(state, newValue: TPropertiesMark) {
-            state.select_PropertiesMark = newValue;
+        Update_select_zoom(state, newValue: number) {
+            state.select_zoom = newValue;
         },
         AUpdate_coordinat_click(state, newValue: TCoord) {
             state.coordinat_click = newValue;
         },
-        Update_zoom_select(state, newValue: number) {
-            state.zoom_select = newValue;
-        },
         AUpdate_type_view(state, newValue: string) {
             state.type_view = newValue;
         },
-        AUpdate_select_geomap_id(state, newValue: number) {
-            state.select_geomap_id = newValue;
+        // ----------------
+        Update_geomap_json(state, newValue: TGeomap[]) {
+            state.geomap_json = newValue;
+        },
+        Update_channel_geomap_json(state, newValue: Tchannel_geomapJson) {
+            state.channel_geomap_json = newValue;
+        },
+        AUpdate_select_PropertiesMark(state, newValue: TPropertiesMark) {
+            state.select_PropertiesMark = newValue;
         },
         Update_url_geomap(state, newValue: string) {
             state.url_geomap = ParseUrlSrc(newValue);
-        },
+        }
     },
     actions: {
         // Обновить координаты в фокуса
@@ -73,8 +75,11 @@ export const geomap = {
             let query = clone(route.query);
             query[UrlGetParams.latitude] = coord.latitude;
             query[UrlGetParams.longitude] = coord.longitude;
-            query[UrlGetParams.zoom] = state.zoom_select;
+            query[UrlGetParams.zoom] = state.select_zoom;
             query[UrlGetParams.type_view] = UrlGetParamsTypeView.main_map;
+            if (state.select_PropertiesMark) {
+                query[UrlGetParams.mark] = state.select_PropertiesMark.id;
+            }
             router.push({ query: query });
         },
         Update_type_view(
@@ -93,19 +98,32 @@ export const geomap = {
             query[UrlGetParams.type_view] = type_view;
             router.push({ query: query });
         },
-        Update_select_geomap_id(
+        Update_select_channel(
             {
                 commit, // то же, что и `store.commit`
             },
             {
-                geomap_id,
+                channel,
                 router,
                 route,
-            }: { geomap_id: number; router: any; route: any }
+            }: { channel: number; router: any; route: any }
         ) {
-            commit("AUpdate_select_geomap_id", geomap_id);
+            commit("AUpdate_select_channel", channel);
             let query = clone(route.query);
-            query[UrlGetParams.type_view] = geomap_id;
+            query[UrlGetParams.channel] = channel;
+            router.push({ query: query });
+        },
+        Update_select_PropertiesMark({
+            commit, // то же, что и `store.commit`
+        },
+            {
+                mark,
+                router,
+                route,
+            }: { mark: TPropertiesMark; router: any; route: any }) {
+            commit("AUpdate_select_PropertiesMark", mark);
+            let query = clone(route.query);
+            query[UrlGetParams.mark] = mark.id;
             router.push({ query: query });
         },
     },

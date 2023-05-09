@@ -127,14 +127,11 @@ export default {
         props_component: {
             handler(newValue: TPropertiesMark) {
                 // Эти данные берутся из поверхностной информации
-                this.name_marker = newValue.name_marker;
+                this.name_marker = newValue.type_place_obj.name;
                 this.rating = newValue.rating;
                 this.simpl_name = newValue.simpl_name;
                 this.address = newValue.address;
-                this.whattodo = whattodoIdFromName(
-                    newValue,
-                    this.$store.state.geomap.geomap_json.geom_whattodo_det
-                );
+                this.whattodo = whattodoIdFromName(newValue);
                 // Получаем подробные данные о месте
                 this.updateData(newValue);
             },

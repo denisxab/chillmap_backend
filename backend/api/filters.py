@@ -1,6 +1,5 @@
-from django_filters import rest_framework as filters
-
 from api.models.geomap import PlaceInMap
+from django_filters import rest_framework as filters
 
 
 class PlaceInMapFilter(filters.FilterSet):
@@ -10,4 +9,4 @@ class PlaceInMapFilter(filters.FilterSet):
 
     class Meta:
         model = PlaceInMap
-        fields = ("simpl_name", "what_todo", "group_place", "meta_geomap")
+        fields = ("simpl_name", "what_todo", "type_place", "channel_geomap")
