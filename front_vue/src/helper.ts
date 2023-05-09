@@ -16,7 +16,7 @@ export function ParseUrlBackend(url_src: string) {
 
 // Скачать статический файл указанному URL
 export interface TDownloadFromUrl {
-    text: Promise<string>;
+    data: object;
     ok: boolean;
     status: number;
 }
@@ -24,7 +24,7 @@ export async function DownloadFromUrl(url_src: string) {
     const response = await fetch(url_src, {
         method: "GET",
     });
-    return { text: response.text(), ok: response.ok, status: response.status };
+    return { data: await response.json(), ok: response.ok, status: response.status };
 }
 
 // Копировать объект

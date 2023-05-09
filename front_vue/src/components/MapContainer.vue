@@ -283,7 +283,7 @@ export default {
         async updateSelectGeomap(url_download: string) {
             const geomap: TDownloadFromUrl = await DownloadFromUrl(url_download);
             if (geomap.ok) {
-                const geomap_json: TGeomap[] = JSON.parse(await geomap.text);
+                const geomap_json = <TGeomap[]>geomap.data;
                 // Убираем с карты маркеры от прошлых места
                 this.ClearMarkers(this.markersLayer);
                 // Заносим Geomap в глобальное хранилище

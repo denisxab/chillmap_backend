@@ -44,7 +44,7 @@
     </div>
 </template>
 <script lang="ts">
-import { ParseUrlSrc, whattodoIdFromName } from "@/helper";
+import { DownloadFromUrl, ParseUrlSrc, whattodoIdFromName } from "@/helper";
 import ParamsList from "@/components/ParamsList.vue";
 import { TPropertiesMark } from "@/interface";
 
@@ -70,15 +70,29 @@ export default {
         this.$refs["img_rating"].src = rating;
         this.$refs["img_address"].src = address;
     },
+    methods: {
+        async getAddress(lat, lon) {
+            const response = await DownloadFromUrl(
+                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
+            );
+            if (response.ok) {
+                this.address = response.data.display_name
+            }
+            else {
+                console.error(`Ошибка при получении адреса по координатам: ${lat} ${lon}`);
+            }
+        },
+    },
     watch: {
         props_component: {
-            handler(newValue: TPropertiesMark) {
+            async handler(newValue: TPropertiesMark) {
                 // Эти данные берутся из поверхностной информации
                 this.name_marker = newValue.type_place_obj.name;
                 this.simpl_name = newValue.simpl_name;
                 this.rating = newValue.rating;
                 this.address = newValue.address;
                 this.whattodo = whattodoIdFromName(newValue);
+                await this.getAddress(newValue.cord_x, newValue.cord_y)
             },
             deep: true,
         },
