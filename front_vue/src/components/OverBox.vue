@@ -4,7 +4,9 @@
         <!-- Список компонентов на всплывающем окне -->
         <div class="over_box_body">
             <!-- Детальная информация о месте -->
-            <DetailFromPlace v-show="view_component == 'DetailFromPlace'" />
+            <DetailFromPlace v-show="view_component === 'DetailFromPlace'" />
+            <!-- Дополнительными Возможностями -->
+            <ExtraFeaturesWindow v-show="view_component === 'ExtraFeaturesWindow'" />
         </div>
         <!-- Пустой div чтобы можно было больше проскролить вниз -->
         <div class="empty"></div>
@@ -15,10 +17,11 @@
 <script lang="ts">
 import { arrow_up } from "@/pages/MapApp.vue";
 import DetailFromPlace from "@/components/DetailFromPlace.vue";
+import ExtraFeaturesWindow from "@/components/ExtraFeaturesWindow.vue";
 
 export default {
     emits: ["hidden_over_box"],
-    components: { DetailFromPlace },
+    components: { DetailFromPlace, ExtraFeaturesWindow },
     props: {
         view_component: { type: Object as () => string },
     },
@@ -45,7 +48,9 @@ export default {
     width: 100%;
     min-height: 100%;
 
-    .over_box_body {}
+    .over_box_body {
+        width: 100%;
+    }
 
     .hidden_over_box {
         position: fixed;

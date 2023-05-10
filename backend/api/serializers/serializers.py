@@ -1,4 +1,5 @@
-from api.models.geomap import ArialInMap, ChannelGeomap, PlaceInMap, TypePlace, WhatTodo
+from api.models.geomap import (ArialInMap, ChannelGeomap, PlaceInMap,
+                               TypePlace, WhatTodo)
 from django.urls import reverse
 from rest_framework import serializers
 

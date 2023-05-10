@@ -1,10 +1,5 @@
-from .settings_local import (
-    ALLOWED_HOSTS_SELECT,
-    BASE_DIR,
-    DATABASES_SELECT,
-    DEBUG_SELECT,
-    SECRET_KEY_SELECT,
-)
+from .settings_local import (ALLOWED_HOSTS_SELECT, BASE_DIR, DATABASES_SELECT,
+                             DEBUG_SELECT, SECRET_KEY_SELECT)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY_SELECT

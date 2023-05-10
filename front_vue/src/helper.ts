@@ -51,3 +51,17 @@ export function whattodoIdFromName(
     });
     return whattodo;
 }
+
+
+// Функция для получения адреса по координатам
+export async function getAddress(lat: string, lon: string): Promise<string> {
+    const response = await DownloadFromUrl(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`
+    );
+    if (response.ok) {
+        return response.data.display_name
+    }
+    else {
+        console.error(`Ошибка при получении адреса по координатам: ${lat} ${lon}`);
+    }
+}

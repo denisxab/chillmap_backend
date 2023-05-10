@@ -13,7 +13,8 @@
             <!-- Кнопка для показания большей информации -->
             <div ref="d_show_map_detail" class="d_show_map_detail">
                 <!-- Стрелка вверх.  -->
-                <input class="show_map_detail" type="image" ref="show_map_detail" v-show="is_show_map_detail" />
+                <input class="show_map_detail" type="image" v-show="is_show_map_detail" ref="show_map_detail"
+                    @click="ShowExtraFeaturesWindow" />
                 <!-- Иконка для перехода в подробную информацию о месте -->
                 <input class="show_map_detail" type="image" v-show="!is_show_map_detail" ref="show_map_detail_place"
                     @click="ShowPlaceDetailsInfo" />
@@ -136,6 +137,10 @@ export default {
         ShowPlaceDetailsInfo() {
             // Показываем во всплывающем окне детальную информацию о месте
             this.view_component = "DetailFromPlace";
+        },
+        // Показать окно дополнительными возможностями
+        ShowExtraFeaturesWindow() {
+            this.view_component = "ExtraFeaturesWindow";
         },
         // Скрыть всплывающие окно
         hidden_over_box() {

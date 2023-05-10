@@ -15,18 +15,8 @@ class TypePlaceAdmin(admin.ModelAdmin):
 
 @admin.register(PlaceInMap)
 class PlaceInMapAdmin(admin.ModelAdmin):
-    list_display = ("id", "simpl_name", "cord_x", "cord_y", "rating", "address")
-    change_form_template = "admin/change_form.html"
-
-    def change_view(self, request, object_id, form_url="", extra_context=None):
-        extra_context = extra_context or {}
-        # extra_context["osm_data"] = self.get_dynamic_info()
-        return super().change_view(
-            request,
-            object_id,
-            form_url,
-            extra_context=extra_context,
-        )
+    list_display = ("id", "simpl_name", "cord_x", "cord_y", "rating", "channel_geomap")
+    ordering = ("channel_geomap", "simpl_name")
 
 
 @admin.register(ChannelGeomap)

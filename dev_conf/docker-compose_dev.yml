@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: Dockerfile_Django
     # Автоматически перезапускать контейнер при его остановке
-    # restart: always
+    restart: always
     # Пробрасывание порта
     ports:
       - "${HOST_PORT_DJANGO}:8181"

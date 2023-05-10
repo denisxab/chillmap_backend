@@ -1,3 +1,4 @@
+from api.utils import get_address_from_coord
 from django.db import models
 
 from .base_model import ModelInteger, ModelUUID
@@ -107,7 +108,15 @@ class PlaceInMap(ModelUUID):
         return f"{self.simpl_name}: {self.cord_x},{self.cord_y}"
 
     def save(self, *args, **kwargs):
-        # Если не указан адрес то тогда указываем координаты
+        # Если не указан адрес, то тогда пытаемся найти адрес автоматически
+        # если, автоматически не получается, то берем координаты
         if not self.address:
-            self.address = f"{self.cord_x},{self.cord_y}"
+            new_address: tuple[bool, str] = get_address_from_coord(
+                self.cord_x, self.cord_y
+            )
+            if new_address[0]:
+                self.address = new_address[1]
+            else:
+                self.address = f"{self.cord_x},{self.cord_y}"
+                print(f"Ошибка при получении адреса: '{self.address}'")
         super().save(*args, **kwargs)
