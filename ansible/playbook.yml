@@ -8,6 +8,7 @@
     - name: Обновление apt
       apt:
         update_cache: yes
+
     - name: Добавление Docker GPG ключа
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg

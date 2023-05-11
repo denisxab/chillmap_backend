@@ -105,3 +105,9 @@ def downProd(ctx):
     mvDevToRoot(ctx, prod=True)
     ctx.run("docker-compose -f ./docker-compose.yml down")
     mvRootToDev(ctx)
+
+
+@task
+def publishProd(ctx):
+    with ctx.cd('ansible'):
+        ctx.run("ansible-playbook -i inventory.yml playbook.yml")

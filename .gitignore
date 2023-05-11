@@ -9,4 +9,4 @@ venv
 *.log
 /pgdata
 front_vue/node_modules
-/prod/inventory.yml
+inventory.yml
