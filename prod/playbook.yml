@@ -2,29 +2,12 @@
 - name: Развертывание проекта
   hosts: all
   become: true
+  vars:
+    path_app: "/app/chillmap_backend"
   tasks:
     - name: Обновление apt
       apt:
         update_cache: yes
-
-    - name: Создание папки /app
-      file:
-        path: /app
-        state: directory
-        mode: "0755"
-
-    - name: Установка зависимостей для Docker
-      apt:
-        name: "{{ item }}"
-        state: present
-        install_recommends: yes
-      loop:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - software-properties-common
-        - nano
-
     - name: Добавление Docker GPG ключа
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
@@ -35,40 +18,53 @@
         repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
         state: present
 
-    - name: Установка Docker
-      apt:
-        name: docker-ce
-        state: present
+    - name: Создание папки /app
+      file:
+        path: /app
+        state: directory
+        mode: "0755"
 
-    - name: Установка дополнительных пакетов через apt
+    - name: Установка зависимостей
       apt:
         name: "{{ item }}"
         state: present
+        install_recommends: yes
       loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - nano
+        - docker-ce
         - docker-compose
         - python3-pip
 
-    - name: Установка дополнительных пакетов через pip(1)
+    - name: Установка дополнительных пакетов через pip
       pip:
-        name: invoke
-
-    - name: Установка дополнительных пакетов через pip(2)
-      pip:
-        name: python-dotenv
+        name: "{{ item }}"
+        state: present
+      loop:
+        - invoke
+        - python-dotenv
 
     - name: Клонирование проекта
       git:
         repo: https://github.com/denisxab/chillmap_backend
-        dest: /app/chillmap_backend
+        dest: $path_app
         force: yes
 
     - name: Замена строки в файле .env
       lineinfile:
-        path: /app/chillmap_backend/dev_conf/.env
+        path: $path_app/dev_conf/.env
         regexp: "^IP_ADR="
         line: "IP_ADR={{ ansible_host }}"
 
+    - name: Стоп проекта
+      command:
+        cmd: invoke downProd
+        chdir: $path_app
+
     - name: Запуск проекта
-      shell: invoke runProd
-      args:
-        chdir: /app/chillmap_backend
+      command:
+        cmd: invoke runProd
+        chdir: $path_app

@@ -98,3 +98,10 @@ def downDev(ctx):
     mvDevToRoot(ctx)
     ctx.run("docker-compose -f ./docker-compose.yml down")
     mvRootToDev(ctx)
+
+
+@task
+def downProd(ctx):
+    mvDevToRoot(ctx, prod=True)
+    ctx.run("docker-compose -f ./docker-compose.yml down")
+    mvRootToDev(ctx)
