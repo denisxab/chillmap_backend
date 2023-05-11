@@ -9,7 +9,6 @@ from invoke import task
 # Конфигурация для разработки
 file_dev = [
     ".env",
-    "docker-compose.yml",
     "Dockerfile_Vue",
     "nginx.conf",
 ]
@@ -26,24 +25,28 @@ file_all = [
 
 @task
 def mvDevToRoot(ctx, prod=False):
-    try:
-        if prod:
-            shutil.copyfile("./dev_conf/Dockerfile_Django_Prod", "./Dockerfile_Django")
-        else:
-            shutil.copyfile("./dev_conf/Dockerfile_Django_Dev", "./Dockerfile_Django")
-        for file in file_dev:
+    if prod:
+        shutil.copyfile("./dev_conf/Dockerfile_Django_Prod", "./Dockerfile_Django")
+    else:
+        shutil.copyfile("./dev_conf/Dockerfile_Django_Dev", "./Dockerfile_Django")
+    for file in file_dev:
+        try:
             os.rename(f"./dev_conf/{file}", f"./{file}")
-    except FileNotFoundError:
-        ...
+        except FileNotFoundError:
+            ...
 
 
 @task
 def mvRootToDev(ctx):
     try:
-        for file in file_all:
-            os.rename(f"./{file}", f"./dev_conf/{file}")
+        os.remove("./Dockerfile_Django")
     except FileNotFoundError:
         ...
+    for file in file_all:
+        try:
+            os.rename(f"./{file}", f"./dev_conf/{file}")
+        except FileNotFoundError:
+            ...
 
 
 @task
@@ -109,5 +112,5 @@ def downProd(ctx):
 
 @task
 def publishProd(ctx):
-    with ctx.cd('ansible'):
+    with ctx.cd("ansible"):
         ctx.run("ansible-playbook -i inventory.yml playbook.yml")
