@@ -28,8 +28,8 @@ SECRET_KEY_SELECT = "django-insecure-ah3y)b6&1l_&$#v4k8%oui3c!5l=81985j5k6lp&!17
 #
 DEBUG_SELECT = True
 #
-IP_ADR = "192.168.1.50"
+IP_ADR = os.environ.get("IP_ADR", "localhost")
 # Хост для раздачи сатических файлов
-HOST_SRERVER_STATIC = f"http://{IP_ADR}:8091/"
+HOST_SRERVER_STATIC = f"http://{IP_ADR}:{os.environ['HOST_PORT_NGINX']}/"
 # Хост для Front
-HOST_SRERVER_FRONT = f"http://{IP_ADR}:8080/"
+HOST_SRERVER_FRONT = f"http://{IP_ADR}:{os.environ['HOST_PORT_VUE_SERVER']}/"

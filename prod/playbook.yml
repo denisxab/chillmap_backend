@@ -1,0 +1,66 @@
+---
+- name: Установка Docker и других пакетов
+  hosts: all
+  become: true
+  tasks:
+    - name: Обновление apt
+      apt:
+        update_cache: yes
+
+    - name: Создание папки /app
+      file:
+        path: /app
+        state: directory
+        mode: "0755"
+
+    - name: Установка зависимостей для Docker
+      apt:
+        name: "{{ item }}"
+        state: present
+        install_recommends: yes
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+
+    - name: Добавление Docker GPG ключа
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Добавление Docker репозитория
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+        state: present
+
+    - name: Установка Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Установка дополнительных пакетов через apt
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - docker-compose
+        - python3-pip
+
+    - name: Установка дополнительных пакетов через pip(1)
+      pip:
+        name: invoke
+
+    - name: Установка дополнительных пакетов через pip(2)
+      pip:
+        name: python-dotenv
+
+    - name: Клонирование проекта
+      git:
+        repo: https://github.com/denisxab/chillmap_backend
+        dest: /app/chillmap_backend
+
+    - name: Запуск проекта
+      shell: invoke runDev
+      args:
+        chdir: /app/chillmap_backend
