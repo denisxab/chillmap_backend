@@ -9,7 +9,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile_Django
-    command: python manage.py migrate && make css_to_drf && make loaddata && tail -f /dev/null
     # Автоматически перезапускать контейнер при его остановке
     restart: always
     # Пробрасывание порта

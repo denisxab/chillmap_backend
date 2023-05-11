@@ -9,15 +9,27 @@ from invoke import task
 file_dev = [
     ".env",
     "docker-compose_dev.yml",
-    "Dockerfile_Django",
+    "Dockerfile_Vue",
+    "nginx.conf",
+]
+
+file_all = [
+    ".env",
+    "docker-compose_dev.yml",
+    "Dockerfile_Django_Dev",
+    "Dockerfile_Django_Prod",
     "Dockerfile_Vue",
     "nginx.conf",
 ]
 
 
 @task
-def mvDevToRoot(ctx):
+def mvDevToRoot(ctx, prod=False):
     try:
+        if prod:
+            os.rename("./dev_conf/Dockerfile_Django_Prod", "./Dockerfile_Django")
+        else:
+            os.rename("./dev_conf/Dockerfile_Django_Dev", "./Dockerfile_Django")
         for file in file_dev:
             os.rename(f"./dev_conf/{file}", f"./{file}")
     except FileNotFoundError:
@@ -27,7 +39,7 @@ def mvDevToRoot(ctx):
 @task
 def mvRootToDev(ctx):
     try:
-        for file in file_dev:
+        for file in file_all:
             os.rename(f"./{file}", f"./dev_conf/{file}")
     except FileNotFoundError:
         ...
