@@ -15,7 +15,6 @@ file_dev = [
 
 file_all = [
     ".env",
-    "docker-compose.yml",
     "Dockerfile_Django_Dev",
     "Dockerfile_Django_Prod",
     "Dockerfile_Vue",
