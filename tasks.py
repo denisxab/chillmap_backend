@@ -72,7 +72,7 @@ def runDev(ctx):
 def runProd(ctx):
     mvDevToRoot(ctx, prod=True)
     build_html()
-    ctx.run("docker-compose -f ./docker-compose.yml up")
+    ctx.run("docker-compose -f ./docker-compose.yml up -d")
     mvRootToDev(ctx)
 
 

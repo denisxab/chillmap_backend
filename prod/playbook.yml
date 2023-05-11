@@ -1,5 +1,5 @@
 ---
-- name: Установка Docker и других пакетов
+- name: Развертывание проекта
   hosts: all
   become: true
   tasks:
@@ -23,6 +23,7 @@
         - ca-certificates
         - curl
         - software-properties-common
+        - nano
 
     - name: Добавление Docker GPG ключа
       apt_key:
@@ -59,8 +60,15 @@
       git:
         repo: https://github.com/denisxab/chillmap_backend
         dest: /app/chillmap_backend
+        force: yes
 
-    # - name: Запуск проекта
-    #   shell: invoke runDev
-    #   args:
-    #     chdir: /app/chillmap_backend
+    - name: Замена строки в файле .env
+      lineinfile:
+        path: /app/chillmap_backend/dev_conf/.env
+        regexp: "^IP_ADR="
+        line: "IP_ADR={{ ansible_host }}"
+
+    - name: Запуск проекта
+      shell: invoke runProd
+      args:
+        chdir: /app/chillmap_backend
