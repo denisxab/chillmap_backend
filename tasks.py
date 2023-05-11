@@ -8,14 +8,14 @@ from invoke import task
 # Конфигурация для разработки
 file_dev = [
     ".env",
-    "docker-compose_dev.yml",
+    "docker-compose.yml",
     "Dockerfile_Vue",
     "nginx.conf",
 ]
 
 file_all = [
     ".env",
-    "docker-compose_dev.yml",
+    "docker-compose.yml",
     "Dockerfile_Django_Dev",
     "Dockerfile_Django_Prod",
     "Dockerfile_Vue",
@@ -48,7 +48,7 @@ def mvRootToDev(ctx):
 @task
 def buildDev(ctx):
     mvDevToRoot(ctx)
-    ctx.run("docker-compose -f ./docker-compose_dev.yml build")
+    ctx.run("docker-compose -f ./docker-compose.yml build")
     mvRootToDev(ctx)
 
 
@@ -56,7 +56,7 @@ def buildDev(ctx):
 def runDev(ctx):
     mvDevToRoot(ctx)
     build_html()
-    ctx.run("docker-compose -f ./docker-compose_dev.yml up")
+    ctx.run("docker-compose -f ./docker-compose.yml up")
     mvRootToDev(ctx)
 
 
@@ -64,7 +64,7 @@ def runDev(ctx):
 def runProd(ctx):
     mvDevToRoot(ctx)
     build_html()
-    ctx.run("docker-compose -f ./docker-compose_prod.yml up")
+    ctx.run("docker-compose -f ./docker-compose.yml up")
     mvRootToDev(ctx)
 
 
@@ -88,5 +88,5 @@ def build_html():
 @task
 def downDev(ctx):
     mvDevToRoot(ctx)
-    ctx.run("docker-compose -f ./docker-compose_dev.yml down")
+    ctx.run("docker-compose -f ./docker-compose.yml down")
     mvRootToDev(ctx)
