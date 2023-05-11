@@ -7,6 +7,7 @@
             <DetailFromPlace v-show="view_component === 'DetailFromPlace'" />
             <!-- Дополнительными Возможностями -->
             <ExtraFeaturesWindow
+                @hiddenOverBox="hiddenOverBox"
                 v-show="view_component === 'ExtraFeaturesWindow'" />
         </div>
         <!-- Пустой div чтобы можно было больше проскролить вниз -->

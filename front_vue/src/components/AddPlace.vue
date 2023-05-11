@@ -49,7 +49,7 @@ import {
 } from "@/pages/MapApp.vue";
 
 export default {
-    emits: ["hidden_elm"],
+    emits: ["hidden_elm", "hiddenOverBox"],
     mounted() {
         this.$refs["hidden_elm"].src = arrow_up;
         this.show();
@@ -84,9 +84,11 @@ export default {
             };
             const res = await PostJsonFromUrl(place_url, req);
             if (res.ok) {
-                console.log("Успешное создание нового места");
+                alert("Успешное создание нового места");
+                this.hidden_elm();
+                this.$emit("hiddenOverBox");
             } else {
-                console.error("Ошибка создания нового места");
+                alert("Ошибка создания нового места");
             }
         },
 

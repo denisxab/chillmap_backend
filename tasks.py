@@ -1,6 +1,7 @@
 import os
 import pathlib
 import re
+import shutil
 
 from dotenv import dotenv_values
 from invoke import task
@@ -27,9 +28,9 @@ file_all = [
 def mvDevToRoot(ctx, prod=False):
     try:
         if prod:
-            os.rename("./dev_conf/Dockerfile_Django_Prod", "./Dockerfile_Django")
+            shutil.copyfile("./dev_conf/Dockerfile_Django_Prod", "./Dockerfile_Django")
         else:
-            os.rename("./dev_conf/Dockerfile_Django_Dev", "./Dockerfile_Django")
+            shutil.copyfile("./dev_conf/Dockerfile_Django_Dev", "./Dockerfile_Django")
         for file in file_dev:
             os.rename(f"./dev_conf/{file}", f"./{file}")
     except FileNotFoundError:
@@ -53,6 +54,13 @@ def buildDev(ctx):
 
 
 @task
+def buildProd(ctx):
+    mvDevToRoot(ctx, prod=True)
+    ctx.run("docker-compose -f ./docker-compose.yml build")
+    mvRootToDev(ctx)
+
+
+@task
 def runDev(ctx):
     mvDevToRoot(ctx)
     build_html()
@@ -62,7 +70,7 @@ def runDev(ctx):
 
 @task
 def runProd(ctx):
-    mvDevToRoot(ctx)
+    mvDevToRoot(ctx, prod=True)
     build_html()
     ctx.run("docker-compose -f ./docker-compose.yml up")
     mvRootToDev(ctx)

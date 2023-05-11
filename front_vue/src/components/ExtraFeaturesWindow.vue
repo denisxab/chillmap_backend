@@ -14,7 +14,8 @@
             <AddPlace
                 ref="add_place"
                 v-show="select_elm === 'add_place'"
-                @hidden_elm="hidden_elm" />
+                @hidden_elm="hidden_elm"
+                @hiddenOverBox="hiddenOverBox" />
         </div>
     </div>
 </template>
@@ -39,6 +40,9 @@ export default {
         },
         hidden_elm() {
             this.select_elm = undefined;
+        },
+        hiddenOverBox() {
+            this.$emit("hiddenOverBox");
         },
     },
 };

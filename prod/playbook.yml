@@ -60,7 +60,7 @@
         repo: https://github.com/denisxab/chillmap_backend
         dest: /app/chillmap_backend
 
-    - name: Запуск проекта
-      shell: invoke runDev
-      args:
-        chdir: /app/chillmap_backend
+    # - name: Запуск проекта
+    #   shell: invoke runDev
+    #   args:
+    #     chdir: /app/chillmap_backend
