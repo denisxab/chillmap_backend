@@ -4,7 +4,7 @@ FROM python:3.11
 # Установка рабочей директории
 WORKDIR /app
 
-COPY ./backend/pyproject.toml ./backend/poetry.lock .
+COPY ./backend/pyproject.toml ./backend/poetry.lock ./
 
 RUN apt update && apt install -y make postgresql-client htop
 
@@ -16,7 +16,7 @@ RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction
 
 # Копирование остальных файлов приложения в рабочую директорию
-COPY ./backend/ .
+COPY ./backend/ ./
 
 # Установка переменной среды, чтобы вывод не буферизовался
 ENV PYTHONUNBUFFERED=1
