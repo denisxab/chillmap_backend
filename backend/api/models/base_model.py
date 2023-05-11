@@ -20,7 +20,7 @@ class ModelInteger(models.Model):
         primary_key=True,
         default=int,
         verbose_name="Идентификатор записи Int",
-        editable=False,
+        # editable=False,
     )
 
     class Meta:

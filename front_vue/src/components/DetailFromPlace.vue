@@ -33,7 +33,7 @@ import {
 import {
     DownloadFromUrl,
     ParseUrlSrc,
-    TDownloadFromUrl,
+    TFromUrl,
     whattodoIdFromName,
 } from "@/helper";
 import ParamsList from "@/components/ParamsList.vue";
@@ -127,7 +127,7 @@ export default {
         props_component: {
             handler(newValue: TPropertiesMark) {
                 // Эти данные берутся из поверхностной информации
-                this.name_marker = newValue.type_place_obj.name;
+                this.name_marker = this.$store.state.geomap.settings_type_place[newValue.type_place].name;
                 this.rating = newValue.rating;
                 this.simpl_name = newValue.simpl_name;
                 this.address = newValue.address;

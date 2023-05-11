@@ -17,7 +17,7 @@ export enum UrlGetParams {
     // Идентификатор канала
     channel = "c",
     // Идентификатор выбранного места(маркера)
-    mark = 'm'
+    mark = "m",
 }
 // -------------------------------------------------
 
@@ -91,45 +91,33 @@ export interface TGeomap {
     type_place: number;
     type_place_obj: TTypePlaceObj;
 }
-export interface TPropertiesMark extends TGeomap { };
-export interface Tchannel_geomapJson { }
 
-// export interface TPropertiesMark extends TGeomap {
-//     // Названия группы маркеров
-//     name_marker: string;
-//     // Координаты места [широта,долгота]
-//     coord: [number, number];
-// }
-// export interface Tgeom_place_coord_list {
-//     [key: NameGeom]: Tgeom_place_coord_list_item;
-// }
+// Идентификатор типа места
+type TIdTypePlace = string;
 
-// export interface Tgeom_place_coord {
-//     [key: NameGeom]: Tgeom_place_coord_list;
-// }
+export interface TPlace {
+    [key: TIdTypePlace]: Omit<
+        TGeomap,
+        | "what_todo_obj"
+        | "type_place_obj"
+        | "channel_geomap"
+        | "channel_geomap_obj"
+    >[];
+}
+export interface TSettingsPlace {
+    [key: TIdTypePlace]: TTypePlaceObj;
+}
+export interface TPlaces {
+    place: TPlace;
+    settings: TSettingsPlace;
+}
+export interface TChannelGeomapPlace extends TChannelGeomapObj {
+    places: TPlaces;
+}
 
-// ------------------------------------------------- //
-
-// ----- channel_geomap ---------------------------------------- //
-
-// export interface Tchannel_geomapJson_names_radius {
-//     // По этому имени пользователи будут фильтровать "Имена точек радиуса".
-//     hum: string;
-//     // Путь к статическому файлу, который хранить в себе информацию обо всех местах в этом радиусе.
-//     name_path: string;
-//     // ID БД шарда, где храниться группа
-//     shard: number;
-// }
-
-
-
-// export interface Tchannel_geomapJson {
-//     // names_radius: {
-//     //     [key: number]: Tchannel_geomapJson_names_radius;
-//     // };
-//     results: TChannelGeomap[];
-// }
-
+// --------------------
+export interface TPropertiesMark extends TGeomap {}
+export interface Tchannel_geomapJson {}
 
 // ------------------------------------------------- //
 

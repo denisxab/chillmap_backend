@@ -77,7 +77,7 @@ export default {
         props_component: {
             async handler(newValue: TPropertiesMark) {
                 // Эти данные берутся из поверхностной информации
-                this.name_marker = newValue.type_place_obj.name;
+                this.name_marker = this.$store.state.geomap.settings_type_place[newValue.type_place].name;
                 this.simpl_name = newValue.simpl_name;
                 this.rating = newValue.rating;
                 this.address = newValue.address;

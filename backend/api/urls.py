@@ -1,8 +1,13 @@
 from rest_framework import routers
 
-from .views import (ArialInMapViewSet, ChannelGeomapListPlaceViewSet,
-                    ChannelGeomapViewSet, PlaceInMapViewSet, TypePlaceViewSet,
-                    WhatTodoViewSet)
+from .views import (
+    ArialInMapViewSet,
+    ChannelGeomapListPlaceViewSet,
+    ChannelGeomapViewSet,
+    PlaceInMapViewSet,
+    TypePlaceViewSet,
+    WhatTodoViewSet,
+)
 
 router = routers.DefaultRouter()
 router.register(r"place", PlaceInMapViewSet, basename="place")

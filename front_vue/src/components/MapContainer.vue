@@ -27,11 +27,11 @@ import Icon from "ol/style/Icon";
 import { toSize } from "ol/size";
 import Layer from "ol/layer/Layer";
 import Fill from "ol/style/Fill";
-import { DownloadFromUrl, ParseUrlSrc, TDownloadFromUrl } from "@/helper";
+import { DownloadFromUrl, ParseUrlSrc, TFromUrl } from "@/helper";
 import Stroke from "ol/style/Stroke";
 import MapEvent from "ol/MapEvent";
 import MapBrowserEvent from "ol/MapBrowserEvent";
-import { TGeomap, TCoord } from "@/interface";
+import { TCoord, TChannelGeomapPlace } from "@/interface";
 
 // Картинка маркера по умолчанию
 const imgPont = ParseUrlSrc("@/img/default_point.png");
@@ -281,9 +281,11 @@ export default {
         },
         // Загрузить geomap_ИмяТочкиРадиусов.json и обновить все маркеры мест на карте, в соответствие с этим файлом
         async updateSelectGeomap(url_download: string) {
-            const geomap: TDownloadFromUrl = await DownloadFromUrl(url_download);
+            const geomap: TFromUrl = await DownloadFromUrl(
+                url_download
+            );
             if (geomap.ok) {
-                const geomap_json = <TGeomap[]>geomap.data;
+                const geomap_json = <TChannelGeomapPlace>geomap.data;
                 // Убираем с карты маркеры от прошлых места
                 this.ClearMarkers(this.markersLayer);
                 // Заносим Geomap в глобальное хранилище
@@ -302,7 +304,7 @@ export default {
             layer.getSource().clear();
         },
         // Отобразить места на карте из формата `Tgeomap`
-        ShowPlaceFromExternal(layer: Layer, self_geomap: TGeomap[]) {
+        ShowPlaceFromExternal(layer: Layer, self_geomap: TChannelGeomapPlace) {
             /*
                 layer: На какой слой добавить маркеры.
                 self_geomap: Объект с данными имеющий координаты и стили для маркеров.
@@ -310,34 +312,44 @@ export default {
 
             // 1. Показать слой
             layer.setVisible(true);
-            // Перебрать места и отобразить их на месте
-            self_geomap.forEach(element => {
-                let style = {};
-                let style_geom = element.type_place_obj
-                if (style_geom) {
-                    let img_url = element.type_place_obj.img_url
-                    let img_size = [element.type_place_obj.img_size_w, element.type_place_obj.img_size_h]
-                    style = {
+            // Получить настройки для типов и сохранить их  в store
+            const settings_type_place = self_geomap.places.settings;
+            this.$store.commit(
+                "geomap/Update_settings_type_place",
+                settings_type_place
+            );
+            //! Перебрать места и отобразить их на месте
+            for (let item in self_geomap.places.place) {
+                self_geomap.places.place[item].forEach((element) => {
+                    const img_url = settings_type_place[item].img_url;
+                    const img_size = [
+                        settings_type_place[item].img_size_w,
+                        settings_type_place[item].img_size_h,
+                    ];
+                    const style = {
                         imgUrl: ParseUrlSrc(img_url),
-                        imgSize: img_size
+                        imgSize: img_size,
                     };
-                    const coord = this._parseCoordFromOpenstreetmap(`${element.cord_x},${element.cord_y}`);
                     // Формируем краткую информацию о месте. Рейтинг:Имя
                     style["labelText"] = `${
                         // Максимум 12 баллов
                         element.rating % 13
-                        }:${
+                    }:${
                         // Максимальная длинна названия 16 символов
                         element.simpl_name.substring(0, 16)
-                        }`;
+                    }`;
+                    const coord = this._parseCoordFromOpenstreetmap(
+                        `${element.cord_x},${element.cord_y}`
+                    );
                     // Своиства которы будут храниться в маркере
                     let PropertiesMark = element;
-                    PropertiesMark["name_marker"] = element.type_place_obj.name;
+                    PropertiesMark["name_marker"] =
+                        settings_type_place[item].name;
                     PropertiesMark["coord"] = [coord.latitude, coord.longitude];
                     // 2.2.1 Устанавливаем маркеры
                     this.setMarkers(coord, PropertiesMark, style);
-                }
-            });
+                });
+            }
         },
         //  ---------- Обработчики событий на карте  ------------------ //
 
@@ -411,14 +423,11 @@ export default {
             // Кастомные свойства у нажатого маркера
             const PropertiesMark = feat.getProperties();
             // Сохраняем в ГХ текущие выбранное место;
-            this.$store.dispatch(
-                `geomap/Update_select_PropertiesMark`,
-                {
-                    mark: PropertiesMark,
-                    router: this.$router,
-                    route: this.$route,
-                }
-            );
+            this.$store.dispatch(`geomap/Update_select_PropertiesMark`, {
+                mark: PropertiesMark,
+                router: this.$router,
+                route: this.$route,
+            });
             // Координаты фокусировки равны = координатам нажатого места
             this.$store.dispatch(`geomap/Update_coordinat_click`, {
                 coord: {

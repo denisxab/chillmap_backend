@@ -1,9 +1,13 @@
 from api.filters import PlaceInMapFilter
-from api.models.geomap import (ArialInMap, ChannelGeomap, PlaceInMap,
-                               TypePlace, WhatTodo)
-from api.serializers import (ArialInMapSerializers, ChannelGeomapListPlace,
-                             ChannelGeomapSerializers, PlaceInMapSerializers,
-                             TypePlaceSerializers, WhatTodoSerializers)
+from api.models.geomap import ArialInMap, ChannelGeomap, PlaceInMap, TypePlace, WhatTodo
+from api.serializers import (
+    ArialInMapSerializers,
+    ChannelGeomapListPlaceSerializers,
+    ChannelGeomapSerializers,
+    PlaceInMapSerializers,
+    TypePlaceSerializers,
+    WhatTodoSerializers,
+)
 from django_filters import rest_framework as filters
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
@@ -41,4 +45,4 @@ class ChannelGeomapViewSet(ModelViewSet):
 
 class ChannelGeomapListPlaceViewSet(ReadOnlyModelViewSet):
     queryset = ChannelGeomap.objects.all()
-    serializer_class = ChannelGeomapListPlace
+    serializer_class = ChannelGeomapListPlaceSerializers

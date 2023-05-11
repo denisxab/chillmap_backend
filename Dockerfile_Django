@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir poetry
 
 # Установка зависимостей с использованием Poetry
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi --no-root
+    && poetry install --no-interaction
 
 # Копирование остальных файлов приложения в рабочую директорию
 COPY ./backend/ .

@@ -6,12 +6,17 @@
             <!-- Детальная информация о месте -->
             <DetailFromPlace v-show="view_component === 'DetailFromPlace'" />
             <!-- Дополнительными Возможностями -->
-            <ExtraFeaturesWindow v-show="view_component === 'ExtraFeaturesWindow'" />
+            <ExtraFeaturesWindow
+                v-show="view_component === 'ExtraFeaturesWindow'" />
         </div>
         <!-- Пустой div чтобы можно было больше проскролить вниз -->
         <div class="empty"></div>
         <!-- Кнопка для скрытия всплывающего окна -->
-        <input ref="hidden_over_box" class="hidden_over_box" type="image" @click="hiddenOverBox" />
+        <input
+            ref="hidden_over_box"
+            class="hidden_over_box"
+            type="image"
+            @click="hiddenOverBox" />
     </div>
 </template>
 <script lang="ts">

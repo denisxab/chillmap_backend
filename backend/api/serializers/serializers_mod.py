@@ -1,14 +1,30 @@
+from collections import defaultdict
 from api.models.geomap import ChannelGeomap, PlaceInMap, TypePlace
 from rest_framework import serializers
 
-from .serializers import (ArialInMapSerializers, MixinInteger, MixinUrl,
-                          MixinUUIDv4, WhatTodoSerializers)
+from .serializers import (
+    ArialInMapSerializers,
+    MixinInteger,
+    MixinUrl,
+    MixinUUIDv4,
+    TypePlaceSerializers,
+    WhatTodoSerializers,
+)
 
 
-class DPlaceInMapSerializers(MixinUUIDv4, MixinUrl, serializers.ModelSerializer):
-    """Сериализация модели PlaceInMap который используется в  ChannelGeomapListPlace"""
+class DPlaceInMapSerializers(
+    MixinUUIDv4,
+    MixinUrl,
+    serializers.ModelSerializer,
+):
+    """Сериализация модели PlaceInMap который используется
+    в  ChannelGeomapListPlace"""
 
-    what_todo_obj = WhatTodoSerializers(source="what_todo", read_only=True, many=True)
+    what_todo_obj = WhatTodoSerializers(
+        source="what_todo",
+        read_only=True,
+        many=True,
+    )
 
     class Meta:
         model = PlaceInMap
@@ -26,13 +42,58 @@ class DPlaceInMapSerializers(MixinUUIDv4, MixinUrl, serializers.ModelSerializer)
         url = "place"
 
 
-class ChannelGeomapListPlace(MixinInteger, MixinUrl, serializers.ModelSerializer):
+class PlacesSerializers(serializers.Serializer):
+    place = serializers.SerializerMethodField(read_only=True)
+
+    def get_place(self, obj):
+        ...
+
+    def to_representation(self, instance):
+        res = super().to_representation(instance)
+
+        places = DPlaceInMapSerializers(
+            instance.all(), many=True, context=self.context
+        ).data
+
+        # Группировка мест по типу места с использованием defaultdict
+        place = defaultdict(list)
+        for p in places:
+            p_type = p.get("type_place", None)
+            if p_type is not None:
+                place[p_type].append(p)
+
+        # Получение всех идентификаторов типов мест
+        type_place_ids = place.keys()
+
+        # Запрос всех объектов TypePlace за один раз
+        type_places = TypePlace.objects.filter(pk__in=type_place_ids)
+        type_places_data = TypePlaceSerializers(
+            type_places, many=True, context=self.context
+        ).data
+
+        # Создание словаря настроек, где ключ - идентификатор типа места
+        # , а значение - данные TypePlace
+        settings = {tp["id"]: tp for tp in type_places_data}
+
+        res["settings"] = settings
+        # Преобразование defaultdict в обычный словарь
+        res["place"] = dict(place)
+
+        return res
+
+
+class ChannelGeomapListPlaceSerializers(
+    MixinInteger, MixinUrl, serializers.ModelSerializer
+):
     """Сериализация модели  ChannelGeomap в которой отобразиться список мест
     которые входят в этот канал
     """
 
-    arial_in_map_obj = ArialInMapSerializers(source="arial_in_map", read_only=True)
-    places = serializers.SerializerMethodField(read_only=True)
+    arial_in_map_obj = ArialInMapSerializers(
+        source="arial_in_map",
+        read_only=True,
+    )
+    places = PlacesSerializers(source="channel_geomap", read_only=True)
 
     class Meta:
         model = ChannelGeomap
@@ -46,34 +107,3 @@ class ChannelGeomapListPlace(MixinInteger, MixinUrl, serializers.ModelSerializer
             "places",
         )
         url = "channel_geomap_place"
-
-    def get_places(self, obj):
-        return ""
-
-    def to_representation(self, instance):
-        # Вызываем родительский метод to_representation()
-        res = super().to_representation(instance)
-
-        places = DPlaceInMapSerializers(
-            instance.channel_geomap.all(), many=True, context=self.context
-        ).data
-        # Создаем пустой словарь type_place_dict для группировки мест по
-        # типу места
-        type_place_dict = dict()
-
-        # Проходимся по списку мест и добавляем их ID в словарь
-        # type_place_dict, сгруппированный по типу места
-        for p in places:
-            if t := type_place_dict.get(p["type_place"]):
-                t.append(p)
-            else:
-                type_place_dict[p["type_place"]] = [p]
-
-        # Для каждого типа места из базы данных TypePlace, заменяем его ID
-        # на его имя в словаре type_place_dict
-        for r in TypePlace.objects.filter(pk__in=tuple(type_place_dict.keys())):
-            type_place_dict[r.name] = type_place_dict.pop(r.pk)
-
-        res["places"] = type_place_dict
-        # Возвращаем измененный словарь представления объекта модели
-        return res
