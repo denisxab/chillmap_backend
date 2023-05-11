@@ -5,8 +5,7 @@
         <!-- Запрет приближать дисплей -->
         <meta
             name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
+            content="width=device-width, initial-scale=1, maximum-scale=1" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
         <link rel="icon" href="<%= BASE_URL %>favicon.svg" />
@@ -15,10 +14,25 @@
 
     <script>
         // ------------------  ПЕРЕЕМНЫЕ ОКРУЖЕНИЯ  ----------------------------------------
-        // Путь к статическим файлам по умолчанию. Он будет подставлен за место `@/`
-        var ENV_default_host_to_src = "http://localhost:8091/"; //"http://5.63.154.238:8091/";
-        var ENV_default_host_to_backend = "http://localhost:8181/"; //"http://5.63.154.238:8181/";
+        // URL для получения других URL от Сервера.
+        var ENV_GetUrl = "http://192.168.1.50:8181/get_url/";
         // ---------------------------------------------------------------------------------
+        // Выполнение синхронного запроса
+        function loadSync(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, false); // false означает синхронный запрос
+            xhr.send();
+            return xhr.responseText;
+        }
+        // Получение URL синхронно
+        var ENV_GetUrlResponse = loadSync(ENV_GetUrl);
+        // Обновление переменной с URL
+        if (ENV_GetUrlResponse) {
+            const u = JSON.parse(ENV_GetUrlResponse);
+            var ENV_default_host_to_src = u.HOST_SRERVER_STATIC;
+            var ENV_default_host_to_backend = u.HOST_SRERVER_BACKEND;
+            var ENV_default_host_to_front = u.HOST_SRERVER_FRONT;
+        }
     </script>
     <body>
         <div id="app"></div>

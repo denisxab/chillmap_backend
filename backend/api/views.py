@@ -9,7 +9,11 @@ from api.serializers import (
     WhatTodoSerializers,
 )
 from django_filters import rest_framework as filters
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+
+from conf.settings_local import HOST_SRERVER_FRONT, HOST_SRERVER_STATIC
 
 
 class PlaceInMapViewSet(ModelViewSet):
@@ -46,3 +50,21 @@ class ChannelGeomapViewSet(ModelViewSet):
 class ChannelGeomapListPlaceViewSet(ReadOnlyModelViewSet):
     queryset = ChannelGeomap.objects.all()
     serializer_class = ChannelGeomapListPlaceSerializers
+
+
+class GetUrls(APIView):
+    """Показать спсиок хостов"""
+
+    def get(self, request, *args, **kwargs):
+        return Response(
+            {
+                # Хост для раздачи сатических файлов
+                "HOST_SRERVER_STATIC": HOST_SRERVER_STATIC,
+                # Хост для Django
+                "HOST_SRERVER_BACKEND": request.build_absolute_uri().replace(
+                    "get_url/", ""
+                ),
+                # Хост для Front
+                "HOST_SRERVER_FRONT": HOST_SRERVER_FRONT,
+            }
+        )

@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from api.views import GetUrls
 from conf import settings
 from django.contrib import admin
 from django.urls import include, path
@@ -22,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
     path("api/v1/", include("api.urls")),
+    path("get_url/", GetUrls.as_view(), name="get_url"),
 ]
 if settings.DEBUG:
     import debug_toolbar

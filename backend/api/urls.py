@@ -1,3 +1,4 @@
+from django.urls import path
 from rest_framework import routers
 
 from .views import (
@@ -14,7 +15,11 @@ router.register(r"place", PlaceInMapViewSet, basename="place")
 router.register(r"what_todo", WhatTodoViewSet, basename="what_todo")
 router.register(r"type_place", TypePlaceViewSet, basename="type_place")
 router.register(r"arial_in_map", ArialInMapViewSet, basename="arial_in_map")
-router.register(r"channel_geomap", ChannelGeomapViewSet, basename="channel_geomap")
+router.register(
+    r"channel_geomap",
+    ChannelGeomapViewSet,
+    basename="channel_geomap",
+)
 router.register(
     r"channel_geomap_place",
     ChannelGeomapListPlaceViewSet,
@@ -22,4 +27,4 @@ router.register(
 )
 
 
-urlpatterns = router.urls
+urlpatterns = [*router.urls]

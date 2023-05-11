@@ -115,11 +115,11 @@ export default {
 @import "@/gcolor.scss";
 
 .hidden_elm {
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(90deg);
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
     width: 5rem;
 }
 
@@ -127,6 +127,8 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
+    color: $БазовыйЦветТекста;
+
     .row {
         box-shadow: 0px 0px 0.1rem 0.1rem $ЦветФонаВсплывающегоОкна;
         border-radius: 0.2rem;
@@ -150,6 +152,8 @@ export default {
             flex: 1;
             margin-left: 0.5rem;
             width: 100%;
+            color: $БазовыйЦветТекста;
+            background: $ЦветФонаВсплывающегоОкна;
         }
         .todo {
             height: 6rem;
