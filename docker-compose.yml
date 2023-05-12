@@ -27,6 +27,7 @@ services:
       IP_ADR: ${IP_ADR}
       HOST_PORT_NGINX_STATIC: ${HOST_PORT_NGINX_STATIC}
       HOST_PORT_VUE_SERVER: ${HOST_PORT_VUE_SERVER}
+      HOST_PORT_NGINX_VUE: ${HOST_PORT_NGINX_VUE}
     depends_on:
       - db
 
