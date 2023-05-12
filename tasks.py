@@ -57,20 +57,20 @@ def dump(ctx):
 
 
 @task
-def run(ctx, prod, detach):
+def run(ctx, prod=False, detach=False):
     """Запустить docker-compose"""
     ConfToRoot(ctx, prod)
     build_html()
     ctx.run(
-        f"docker-compose -f ./docker-compose.yml up {'-d' if detach == 'True' else ''} app db nginx_vue nginx_static"
-        if prod == "True"
+        f"docker-compose -f ./docker-compose.yml up {'-d' if detach else ''} app db nginx_vue nginx_static"
+        if prod
         else "docker-compose -f ./docker-compose.yml up"
     )
     RootToConf(ctx)
 
 
 @task
-def restart(ctx, prod, detach):
+def restart(ctx, prod=False, detach=False):
     """Перезапустить docker-compose"""
     down(ctx, prod)
     build(ctx, prod)
@@ -78,7 +78,7 @@ def restart(ctx, prod, detach):
 
 
 @task
-def down(ctx, prod):
+def down(ctx, prod=False):
     """Остановить docker-compose"""
     ConfToRoot(ctx, prod)
     ctx.run("docker-compose -f ./docker-compose.yml down")
@@ -86,14 +86,14 @@ def down(ctx, prod):
 
 
 @task
-def build(ctx, prod):
+def build(ctx, prod=False):
     ConfToRoot(ctx, prod)
     ctx.run("docker-compose -f ./docker-compose.yml build")
     RootToConf(ctx)
 
 
 @task
-def logs(ctx, prod):
+def logs(ctx, prod=False):
     """Посмотреть логи"""
     ConfToRoot(ctx, prod)
     ctx.run("docker-compose logs")
@@ -105,9 +105,9 @@ def logs(ctx, prod):
 
 
 @task
-def ConfToRoot(ctx, prod):
+def ConfToRoot(ctx, prod=False):
     shutil.copyfile(
-        DOCKERFILE_DJANGO_PROD if prod == "True" else DOCKERFILE_DJANGO_DEV,
+        DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV,
         DOCKERFILE_DJANGO,
     )
 

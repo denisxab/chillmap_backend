@@ -68,5 +68,5 @@
 
     - name: Перезапуск проекта
       command:
-        cmd: invoke dck.restart --prod=True  --detach=True --echo
+        cmd: invoke dck.restart --prod --detach --echo
         chdir: "{{ path_app }}"
