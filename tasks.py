@@ -5,27 +5,27 @@ import shutil
 from contextlib import suppress
 
 from dotenv import dotenv_values
-from invoke import Context, task, Collection
+from invoke import Collection, Context, task
 
-FILE_DEV = [
-    ".env",
-    "nginx.conf",
-]
-
-DOCKERFILE_DJANGO_DEV = "./dev_conf/Dockerfile_Django_Dev"
-DOCKERFILE_DJANGO_PROD = "./dev_conf/Dockerfile_Django_Prod"
+DOCKERFILE_DJANGO_DEV = "./conf_build/Dockerfile_Django_Dev"
+DOCKERFILE_DJANGO_PROD = "./conf_build/Dockerfile_Django_Prod"
 DOCKERFILE_DJANGO = "./Dockerfile_Django"
-DOCKERFILE_VUE_DEV = "./dev_conf/Dockerfile_Vue_Dev"
-DOCKERFILE_VUE_PROD = "./dev_conf/Dockerfile_Vue_Prod"
+#
+DOCKERFILE_VUE_DEV = "./conf_build/Dockerfile_Vue_Dev"
+DOCKERFILE_VUE_BUILD = "./conf_build/Dockerfile_Vue_Build"
 DOCKERFILE_VUE = "./Dockerfile_Vue"
 
-FILE_ALL = [
-    ".env",
+
+FILE_DEV = [
     DOCKERFILE_DJANGO_DEV,
-    DOCKERFILE_DJANGO_PROD,
     DOCKERFILE_VUE_DEV,
-    DOCKERFILE_VUE_PROD,
-    "nginx.conf",
+]
+FILE_PROD = [
+    DOCKERFILE_DJANGO_PROD,
+]
+FILE_ALL = [
+    *FILE_DEV,
+    *FILE_PROD,
 ]
 
 ######################
@@ -35,6 +35,10 @@ FILE_ALL = [
 @task
 def publish(ctx):
     """Отправить проект на прод"""
+    # Перед диплоем, собрать Vue.js приложение в контейнере
+    ctx.run(f"docker build -t dockerfile_vue_prod -f {DOCKERFILE_VUE_BUILD} .")
+    ctx.run("docker run -v ./front_vue:/app -v /app/node_modules dockerfile_vue_prod")
+    # Выполнить диплой
     with ctx.cd("ansible"):
         ctx.run("ansible-playbook -i inventory.yml publush.yml")
 
@@ -54,14 +58,14 @@ def dump(ctx):
 @task
 def run(ctx, prod, detach):
     """Запустить docker-compose"""
-    DevToRoot(ctx, prod)
+    ConfToRoot(ctx, prod)
     build_html()
     ctx.run(
-        f"docker-compose -f ./docker-compose.yml up {'-d' if detach == 'True' else ''}"
+        f"docker-compose -f ./docker-compose.yml up {'-d' if detach == 'True' else ''} app db nginx_vue nginx_static"
         if prod == "True"
         else "docker-compose -f ./docker-compose.yml up"
     )
-    RootToDev(ctx)
+    RootToConf(ctx)
 
 
 @task
@@ -75,24 +79,24 @@ def restart(ctx, prod, detach):
 @task
 def down(ctx, prod):
     """Остановить docker-compose"""
-    DevToRoot(ctx, prod)
+    ConfToRoot(ctx, prod)
     ctx.run("docker-compose -f ./docker-compose.yml down")
-    RootToDev(ctx)
+    RootToConf(ctx)
 
 
 @task
 def build(ctx, prod):
-    DevToRoot(ctx, prod)
+    ConfToRoot(ctx, prod)
     ctx.run("docker-compose -f ./docker-compose.yml build")
-    RootToDev(ctx)
+    RootToConf(ctx)
 
 
 @task
 def logs(ctx, prod):
     """Посмотреть логи"""
-    DevToRoot(ctx, prod)
+    ConfToRoot(ctx, prod)
     ctx.run("docker-compose logs")
-    RootToDev(ctx)
+    RootToConf(ctx)
 
 
 ######################
@@ -100,28 +104,17 @@ def logs(ctx, prod):
 
 
 @task
-def DevToRoot(ctx, prod):
+def ConfToRoot(ctx, prod):
     shutil.copyfile(
         DOCKERFILE_DJANGO_PROD if prod == "True" else DOCKERFILE_DJANGO_DEV,
         DOCKERFILE_DJANGO,
     )
-    shutil.copyfile(
-        DOCKERFILE_VUE_PROD if prod == "True" else DOCKERFILE_VUE_DEV, DOCKERFILE_VUE
-    )
-    for file in FILE_DEV:
-        with suppress(FileNotFoundError):
-            os.rename(f"./dev_conf/{file}", f"./{file}")
 
 
 @task
-def RootToDev(ctx):
+def RootToConf(ctx):
     with suppress(FileNotFoundError):
         os.remove(DOCKERFILE_DJANGO)
-    with suppress(FileNotFoundError):
-        os.remove(DOCKERFILE_VUE)
-    for file in FILE_ALL:
-        with suppress(FileNotFoundError):
-            os.rename(f"./{file}", f"./dev_conf/{file}")
 
 
 ######################
@@ -129,20 +122,26 @@ def RootToDev(ctx):
 
 
 def build_html():
+    """Изменение index.html указываем хост к Django серверу,
+    в зависимости от сервера хост будет разный"""
+
     env_dict = dotenv_values(".env")
     # Изменить IP в HTML
     html_file = pathlib.Path("./front_vue/public/index.html")
-    html = html_file.read_text()
-    html = re.sub(
-        "const IP_ADR = `[^`]+", f"const IP_ADR = `{env_dict['IP_ADR']}", html
-    )
-    html = re.sub(
-        "const HOST_PORT_DJANGO = `[^`]+",
-        f"const HOST_PORT_DJANGO = `{env_dict['HOST_PORT_DJANGO']}",
-        html,
-    )
-    html_file.write_text(html)
-    print("Успешная сборка HTML")
+    html_file_prod = pathlib.Path("./front_vue/dist/index.html")
+
+    for file in (html_file, html_file_prod):
+        html = file.read_text()
+        html = re.sub(
+            "const IP_ADR = `[^`]+", f"const IP_ADR = `{env_dict['IP_ADR']}", html
+        )
+        html = re.sub(
+            "const HOST_PORT_DJANGO = `[^`]+",
+            f"const HOST_PORT_DJANGO = `{env_dict['HOST_PORT_DJANGO']}",
+            html,
+        )
+        file.write_text(html)
+        print("Успешная сборка HTML")
 
 
 prod_namespace = Collection()
@@ -157,8 +156,8 @@ dck_namespace.add_task(build)
 dck_namespace.add_task(logs)
 
 mv_namespace = Collection()
-mv_namespace.add_task(DevToRoot)
-mv_namespace.add_task(RootToDev)
+mv_namespace.add_task(ConfToRoot)
+mv_namespace.add_task(RootToConf)
 
 namespace = Collection()
 namespace.add_collection(prod_namespace, name="prod")

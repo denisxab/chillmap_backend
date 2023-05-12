@@ -56,13 +56,13 @@
 
     - name: Замена строки в файле .env с IP_ADR
       lineinfile:
-        path: "{{ path_app }}/dev_conf/.env"
+        path: "{{ path_app }}/.env"
         regexp: "^IP_ADR="
         line: "IP_ADR={{ ansible_host }}"
 
     - name: Замена строки в файле .env с DEBUG
       lineinfile:
-        path: "{{ path_app }}/dev_conf/.env"
+        path: "{{ path_app }}/.env"
         regexp: "^DEBUG="
         line: "DEBUG=False"
 

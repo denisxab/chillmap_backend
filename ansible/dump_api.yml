@@ -8,7 +8,7 @@
   tasks:
     - name: Выполнить команду invoke
       command:
-        cmd: invoke mv.DevToRoot --prod=True --echo
+        cmd: invoke mv.ConfToRoot --prod=True --echo
         chdir: "{{ path_app }}"
 
     - name: Выполнить команду docker-compose
