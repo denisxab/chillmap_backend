@@ -122,6 +122,7 @@ CORS_ALLOW_METHODS = [
     "PUT",
 ]
 
+ASGI_APPLICATION = "asgi.application"
 
 if DEBUG:
     # Всегда показывать панель с отладкой
