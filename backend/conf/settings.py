@@ -1,8 +1,11 @@
+import os
+
 from .settings_local import (
     ALLOWED_HOSTS_SELECT,
     BASE_DIR,
     DATABASES_SELECT,
     DEBUG_SELECT,
+    HOST_SRERVER_STATIC,
     SECRET_KEY_SELECT,
 )
 
@@ -106,7 +109,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = f"{HOST_SRERVER_STATIC}static_django/"
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

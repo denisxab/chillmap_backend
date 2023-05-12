@@ -77,7 +77,10 @@ services:
       - "${HOST_PORT_NGINX_STATIC}:80"
     # Примонтирование локальной директории к контейнеру
     volumes:
+      # Основной проброс статических файлов - изображений
       - ./front_vue/static:/usr/share/nginx/html
+      # Проброс для статических файлов Django
+      - ./backend/static:/usr/share/nginx/html/static_django
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
 
   # Описание сервиса "vue"

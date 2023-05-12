@@ -1,0 +1,187 @@
+/* Стили для панели DRF */
+
+/* The navbar is fixed at >= 980px wide, so add padding to the body to prevent
+content running up underneath it. */
+
+h1 {
+    font-weight: 300;
+}
+
+h2,
+h3 {
+    font-weight: 300;
+}
+
+.resource-description,
+.response-info {
+    margin-bottom: 2em;
+}
+
+.version:before {
+    content: "v";
+    opacity: 0.6;
+    padding-right: 0.25em;
+}
+
+.version {
+    font-size: 70%;
+}
+
+.format-option {
+    font-family: Menlo, Consolas, "Andale Mono", "Lucida Console", monospace;
+}
+
+.button-form {
+    float: right;
+    margin-right: 1em;
+}
+
+td.nested {
+    padding: 0 !important;
+}
+
+td.nested > table {
+    margin: 0;
+}
+
+form select,
+form input:not([type="checkbox"]),
+form textarea {
+    width: 90%;
+}
+
+form select[multiple] {
+    height: 150px;
+}
+
+/* To allow tooltips to work on disabled elements */
+.disabled-tooltip-shield {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.errorlist {
+    margin-top: 0.5em;
+}
+
+pre {
+    overflow: auto;
+    word-wrap: normal;
+    white-space: pre;
+    font-size: 12px;
+}
+
+.page-header {
+    border-bottom: none;
+    padding-bottom: 0px;
+}
+
+#filtersModal form input[type="submit"] {
+    width: auto;
+}
+
+#filtersModal .modal-body h2 {
+    margin-top: 0;
+}
+
+body,
+.toclink,
+.promo li a,
+blockquote,
+.well,
+.modal-content,
+select,
+input {
+    color: #eee;
+    background-color: #333;
+}
+
+.form-control,
+.breadcrumb {
+    color: #eee;
+    background-color: #272729;
+}
+
+body a {
+    color: #d39999;
+}
+
+.chart {
+    color: #333;
+}
+
+.nav-list > li > a,
+.nav-list .nav-header {
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+pre {
+    color: #a8a8ac;
+}
+
+.com {
+    color: #93a1a1;
+}
+
+.lit {
+    color: #e95f91;
+}
+
+.pun,
+.opn,
+.clo {
+    color: #93a1a1;
+}
+
+.fun {
+    color: #3cd2df;
+}
+
+.str,
+.atv {
+    color: #9feaaf;
+}
+
+.kwd,
+.prettyprint .tag {
+    color: #fec48b;
+}
+
+.typ,
+.atn,
+.dec,
+.var {
+    color: #f08080;
+}
+
+.pln {
+    color: #a8a8ac;
+}
+
+.prettyprint {
+    padding: 8px;
+    background-color: #272729;
+    border: 1px solid #111118;
+}
+
+.prettyprint.linenums {
+    -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+    -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+    box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+}
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+    margin: 0 0 0 33px;
+    /* IE indents via margin-left */
+}
+
+ol.linenums li {
+    padding-left: 12px;
+    color: #bebec5;
+    line-height: 20px;
+    text-shadow: 0 1px 0 #fff;
+}
