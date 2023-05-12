@@ -79,8 +79,9 @@ services:
     volumes:
       - ./front_vue/dist:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - vue_app
+    # Может закоментить ?
+    # depends_on:
+    #   - vue_app
 
   # Описание сервиса "nginx_static"
   # Используется для раздачи изображений
