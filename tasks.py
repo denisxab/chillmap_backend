@@ -87,6 +87,14 @@ def build(ctx, prod):
     RootToDev(ctx)
 
 
+@task
+def logs(ctx, prod):
+    """Посмотреть логи"""
+    DevToRoot(ctx, prod)
+    ctx.run("docker-compose logs")
+    RootToDev(ctx)
+
+
 ######################
 # Перенеиспользуемые задачи
 
