@@ -35,7 +35,10 @@ LIST_PROD_APP = " ".join(["app", "db", "nginx_vue", "nginx_static"])
 
 @task
 def publish(ctx, limit):
-    """Отправить проект на прод"""
+    """Отправить проект на прод
+
+    limit: Ограничить выполннение только дял указных серверов, если указать `all`, то выполнится для всех
+    """
     # Сборка Vue.js приложения на локальной машине перед диплоем
     ctx.run(f"docker build -t dockerfile_vue_prod -f {DOCKERFILE_VUE_BUILD} .")
     ctx.run("docker run -v ./front_vue:/app -v /app/node_modules dockerfile_vue_prod")
@@ -51,7 +54,10 @@ def publish(ctx, limit):
 @task
 def dump(ctx, limit):
     """Сделать дамб базы на проде, и копировать её на текущую машину
-    в ./backend/fixtures/api.json"""
+    в ./backend/fixtures/api.json
+
+    limit: Ограничить выполннение только дял указных серверов, если указать `all`, то выполнится для всех
+    """
     with ctx.cd("ansible"):
         if limit == "all":
             ctx.run("ansible-playbook -i inventory.yml dump_api.yml")

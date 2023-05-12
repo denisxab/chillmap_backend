@@ -1,0 +1,348 @@
+[
+{
+    "model": "api.whattodo",
+    "pk": 0,
+    "fields": {
+        "todo": "Закупиться"
+    }
+},
+{
+    "model": "api.whattodo",
+    "pk": 1,
+    "fields": {
+        "todo": "Подумать"
+    }
+},
+{
+    "model": "api.whattodo",
+    "pk": 2,
+    "fields": {
+        "todo": "Выпить"
+    }
+},
+{
+    "model": "api.whattodo",
+    "pk": 3,
+    "fields": {
+        "todo": "Потанцевать"
+    }
+},
+{
+    "model": "api.whattodo",
+    "pk": 4,
+    "fields": {
+        "todo": "Помыслить"
+    }
+},
+{
+    "model": "api.whattodo",
+    "pk": 5,
+    "fields": {
+        "todo": "Поесть"
+    }
+},
+{
+    "model": "api.typeplace",
+    "pk": 0,
+    "fields": {
+        "name": "Спортзалы",
+        "img_url": "@/img/gym.png",
+        "img_size_w": 0.25,
+        "img_size_h": 0.25
+    }
+},
+{
+    "model": "api.typeplace",
+    "pk": 1,
+    "fields": {
+        "name": "Бар",
+        "img_url": "@/img/beer.png",
+        "img_size_w": 0.3,
+        "img_size_h": 0.3
+    }
+},
+{
+    "model": "api.typeplace",
+    "pk": 2,
+    "fields": {
+        "name": "Продуктовый магазин",
+        "img_url": "@/img/foot_market.png",
+        "img_size_w": 0.3,
+        "img_size_h": 0.3
+    }
+},
+{
+    "model": "api.typeplace",
+    "pk": 3,
+    "fields": {
+        "name": "Клуб",
+        "img_url": "@/img/point.png",
+        "img_size_w": 0.3,
+        "img_size_h": 0.3
+    }
+},
+{
+    "model": "api.typeplace",
+    "pk": 4,
+    "fields": {
+        "name": "Театр",
+        "img_url": "@/img/point.png",
+        "img_size_w": 0.3,
+        "img_size_h": 0.3
+    }
+},
+{
+    "model": "api.typeplace",
+    "pk": 5,
+    "fields": {
+        "name": "Стендап",
+        "img_url": "@/img/point.png",
+        "img_size_w": 0.3,
+        "img_size_h": 0.3
+    }
+},
+{
+    "model": "api.arialinmap",
+    "pk": 1,
+    "fields": {
+        "name": "Санкт-Петербург - радиус 200км от дворцовой площади"
+    }
+},
+{
+    "model": "api.channelgeomap",
+    "pk": 1,
+    "fields": {
+        "name": "Пивные СПБ",
+        "arial_in_map": 1,
+        "shard": 1
+    }
+},
+{
+    "model": "api.channelgeomap",
+    "pk": 2,
+    "fields": {
+        "name": "Продуктовые СПБ",
+        "arial_in_map": 1,
+        "shard": 1
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "081010fb-bc9c-4cd3-ba0e-7ef686e415ed",
+    "fields": {
+        "simpl_name": "Магнит у дома",
+        "cord_x": "60.013957304834975",
+        "cord_y": "30.250643577701016",
+        "rating": 3,
+        "address": "28 к1, Комендантский проспект, Озеро Долгое, округ Озеро Долгое, Санкт-Петербург, Северо-Западный федеральный округ, 197372, Россия",
+        "channel_geomap": 2,
+        "type_place": 2,
+        "what_todo": [
+            0
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "0e427f5c-dbda-4a2f-996c-52c860ab7765",
+    "fields": {
+        "simpl_name": "Вкус вил",
+        "cord_x": "60.0089804498962",
+        "cord_y": "30.2599129749569",
+        "rating": 4,
+        "address": "13 к1, Комендантский проспект, Озеро Долгое, округ Озеро Долгое, Санкт-Петербург, Северо-Западный федеральный округ, 197371, Россия",
+        "channel_geomap": 2,
+        "type_place": 2,
+        "what_todo": [
+            0,
+            2,
+            5
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "173dc35e-7efa-4f2c-9868-dd9d5a9e8178",
+    "fields": {
+        "simpl_name": "Люди любят х",
+        "cord_x": "60.011744189767455",
+        "cord_y": "30.25332837704526",
+        "rating": 2,
+        "address": "22 к1, Комендантский проспект, Озеро Долгое, округ Озеро Долгое, Санкт-Петербург, Северо-Западный федеральный округ, 197372, Россия",
+        "channel_geomap": 2,
+        "type_place": 0,
+        "what_todo": [
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "1ad3a016-cb21-43cb-a61e-6e246aa9e75e",
+    "fields": {
+        "simpl_name": "Перекресток в ТРК Озерки",
+        "cord_x": "60.01677863137695",
+        "cord_y": "30.246386469660614",
+        "rating": 3,
+        "address": "ТРК «Пять озёр», 14 к2, Долгоозёрная улица, округ Юнтолово, Санкт-Петербург, Северо-Западный федеральный округ, 197373, Россия",
+        "channel_geomap": 2,
+        "type_place": 2,
+        "what_todo": [
+            0,
+            5
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "22844768-6748-490d-9fc9-db72870de489",
+    "fields": {
+        "simpl_name": "Пример магнит",
+        "cord_x": "60.01050853999885",
+        "cord_y": "30.2544748438888",
+        "rating": 3,
+        "address": "16 к1, Комендантский проспект, Озеро Долгое, округ Озеро Долгое, Санкт-Петербург, Северо-Западный федеральный округ, 197372, Россия",
+        "channel_geomap": 2,
+        "type_place": 2,
+        "what_todo": [
+            0,
+            4,
+            5
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "64f61d77-5af1-4714-b43b-2977e9fbecb1",
+    "fields": {
+        "simpl_name": "Клубника",
+        "cord_x": "60.007825659750466",
+        "cord_y": "30.25983803",
+        "rating": 2,
+        "address": "Комендантский проспект",
+        "channel_geomap": 2,
+        "type_place": 2,
+        "what_todo": [
+            0
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "6a27da44-844d-42c3-9624-2d4e9701fb69",
+    "fields": {
+        "simpl_name": "Дорогая пивнуха",
+        "cord_x": "59.858570596661764",
+        "cord_y": "30.151752705497124",
+        "rating": 3,
+        "address": "просп. Героев, 18, Санкт-Петербург",
+        "channel_geomap": 1,
+        "type_place": 1,
+        "what_todo": [
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "6f598670-38b1-4524-bd09-0ed6314a353c",
+    "fields": {
+        "simpl_name": "Пивная",
+        "cord_x": "59.865411294740454",
+        "cord_y": "30.159816757278403",
+        "rating": 1,
+        "address": "просп. Героев, 23, Санкт-Петербург",
+        "channel_geomap": 1,
+        "type_place": 2,
+        "what_todo": [
+            1
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "8e48cb61-6c44-4850-b0fa-4e860317a835",
+    "fields": {
+        "simpl_name": "Перекресток",
+        "cord_x": "60.013166064138346",
+        "cord_y": "30.25163723",
+        "rating": 4,
+        "address": "24 к1, Комендантский проспект, Озеро Долгое, округ Озеро Долгое, Санкт-Петербург, Северо-Западный федеральный округ, 197372, Россия",
+        "channel_geomap": 2,
+        "type_place": 2,
+        "what_todo": [
+            0
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "9ed82d2b-b9a1-43c9-b177-2fce189c2e10",
+    "fields": {
+        "simpl_name": "Бар Героев",
+        "cord_x": "59.86369521994118",
+        "cord_y": "30.16211789237823",
+        "rating": 1,
+        "address": "просп. Героев, 23, Санкт-Петербург",
+        "channel_geomap": 1,
+        "type_place": 2,
+        "what_todo": [
+            1
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "b1bb8473-5e07-48f1-be1a-349aa6af4481",
+    "fields": {
+        "simpl_name": "Пиво на коменде",
+        "cord_x": "60.01432498404287",
+        "cord_y": "30.250756954",
+        "rating": 3,
+        "address": "Комендантский проспект",
+        "channel_geomap": 1,
+        "type_place": 1,
+        "what_todo": [
+            2
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "d5454491-5e52-4a64-9c26-9b398486ca1c",
+    "fields": {
+        "simpl_name": "Люди любят хлею",
+        "cord_x": "60.009747348230746",
+        "cord_y": "30.256059729519645",
+        "rating": 3,
+        "address": "16 к1, Комендантский проспект, Озеро Долгое, округ Озеро Долгое, Санкт-Петербург, Северо-Западный федеральный округ, 197372, Россия",
+        "channel_geomap": 2,
+        "type_place": 1,
+        "what_todo": [
+            0,
+            2,
+            5
+        ]
+    }
+},
+{
+    "model": "api.placeinmap",
+    "pk": "f9b5026a-0369-494c-b616-ec5afb7c9dde",
+    "fields": {
+        "simpl_name": "Карл Фидрих",
+        "cord_x": "59.969899898584714",
+        "cord_y": "30.232515388583685",
+        "rating": 5,
+        "address": "Южная дорога",
+        "channel_geomap": 1,
+        "type_place": 1,
+        "what_todo": [
+            2,
+            3,
+            4
+        ]
+    }
+}
+]
