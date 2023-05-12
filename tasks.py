@@ -154,6 +154,7 @@ dck_namespace.add_task(run)
 dck_namespace.add_task(restart)
 dck_namespace.add_task(down)
 dck_namespace.add_task(build)
+dck_namespace.add_task(logs)
 
 mv_namespace = Collection()
 mv_namespace.add_task(DevToRoot)
