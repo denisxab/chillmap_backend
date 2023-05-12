@@ -9,7 +9,7 @@ from .settings_local import (
     SECRET_KEY_SELECT,
 )
 
-SERVER_VERSION = "0.0.1"
+SERVER_VERSION = "0.0.3"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY_SELECT
