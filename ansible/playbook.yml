@@ -51,12 +51,12 @@
     - name: Клонирование проекта
       git:
         repo: https://github.com/denisxab/chillmap_backend
-        dest: $path_app
+        dest: /app/chillmap_backend
         force: yes
 
     - name: Замена строки в файле .env
       lineinfile:
-        path: $path_app/dev_conf/.env
+        path: /app/chillmap_backend/dev_conf/.env
         regexp: "^IP_ADR="
         line: "IP_ADR={{ ansible_host }}"
 
