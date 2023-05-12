@@ -63,5 +63,5 @@
     - name: Пере запуск проекта
       command:
         cmd: invoke restart --prod=True --echo
-        chdir: $path_app
+        chdir: /app/chillmap_backend
 
