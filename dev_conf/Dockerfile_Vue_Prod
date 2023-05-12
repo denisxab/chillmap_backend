@@ -17,4 +17,4 @@ RUN npm install --force
 COPY front_vue/ .
 
 # Запустите сборку Vue.js. Собирается в ./front_vue/dist
-CMD npm run build && tail -f /dev/null
+CMD npm run build ; tail -f /dev/null

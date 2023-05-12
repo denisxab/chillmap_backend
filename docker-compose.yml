@@ -28,6 +28,7 @@ services:
       HOST_PORT_NGINX_STATIC: ${HOST_PORT_NGINX_STATIC}
       HOST_PORT_VUE_SERVER: ${HOST_PORT_VUE_SERVER}
       HOST_PORT_NGINX_VUE: ${HOST_PORT_NGINX_VUE}
+      DEBUG: ${DEBUG}
     depends_on:
       - db
 

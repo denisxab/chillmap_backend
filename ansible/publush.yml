@@ -54,11 +54,17 @@
         dest: "{{ path_app }}"
         force: yes
 
-    - name: Замена строки в файле .env
+    - name: Замена строки в файле .env с IP_ADR
       lineinfile:
         path: "{{ path_app }}/dev_conf/.env"
         regexp: "^IP_ADR="
         line: "IP_ADR={{ ansible_host }}"
+
+    - name: Замена строки в файле .env с DEBUG
+      lineinfile:
+        path: "{{ path_app }}/dev_conf/.env"
+        regexp: "^DEBUG="
+        line: "DEBUG=False"
 
     - name: Перезапуск проекта
       command:
