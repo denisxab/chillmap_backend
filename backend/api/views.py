@@ -13,7 +13,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from conf.settings_local import HOST_SRERVER_FRONT, HOST_SRERVER_STATIC
+from conf.settings_local import (
+    HOST_SRERVER_FRONT_DEV,
+    HOST_SRERVER_FRONT_PROD,
+    HOST_SRERVER_STATIC,
+)
 
 
 class PlaceInMapViewSet(ModelViewSet):
@@ -65,6 +69,7 @@ class GetUrls(APIView):
                     "get_url/", ""
                 ),
                 # Хост для Front
-                "HOST_SRERVER_FRONT": HOST_SRERVER_FRONT,
+                "HOST_SRERVER_FRONT_DEV": HOST_SRERVER_FRONT_DEV,
+                "HOST_SRERVER_FRONT_PROD": HOST_SRERVER_FRONT_PROD,
             }
         )
