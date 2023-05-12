@@ -5,7 +5,7 @@ import shutil
 from contextlib import suppress
 
 from dotenv import dotenv_values
-from invoke import Context, task
+from invoke import Context, task, Collection
 
 FILE_DEV = [
     ".env",
@@ -24,31 +24,27 @@ DOCKERFILE_DJANGO_DEV = "./dev_conf/Dockerfile_Django_Dev"
 DOCKERFILE_DJANGO_PROD = "./dev_conf/Dockerfile_Django_Prod"
 DOCKERFILE_DJANGO = "./Dockerfile_Django"
 
-
-@task
-def mvDevToRoot(ctx, prod):
-    shutil.copyfile(
-        DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV, DOCKERFILE_DJANGO
-    )
-    for file in FILE_DEV:
-        with suppress(FileNotFoundError):
-            os.rename(f"./dev_conf/{file}", f"./{file}")
+######################
+# Для диплой
 
 
 @task
-def mvRootToDev(ctx):
-    with suppress(FileNotFoundError):
-        os.remove(DOCKERFILE_DJANGO)
-    for file in FILE_ALL:
-        with suppress(FileNotFoundError):
-            os.rename(f"./{file}", f"./dev_conf/{file}")
+def publish(ctx):
+    """Отправить проект на прод"""
+    with ctx.cd("ansible"):
+        ctx.run("ansible-playbook -i inventory.yml publush.yml")
 
 
 @task
-def build(ctx, prod):
-    mvDevToRoot(ctx, prod)
-    ctx.run("docker-compose -f ./docker-compose.yml build")
-    mvRootToDev(ctx)
+def dump(ctx):
+    """Сделать дамб базы на проде, и копировать её на текущую машину
+    в ./backend/fixtures/api.json"""
+    with ctx.cd("ansible"):
+        ctx.run("ansible-playbook -i inventory.yml dump_api.yml")
+
+
+######################
+# Взаимодействие с docker-compose
 
 
 @task
@@ -80,21 +76,37 @@ def down(ctx, prod):
 
 
 @task
-def publish(ctx):
-    """Отправить проект на прод"""
-    with ctx.cd("ansible"):
-        ctx.run("ansible-playbook -i inventory.yml publush.yml")
-
-
-@task
-def getDump(ctx):
-    """Сделать дамб базы на проде, и копировать её на текущую машину
-    в ./backend/fixtures/api.json"""
-    with ctx.cd("ansible"):
-        ctx.run("ansible-playbook -i inventory.yml dump_api.yml")
+def build(ctx, prod):
+    mvDevToRoot(ctx, prod)
+    ctx.run("docker-compose -f ./docker-compose.yml build")
+    mvRootToDev(ctx)
 
 
 ######################
+# Перенеиспользуемые задачи
+
+
+@task
+def mvDevToRoot(ctx, prod):
+    shutil.copyfile(
+        DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV, DOCKERFILE_DJANGO
+    )
+    for file in FILE_DEV:
+        with suppress(FileNotFoundError):
+            os.rename(f"./dev_conf/{file}", f"./{file}")
+
+
+@task
+def mvRootToDev(ctx):
+    with suppress(FileNotFoundError):
+        os.remove(DOCKERFILE_DJANGO)
+    for file in FILE_ALL:
+        with suppress(FileNotFoundError):
+            os.rename(f"./{file}", f"./dev_conf/{file}")
+
+
+######################
+# Утилиты
 
 
 def build_html():
@@ -113,6 +125,20 @@ def build_html():
     html_file.write_text(html)
     print("Успешная сборка HTML")
 
+
+prod_namespace = Collection()
+prod_namespace.add_task(publish)
+prod_namespace.add_task(dump)
+
+dck_namespace = Collection()
+dck_namespace.add_task(run)
+dck_namespace.add_task(restart)
+dck_namespace.add_task(down)
+dck_namespace.add_task(build)
+
+namespace = Collection()
+namespace.add_collection(prod_namespace, name="prod")
+namespace.add_collection(dck_namespace, name="dck")
 
 # if __name__ == "__main__":
 #     ctx = Context()
