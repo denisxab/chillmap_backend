@@ -9,20 +9,24 @@ from invoke import Context, task, Collection
 
 FILE_DEV = [
     ".env",
-    "Dockerfile_Vue",
     "nginx.conf",
 ]
 
-FILE_ALL = [
-    ".env",
-    "Dockerfile_Django_Dev",
-    "Dockerfile_Django_Prod",
-    "Dockerfile_Vue",
-    "nginx.conf",
-]
 DOCKERFILE_DJANGO_DEV = "./dev_conf/Dockerfile_Django_Dev"
 DOCKERFILE_DJANGO_PROD = "./dev_conf/Dockerfile_Django_Prod"
 DOCKERFILE_DJANGO = "./Dockerfile_Django"
+DOCKERFILE_VUE_DEV = "./dev_conf/Dockerfile_Vue_Dev"
+DOCKERFILE_VUE_PROD = "./dev_conf/Dockerfile_Vue_Prod"
+DOCKERFILE_VUE = "./Dockerfile_Vue"
+
+FILE_ALL = [
+    ".env",
+    DOCKERFILE_DJANGO_DEV,
+    DOCKERFILE_DJANGO_PROD,
+    DOCKERFILE_VUE_DEV,
+    DOCKERFILE_VUE_PROD,
+    "nginx.conf",
+]
 
 ######################
 # Для диплой
@@ -88,9 +92,11 @@ def build(ctx, prod):
 
 @task
 def DevToRoot(ctx, prod):
+    print("Prod: ", prod)
     shutil.copyfile(
         DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV, DOCKERFILE_DJANGO
     )
+    shutil.copyfile(DOCKERFILE_VUE_PROD if prod else DOCKERFILE_VUE_DEV, DOCKERFILE_VUE)
     for file in FILE_DEV:
         with suppress(FileNotFoundError):
             os.rename(f"./dev_conf/{file}", f"./{file}")
@@ -100,6 +106,8 @@ def DevToRoot(ctx, prod):
 def RootToDev(ctx):
     with suppress(FileNotFoundError):
         os.remove(DOCKERFILE_DJANGO)
+    with suppress(FileNotFoundError):
+        os.remove(DOCKERFILE_VUE)
     for file in FILE_ALL:
         with suppress(FileNotFoundError):
             os.rename(f"./{file}", f"./dev_conf/{file}")
