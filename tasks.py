@@ -53,6 +53,7 @@ def build(ctx, prod):
 
 @task
 def run(ctx, prod):
+    """Запустить docker-compose"""
     mvDevToRoot(ctx, prod)
     build_html()
     ctx.run(
@@ -65,12 +66,14 @@ def run(ctx, prod):
 
 @task
 def restart(ctx, prod):
+    """Перезапустить docker-compose"""
     down(ctx, prod)
     run(ctx, prod)
 
 
 @task
 def down(ctx, prod):
+    """Остановить docker-compose"""
     mvDevToRoot(ctx, prod)
     ctx.run("docker-compose -f ./docker-compose.yml down")
     mvRootToDev(ctx)
@@ -78,8 +81,16 @@ def down(ctx, prod):
 
 @task
 def publish(ctx):
+    """Отправить проект на прод"""
     with ctx.cd("ansible"):
-        ctx.run("ansible-playbook -i inventory.yml playbook.yml")
+        ctx.run("ansible-playbook -i inventory.yml publush.yml")
+
+
+@task
+def getDump(ctx):
+    """Сделать дамб базы на проде, и копировать его на текущую машину"""
+    with ctx.cd("ansible"):
+        ctx.run("ansible-playbook -i inventory.yml dump_api.yml")
 
 
 ######################

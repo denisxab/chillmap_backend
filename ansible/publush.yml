@@ -19,9 +19,9 @@
         repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
         state: present
 
-    - name: Создание папки /app
+    - name: Создание папки {{ path_app }}
       file:
-        path: /app
+        path: "{{ path_app }}"
         state: directory
         mode: "0755"
 
@@ -51,17 +51,16 @@
     - name: Клонирование проекта
       git:
         repo: https://github.com/denisxab/chillmap_backend
-        dest: /app/chillmap_backend
+        dest: "{{ path_app }}"
         force: yes
 
     - name: Замена строки в файле .env
       lineinfile:
-        path: /app/chillmap_backend/dev_conf/.env
+        path: "{{ path_app }}/dev_conf/.env"
         regexp: "^IP_ADR="
         line: "IP_ADR={{ ansible_host }}"
 
-    - name: Пере запуск проекта
+    - name: Перезапуск проекта
       command:
         cmd: invoke restart --prod=True --echo
-        chdir: /app/chillmap_backend
-
+        chdir: "{{ path_app }}"
