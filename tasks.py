@@ -88,7 +88,8 @@ def publish(ctx):
 
 @task
 def getDump(ctx):
-    """Сделать дамб базы на проде, и копировать его на текущую машину"""
+    """Сделать дамб базы на проде, и копировать её на текущую машину
+    в ./backend/fixtures/api.json"""
     with ctx.cd("ansible"):
         ctx.run("ansible-playbook -i inventory.yml dump_api.yml")
 

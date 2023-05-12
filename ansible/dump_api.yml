@@ -7,18 +7,17 @@
     app_name: "app"
   tasks:
     - name: Выполнить команду invoke
-      ansible.builtin.command: 
+      command:
         cmd: invoke mvDevToRoot --prod=True --echo
         chdir: "{{ path_app }}"
 
     - name: Выполнить команду docker-compose
-      ansible.builtin.command: 
+      command:
         cmd: "docker-compose exec {{ app_name }} make dump_api"
         chdir: "{{ path_app }}"
 
     - name: Копировать файл с сервера на локальную машину
-      ansible.builtin.fetch:
+      fetch:
         src: "{{ path_app }}/backend/fixtures/api.json"
-        dest: "backend/fixtures/dump_api.json"
+        dest: "../backend/fixtures/api.json"
         flat: yes
-...
