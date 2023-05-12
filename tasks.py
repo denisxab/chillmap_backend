@@ -2,80 +2,87 @@ import os
 import pathlib
 import re
 import shutil
+from contextlib import suppress
 
 from dotenv import dotenv_values
-from invoke import task
+from invoke import Context, task
 
-# Конфигурация для разработки
-file_dev = [
+FILE_DEV = [
     ".env",
     "Dockerfile_Vue",
     "nginx.conf",
 ]
 
-file_all = [
+FILE_ALL = [
     ".env",
     "Dockerfile_Django_Dev",
     "Dockerfile_Django_Prod",
     "Dockerfile_Vue",
     "nginx.conf",
 ]
+DOCKERFILE_DJANGO_DEV = "./dev_conf/Dockerfile_Django_Dev"
+DOCKERFILE_DJANGO_PROD = "./dev_conf/Dockerfile_Django_Prod"
+DOCKERFILE_DJANGO = "./Dockerfile_Django"
 
 
 @task
-def mvDevToRoot(ctx, prod=False):
-    if prod:
-        shutil.copyfile("./dev_conf/Dockerfile_Django_Prod", "./Dockerfile_Django")
-    else:
-        shutil.copyfile("./dev_conf/Dockerfile_Django_Dev", "./Dockerfile_Django")
-    for file in file_dev:
-        try:
+def mvDevToRoot(ctx, prod):
+    shutil.copyfile(
+        DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV, DOCKERFILE_DJANGO
+    )
+    for file in FILE_DEV:
+        with suppress(FileNotFoundError):
             os.rename(f"./dev_conf/{file}", f"./{file}")
-        except FileNotFoundError:
-            ...
 
 
 @task
 def mvRootToDev(ctx):
-    try:
-        os.remove("./Dockerfile_Django")
-    except FileNotFoundError:
-        ...
-    for file in file_all:
-        try:
+    with suppress(FileNotFoundError):
+        os.remove(DOCKERFILE_DJANGO)
+    for file in FILE_ALL:
+        with suppress(FileNotFoundError):
             os.rename(f"./{file}", f"./dev_conf/{file}")
-        except FileNotFoundError:
-            ...
 
 
 @task
-def buildDev(ctx):
-    mvDevToRoot(ctx)
+def build(ctx, prod):
+    mvDevToRoot(ctx, prod)
     ctx.run("docker-compose -f ./docker-compose.yml build")
     mvRootToDev(ctx)
 
 
 @task
-def buildProd(ctx):
-    mvDevToRoot(ctx, prod=True)
-    ctx.run("docker-compose -f ./docker-compose.yml build")
+def run(ctx, prod):
+    mvDevToRoot(ctx, prod)
+    build_html()
+    ctx.run(
+        "docker-compose -f ./docker-compose.yml up -d"
+        if prod
+        else "docker-compose -f ./docker-compose.yml up"
+    )
     mvRootToDev(ctx)
 
 
 @task
-def runDev(ctx):
-    mvDevToRoot(ctx)
-    build_html()
-    ctx.run("docker-compose -f ./docker-compose.yml up")
+def restart(ctx, prod):
+    down(ctx, prod)
+    run(ctx, prod)
+
+
+@task
+def down(ctx, prod):
+    mvDevToRoot(ctx, prod)
+    ctx.run("docker-compose -f ./docker-compose.yml down")
     mvRootToDev(ctx)
 
 
 @task
-def runProd(ctx):
-    mvDevToRoot(ctx, prod=True)
-    build_html()
-    ctx.run("docker-compose -f ./docker-compose.yml up -d")
-    mvRootToDev(ctx)
+def publish(ctx):
+    with ctx.cd("ansible"):
+        ctx.run("ansible-playbook -i inventory.yml playbook.yml")
+
+
+######################
 
 
 def build_html():
@@ -95,21 +102,7 @@ def build_html():
     print("Успешная сборка HTML")
 
 
-@task
-def downDev(ctx):
-    mvDevToRoot(ctx)
-    ctx.run("docker-compose -f ./docker-compose.yml down")
-    mvRootToDev(ctx)
-
-
-@task
-def downProd(ctx):
-    mvDevToRoot(ctx, prod=True)
-    ctx.run("docker-compose -f ./docker-compose.yml down")
-    mvRootToDev(ctx)
-
-
-@task
-def publishProd(ctx):
-    with ctx.cd("ansible"):
-        ctx.run("ansible-playbook -i inventory.yml playbook.yml")
+# if __name__ == "__main__":
+#     ctx = Context()
+#     down(ctx, False)
+#     print()

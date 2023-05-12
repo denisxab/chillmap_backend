@@ -60,12 +60,8 @@
         regexp: "^IP_ADR="
         line: "IP_ADR={{ ansible_host }}"
 
-    - name: Стоп проекта
+    - name: Пере запуск проекта
       command:
-        cmd: invoke downProd
+        cmd: invoke restart --prod=True --echo
         chdir: $path_app
 
-    - name: Запуск проекта
-      command:
-        cmd: invoke runProd
-        chdir: $path_app
