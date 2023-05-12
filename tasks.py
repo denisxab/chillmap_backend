@@ -50,14 +50,14 @@ def dump(ctx):
 @task
 def run(ctx, prod):
     """Запустить docker-compose"""
-    mvDevToRoot(ctx, prod)
+    DevToRoot(ctx, prod)
     build_html()
     ctx.run(
         "docker-compose -f ./docker-compose.yml up -d"
         if prod
         else "docker-compose -f ./docker-compose.yml up"
     )
-    mvRootToDev(ctx)
+    RootToDev(ctx)
 
 
 @task
@@ -70,16 +70,16 @@ def restart(ctx, prod):
 @task
 def down(ctx, prod):
     """Остановить docker-compose"""
-    mvDevToRoot(ctx, prod)
+    DevToRoot(ctx, prod)
     ctx.run("docker-compose -f ./docker-compose.yml down")
-    mvRootToDev(ctx)
+    RootToDev(ctx)
 
 
 @task
 def build(ctx, prod):
-    mvDevToRoot(ctx, prod)
+    DevToRoot(ctx, prod)
     ctx.run("docker-compose -f ./docker-compose.yml build")
-    mvRootToDev(ctx)
+    RootToDev(ctx)
 
 
 ######################
@@ -87,7 +87,7 @@ def build(ctx, prod):
 
 
 @task
-def mvDevToRoot(ctx, prod):
+def DevToRoot(ctx, prod):
     shutil.copyfile(
         DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV, DOCKERFILE_DJANGO
     )
@@ -97,7 +97,7 @@ def mvDevToRoot(ctx, prod):
 
 
 @task
-def mvRootToDev(ctx):
+def RootToDev(ctx):
     with suppress(FileNotFoundError):
         os.remove(DOCKERFILE_DJANGO)
     for file in FILE_ALL:
@@ -136,9 +136,14 @@ dck_namespace.add_task(restart)
 dck_namespace.add_task(down)
 dck_namespace.add_task(build)
 
+mv_namespace = Collection()
+mv_namespace.add_task(DevToRoot)
+mv_namespace.add_task(RootToDev)
+
 namespace = Collection()
 namespace.add_collection(prod_namespace, name="prod")
 namespace.add_collection(dck_namespace, name="dck")
+namespace.add_collection(mv_namespace, name="mv")
 
 # if __name__ == "__main__":
 #     ctx = Context()

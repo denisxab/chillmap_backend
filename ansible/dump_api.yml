@@ -8,7 +8,7 @@
   tasks:
     - name: Выполнить команду invoke
       command:
-        cmd: invoke mvDevToRoot --prod=True --echo
+        cmd: invoke mv.DevToRoot --prod=True --echo
         chdir: "{{ path_app }}"
 
     - name: Выполнить команду docker-compose
@@ -19,5 +19,5 @@
     - name: Копировать файл с сервера на локальную машину
       fetch:
         src: "{{ path_app }}/backend/fixtures/api.json"
-        dest: "../backend/fixtures/api.json"
+        dest: "../backend/fixtures/{{ ansible_host }}api.json"
         flat: yes
