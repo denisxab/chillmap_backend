@@ -92,6 +92,16 @@
     }
 },
 {
+    "model": "api.typeplace",
+    "pk": 5,
+    "fields": {
+        "name": "Стендап",
+        "img_url": "@/img/point.png",
+        "img_size_w": 0.3,
+        "img_size_h": 0.3
+    }
+},
+{
     "model": "api.arialinmap",
     "pk": 1,
     "fields": {
