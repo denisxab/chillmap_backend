@@ -4,6 +4,11 @@
   apt:
     update_cache: yes
 
+- name: Установка GPG
+  apt:
+    name: gnupg
+    state: present
+
 - name: Добавление Docker GPG ключа
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg

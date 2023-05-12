@@ -3,25 +3,13 @@
   hosts: all
   become: true
   vars:
-    path_app: "/app/chillmap_backend2"
+    path_app: "/app/chillmap_backend"
   tasks:
-    - name: Сборка Vue.js приложения на локальной машине перед диплоем
-      delegate_to: localhost
-      command: "docker build -t dockerfile_vue_prod -f ./conf_build/Dockerfile_Vue_Build ."
-      args:
-        chdir: "../"
-
-    - name: Запуск Docker контейнера на локальном сервере
-      delegate_to: localhost
-      command: "docker run -v ./front_vue:/app -v /app/node_modules dockerfile_vue_prod"
-      args:
-        chdir: "../"
-
-    - name: Изменение владельца директории на локальном сервере
-      delegate_to: localhost
-      command: "sudo chown $USER:$USER -R ./front_vue"
-      args:
-        chdir: "../"
+    - name: Создание папки {{ path_app }}
+      file:
+        path: "{{ path_app }}"
+        state: directory
+        mode: "0755"
 
     - name: Копировать файл с сервера на локальную машину
       synchronize:

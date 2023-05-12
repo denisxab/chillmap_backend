@@ -1,8 +1,11 @@
 ---
 all:
   hosts:
-    server1:
+    main:
       ansible_host: IP
       ansible_ssh_user: Пользователь
       ansible_ssh_pass: Пароль
-# ansible-playbook -i inventory.yml  playbook.yml
+    simpl:
+      ansible_host: IP
+      ansible_ssh_user: Пользователь
+      ansible_ssh_pass: Пароль

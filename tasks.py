@@ -27,25 +27,36 @@ FILE_ALL = [
     *FILE_DEV,
     *FILE_PROD,
 ]
+LIST_PROD_APP = " ".join(["app", "db", "nginx_vue", "nginx_static"])
 
 ######################
 # Для диплой
 
 
 @task
-def publish(ctx):
+def publish(ctx, limit):
     """Отправить проект на прод"""
+    # Сборка Vue.js приложения на локальной машине перед диплоем
+    ctx.run(f"docker build -t dockerfile_vue_prod -f {DOCKERFILE_VUE_BUILD} .")
+    ctx.run("docker run -v ./front_vue:/app -v /app/node_modules dockerfile_vue_prod")
+    ctx.run("sudo chown $USER:$USER -R ./front_vue")
     # Выполнить диплой
     with ctx.cd("ansible"):
-        ctx.run("ansible-playbook -i inventory.yml publush.yml")
+        if limit == "all":
+            ctx.run("ansible-playbook -i inventory.yml publush.yml")
+        else:
+            ctx.run(f"ansible-playbook -i inventory.yml publush.yml --limit {limit}")
 
 
 @task
-def dump(ctx):
+def dump(ctx, limit):
     """Сделать дамб базы на проде, и копировать её на текущую машину
     в ./backend/fixtures/api.json"""
     with ctx.cd("ansible"):
-        ctx.run("ansible-playbook -i inventory.yml dump_api.yml")
+        if limit == "all":
+            ctx.run("ansible-playbook -i inventory.yml dump_api.yml")
+        else:
+            ctx.run(f"ansible-playbook -i inventory.yml dump_api.yml  --limit {limit}")
 
 
 ######################
@@ -58,9 +69,9 @@ def run(ctx, prod=False, detach=False):
     ConfToRoot(ctx, prod)
     build_html()
     ctx.run(
-        f"docker-compose -f ./docker-compose.yml up {'-d' if detach else ''} app db nginx_vue nginx_static"
+        f"docker-compose up {'-d' if detach else ''} {LIST_PROD_APP}"
         if prod
-        else "docker-compose -f ./docker-compose.yml up"
+        else "docker-compose up"
     )
     RootToConf(ctx)
 
@@ -77,14 +88,14 @@ def restart(ctx, prod=False, detach=False):
 def down(ctx, prod=False):
     """Остановить docker-compose"""
     ConfToRoot(ctx, prod)
-    ctx.run("docker-compose -f ./docker-compose.yml down")
+    ctx.run(f"docker-compose down")
     RootToConf(ctx)
 
 
 @task
 def build(ctx, prod=False):
     ConfToRoot(ctx, prod)
-    ctx.run("docker-compose -f ./docker-compose.yml build")
+    ctx.run(f"docker-compose build {LIST_PROD_APP}" if prod else "docker-compose build")
     RootToConf(ctx)
 
 
