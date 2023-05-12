@@ -92,7 +92,7 @@ def build(ctx, prod):
 
 @task
 def DevToRoot(ctx, prod):
-    print("Prod: ", prod)
+    print("Prod: ", type(prod))
     shutil.copyfile(
         DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV, DOCKERFILE_DJANGO
     )
