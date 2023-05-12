@@ -1,0 +1,38 @@
+# Установка invoke и docker-compose 
+
+- name: Обновление apt
+  apt:
+    update_cache: yes
+
+- name: Добавление Docker GPG ключа
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Добавление Docker репозитория
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    state: present
+
+- name: Установка зависимостей
+  apt:
+    name: "{{ item }}"
+    state: present
+    install_recommends: yes
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - nano
+    - docker-ce
+    - docker-compose
+    - python3-pip
+
+- name: Установка дополнительных пакетов через pip
+  pip:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - invoke
+    - python-dotenv

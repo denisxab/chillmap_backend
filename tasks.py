@@ -35,10 +35,6 @@ FILE_ALL = [
 @task
 def publish(ctx):
     """Отправить проект на прод"""
-    # Перед диплоем, собрать Vue.js приложение в контейнере
-    ctx.run(f"docker build -t dockerfile_vue_prod -f {DOCKERFILE_VUE_BUILD} .")
-    ctx.run("docker run -v ./front_vue:/app -v /app/node_modules dockerfile_vue_prod")
-    ctx.run("sudo chown $USER:$USER -R ./front_vue")
     # Выполнить диплой
     with ctx.cd("ansible"):
         ctx.run("ansible-playbook -i inventory.yml publush.yml")

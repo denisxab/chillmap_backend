@@ -3,56 +3,47 @@
   hosts: all
   become: true
   vars:
-    path_app: "/app/chillmap_backend"
+    path_app: "/app/chillmap_backend2"
   tasks:
-    - name: Обновление apt
-      apt:
-        update_cache: yes
+    - name: Сборка Vue.js приложения на локальной машине перед диплоем
+      delegate_to: localhost
+      command: "docker build -t dockerfile_vue_prod -f ./conf_build/Dockerfile_Vue_Build ."
+      args:
+        chdir: "../"
 
-    - name: Добавление Docker GPG ключа
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
+    - name: Запуск Docker контейнера на локальном сервере
+      delegate_to: localhost
+      command: "docker run -v ./front_vue:/app -v /app/node_modules dockerfile_vue_prod"
+      args:
+        chdir: "../"
 
-    - name: Добавление Docker репозитория
-      apt_repository:
-        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-        state: present
+    - name: Изменение владельца директории на локальном сервере
+      delegate_to: localhost
+      command: "sudo chown $USER:$USER -R ./front_vue"
+      args:
+        chdir: "../"
 
-    - name: Создание папки {{ path_app }}
-      file:
-        path: "{{ path_app }}"
-        state: directory
-        mode: "0755"
+    - name: Копировать файл с сервера на локальную машину
+      synchronize:
+        src: "../.gitignore"
+        dest: "{{ path_app }}/.gitignore"
+        delete: yes
 
-    - name: Установка зависимостей
-      apt:
-        name: "{{ item }}"
-        state: present
-        install_recommends: yes
-      loop:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - software-properties-common
-        - nano
-        - docker-ce
-        - docker-compose
-        - python3-pip
+    - name: Сформировать строку исключения для rsync из .gitignore
+      shell: |
+        while IFS= read -r line; do
+          echo "--exclude=$line"
+        done < {{ path_app }}/.gitignore
+      register: rsync_excludes
+      changed_when: false
 
-    - name: Установка дополнительных пакетов через pip
-      pip:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - invoke
-        - python-dotenv
-
-    - name: Клонирование проекта
-      git:
-        repo: https://github.com/denisxab/chillmap_backend
+    - name: Копирование проекта на удаленный сервер
+      synchronize:
+        src: "../../"
         dest: "{{ path_app }}"
-        force: yes
+        delete: yes
+        recursive: yes
+        rsync_opts: "{{ rsync_excludes.stdout_lines }}"
 
     - name: Замена строки в файле .env с IP_ADR
       lineinfile:
@@ -65,6 +56,16 @@
         path: "{{ path_app }}/.env"
         regexp: "^DEBUG="
         line: "DEBUG=False"
+
+    - name: Проверка наличия библиотеки invoke
+      command:
+        cmd: pip show invoke
+      register: pip_check
+      ignore_errors: true
+
+    - name: Установка invoke и docker-compose
+      include_tasks: install_invoke_and_docker_compose.yml
+      when: pip_check.rc != 0
 
     - name: Перезапуск проекта
       command:
