@@ -52,12 +52,12 @@ def dump(ctx):
 
 
 @task
-def run(ctx, prod):
+def run(ctx, prod, detach):
     """Запустить docker-compose"""
     DevToRoot(ctx, prod)
     build_html()
     ctx.run(
-        "docker-compose -f ./docker-compose.yml up -d"
+        f"docker-compose -f ./docker-compose.yml up {'-d' if detach == 'True' else ''}"
         if prod == "True"
         else "docker-compose -f ./docker-compose.yml up"
     )
@@ -65,11 +65,11 @@ def run(ctx, prod):
 
 
 @task
-def restart(ctx, prod):
+def restart(ctx, prod, detach):
     """Перезапустить docker-compose"""
     down(ctx, prod)
     build(ctx, prod)
-    run(ctx, prod)
+    run(ctx, prod, detach)
 
 
 @task
