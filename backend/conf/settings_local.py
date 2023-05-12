@@ -30,6 +30,6 @@ DEBUG_SELECT = True
 #
 IP_ADR = os.environ.get("IP_ADR", "localhost")
 # Хост для раздачи сатических файлов
-HOST_SRERVER_STATIC = f"http://{IP_ADR}:{os.environ['HOST_PORT_NGINX']}/"
+HOST_SRERVER_STATIC = f"http://{IP_ADR}:{os.environ['HOST_PORT_NGINX_STATIC']}/"
 # Хост для Front
 HOST_SRERVER_FRONT = f"http://{IP_ADR}:{os.environ['HOST_PORT_VUE_SERVER']}/"

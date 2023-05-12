@@ -58,7 +58,7 @@ def run(ctx, prod):
     build_html()
     ctx.run(
         "docker-compose -f ./docker-compose.yml up -d"
-        if prod
+        if prod == "True"
         else "docker-compose -f ./docker-compose.yml up"
     )
     RootToDev(ctx)
@@ -68,6 +68,7 @@ def run(ctx, prod):
 def restart(ctx, prod):
     """Перезапустить docker-compose"""
     down(ctx, prod)
+    build(ctx, prod)
     run(ctx, prod)
 
 
@@ -92,11 +93,13 @@ def build(ctx, prod):
 
 @task
 def DevToRoot(ctx, prod):
-    print("Prod: ", type(prod))
     shutil.copyfile(
-        DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV, DOCKERFILE_DJANGO
+        DOCKERFILE_DJANGO_PROD if prod == "True" else DOCKERFILE_DJANGO_DEV,
+        DOCKERFILE_DJANGO,
     )
-    shutil.copyfile(DOCKERFILE_VUE_PROD if prod else DOCKERFILE_VUE_DEV, DOCKERFILE_VUE)
+    shutil.copyfile(
+        DOCKERFILE_VUE_PROD if prod == "True" else DOCKERFILE_VUE_DEV, DOCKERFILE_VUE
+    )
     for file in FILE_DEV:
         with suppress(FileNotFoundError):
             os.rename(f"./dev_conf/{file}", f"./{file}")

@@ -1,26 +1,22 @@
-<!DOCTYPE html>
-<html lang="">
-    <head>
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width,initial-scale=1,maximum-scale=1"
-        />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="icon" href="/favicon.svg" />
-        <title>web_chillmap</title>
-        <script defer="defer" src="/js/chunk-vendors.b908b10e.js"></script>
-        <script defer="defer" src="/js/app.2d5447f7.js"></script>
-        <link href="/css/app.b16a8cb8.css" rel="stylesheet" />
-    </head>
-    <script>
-        // ------------------  ПЕРЕЕМНЫЕ ОКРУЖЕНИЯ  ----------------------------------------
-        // Путь к статическим файлам по умолчанию. Он будет подставлен за место `@/`
-        var ENV_default_host_to_src = "http://5.63.154.238:8091/"; //"http://5.63.154.238:8091/";
+<!doctype html><html lang=""><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="icon" href="/favicon.svg"/><title>web_chillmap</title><script defer="defer" src="/js/chunk-vendors.b3c753f8.js"></script><script defer="defer" src="/js/app.763da0b2.js"></script><link href="/css/app.ca7533b6.css" rel="stylesheet"></head><script>// ------------------  ПЕРЕЕМНЫЕ ОКРУЖЕНИЯ  ----------------------------------------
+        // URL для получения других URL от Сервера.
+        const IP_ADR = `localhost`
+        const HOST_PORT_DJANGO = `8181`
+        var ENV_GetUrl = `http://${IP_ADR}:${HOST_PORT_DJANGO}/get_url/`;
         // ---------------------------------------------------------------------------------
-    </script>
-    <body>
-        <div id="app"></div>
-    </body>
-</html>
+        // Выполнение синхронного запроса
+        function loadSync(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, false); // false означает синхронный запрос
+            xhr.send();
+            return xhr.responseText;
+        }
+        // Получение URL синхронно
+        var ENV_GetUrlResponse = loadSync(ENV_GetUrl);
+        // Обновление переменной с URL
+        if (ENV_GetUrlResponse) {
+            const u = JSON.parse(ENV_GetUrlResponse);
+            var ENV_default_host_to_src = u.HOST_SRERVER_STATIC;
+            var ENV_default_host_to_backend = u.HOST_SRERVER_BACKEND;
+            var ENV_default_host_to_front = u.HOST_SRERVER_FRONT;
+        }</script><body><div id="app"></div></body></html>

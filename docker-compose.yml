@@ -25,7 +25,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB} # Имя БД (переменная из файла .env)
       POSTGRES_PORT: ${POSTGRES_PORT} # Порт для подключения к БД (переменная из файла .env)
       IP_ADR: ${IP_ADR}
-      HOST_PORT_NGINX: ${HOST_PORT_NGINX}
+      HOST_PORT_NGINX_STATIC: ${HOST_PORT_NGINX_STATIC}
       HOST_PORT_VUE_SERVER: ${HOST_PORT_VUE_SERVER}
     depends_on:
       - db
@@ -48,8 +48,10 @@ services:
     ports:
       - "${HOST_PORT_POSTGRESQL}:5432"
 
-  # Описание сервиса "vue-dev"
-  vue-dev:
+  # Описание сервиса "vue"
+  # В dev режиме запускает dev сервер
+  # В prod режиме запускает собирает Vue.js
+  vue_app:
     build:
       context: .
       dockerfile: Dockerfile_Vue
@@ -63,17 +65,36 @@ services:
       - CHOKIDAR_USEPOLLING=true
 
   # Описание сервиса "nginx"
-  nginx:
+  # Используется для раздачи html
+  nginx_vue:
     # Использование готового оброза
     image: nginx:alpine
     # Автоматически перезапускать контейнер при его остановке
     restart: always
     # Пробрасывание порта
     ports:
-      - "${HOST_PORT_NGINX}:80"
+      - "${HOST_PORT_NGINX_VUE}:80"
+    # Примонтирование локальной директории к контейнеру
+    volumes:
+      - ./front_vue/dist:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - vue_app
+
+  # Описание сервиса "nginx_static"
+  # Используется для раздачи изображений
+  nginx_static:
+    # Использование готового оброза
+    image: nginx:alpine
+    # Автоматически перезапускать контейнер при его остановке
+    restart: always
+    # Пробрасывание порта
+    ports:
+      - "${HOST_PORT_NGINX_STATIC}:80"
     # Примонтирование локальной директории к контейнеру
     volumes:
       - ./front_vue/static:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+
 networks:
   default:
