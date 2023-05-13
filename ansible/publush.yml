@@ -1,59 +1,55 @@
 ---
-- name: Развертывание проекта
+- name: Развертывание проекта {{ name_app }}
   hosts: all
   become: true
   vars:
-    path_app: "/app/chillmap_backend"
+    name_app: chillmap_backend
+    git_url: "https://github.com/denisxab/{{ name_app }}"
+    path_app: "/app/{{ name_app }}"
   tasks:
-    - name: Создание папки {{ path_app }}
-      file:
-        path: "{{ path_app }}"
-        state: directory
-        mode: "0755"
+    - name: Получения проекта на удаленном сервер через GIT
+      import_tasks: send_files_app.yml
 
     - name: Копировать файл с сервера на локальную машину
-      synchronize:
-        src: "../.gitignore"
-        dest: "{{ path_app }}/.gitignore"
-        delete: yes
+      block:
+        - name: Копировать файл с сервера на локальную машину
+          synchronize:
+            src: "../.gitignore"
+            dest: "{{ path_app }}/.gitignore"
+            delete: yes
 
-    - name: Сформировать строку исключения для rsync из .gitignore
-      shell: |
-        while IFS= read -r line; do
-          echo "--exclude=$line"
-        done < {{ path_app }}/.gitignore
-      register: rsync_excludes
-      changed_when: false
+        - name: Сформировать строку исключения для rsync из .gitignore
+          shell: |
+            while IFS= read -r line; do
+              echo "--exclude=$line"
+            done < {{ path_app }}/.gitignore
+          register: rsync_excludes
+          changed_when: false
 
-    - name: Копирование проекта на удаленный сервер
-      synchronize:
-        src: "../../"
-        dest: "{{ path_app }}"
-        delete: yes
-        recursive: yes
-        rsync_opts: "{{ rsync_excludes.stdout_lines }}"
+        - name: Копирование проекта на удаленный сервер
+          synchronize:
+            src: "../../"
+            dest: "{{ path_app }}"
+            delete: yes
+            recursive: yes
+            rsync_opts: "{{ rsync_excludes.stdout_lines }}"
 
-    - name: Замена строки в файле .env с IP_ADR
-      lineinfile:
-        path: "{{ path_app }}/.env"
-        regexp: "^IP_ADR="
-        line: "IP_ADR={{ ansible_host }}"
+    - name: Замена строки в файле .env
+      block:
+        - name: Замена строки в файле .env с IP_ADR
+          lineinfile:
+            path: "{{ path_app }}/.env"
+            regexp: "^IP_ADR="
+            line: "IP_ADR={{ ansible_host }}"
 
-    - name: Замена строки в файле .env с DEBUG
-      lineinfile:
-        path: "{{ path_app }}/.env"
-        regexp: "^DEBUG="
-        line: "DEBUG=False"
+        - name: Замена строки в файле .env с DEBUG
+          lineinfile:
+            path: "{{ path_app }}/.env"
+            regexp: "^DEBUG="
+            line: "DEBUG=False"
 
-    - name: Проверка наличия библиотеки invoke
-      command:
-        cmd: pip show invoke
-      register: pip_check
-      ignore_errors: true
-
-    - name: Установка invoke и docker-compose
-      include_tasks: install_invoke_and_docker_compose.yml
-      when: pip_check.rc != 0
+    - name: Установка invoke и docker-compose если это необходимо
+      import_tasks: install_invoke_and_docker_compose.yml
 
     - name: Перезапуск проекта
       command:

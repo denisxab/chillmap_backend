@@ -1,0 +1,62 @@
+#
+##
+### Получения проекта на удаленном сервер через GIT
+##
+#
+# - name: Получения проекта на удаленном сервер через GIT
+#   import_tasks: send_files_app.yml
+#   vars:
+#     git_url: Url путь для клонирование
+#     path_app: Папка в котором будет находиться проект
+
+- name: Проверка наличия директории проекта {{ name_app }}
+  stat:
+    path: "{{ path_app }}"
+  register: path_app_folder
+
+- name: Сброс изменений в существующем проекте {{ name_app }}
+  when: path_app_folder.stat.exists
+  block:
+    # - name: Установить исключение для директории в настройках Git
+    #   command: git config --global --add safe.directory {{ path_app }}
+
+    - name: Сброс изменений в существующем проекте {{ name_app }}
+      command: git reset --hard HEAD
+      args:
+        chdir: "{{ path_app }}"
+      register: git_reset
+      ignore_errors: yes
+
+    - name: Очистка директории при неудачном откате проекта {{ name_app }}
+      file:
+        path: "{{ path_app }}"
+        state: absent
+      when: git_reset is failed
+
+    - name: Обновить репозиторий Git
+      when: git_reset.rc == 0
+      git:
+        repo: "{{ git_url }}"
+        dest: "{{ path_app }}"
+        update: yes
+
+- name: Проверка наличия директории проекта {{ name_app }}
+  stat:
+    path: "{{ path_app }}"
+  register: path_app_folder
+
+- name: Создание директории для нового проекта {{ name_app }}
+  when: not path_app_folder.stat.exists
+  block:
+    - name: Создание директории для нового проекта {{ name_app }}
+      git:
+        repo: "{{ git_url }}"
+        dest: "{{ path_app }}"
+        force: yes
+      register: git_clone
+
+    - name: Клонирование репозитория проекта {{ name_app }}
+      file:
+        path: "{{ path_app }}"
+        state: directory
+        mode: "0755"

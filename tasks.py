@@ -29,6 +29,9 @@ FILE_ALL = [
 ]
 LIST_PROD_APP = " ".join(["app", "db", "nginx_vue", "nginx_static"])
 
+# Скрыть из вывода в консоли задачи который skip
+ANSIBLE_HIDE_SKIP = "export ANSIBLE_DISPLAY_SKIPPED_HOSTS=no &&"
+
 ######################
 # Для диплой
 
@@ -46,9 +49,13 @@ def publish(ctx, limit):
     # Выполнить диплой
     with ctx.cd("ansible"):
         if limit == "all":
-            ctx.run("ansible-playbook -i inventory.yml publush.yml")
+            ctx.run(
+                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml publush.yml"
+            )
         else:
-            ctx.run(f"ansible-playbook -i inventory.yml publush.yml --limit {limit}")
+            ctx.run(
+                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml publush.yml --limit {limit}"
+            )
 
 
 @task
