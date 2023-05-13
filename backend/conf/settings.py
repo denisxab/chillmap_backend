@@ -1,3 +1,4 @@
+import logging
 import os
 
 from .settings_local import (
@@ -138,23 +139,54 @@ if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
-    # Логировать все SQL запросы
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "handlers": {
-            "console": {
-                "class": "logging.StreamHandler",
-            },
-            "file": {
-                "class": "logging.FileHandler",
-                "filename": str(LOG_DIR / "logfile_sql.log"),
-            },
+
+# Логировать все SQL запросы
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "str": {
+            "format": "[{name}-{levelname}] {asctime} {module} {pathname}:> {message}",
+            "style": "{",
         },
-        "loggers": {
-            "django.db.backends": {
-                "handlers": ["console", "file"],
-                "level": "DEBUG",
-            },
+        "json": {
+            "format": '{{"name": "{name}", "levelname": "{levelname}", "asctime": "{asctime}", "module": "{module}", "pathname": "{pathname}", "message": "{message}", "server": "%s"}}'
+            % (os.environ["IP_ADR"],),
+            "style": "{",
         },
-    }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "str",
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": str(LOG_DIR / "logfile_sql.log"),
+            "formatter": "json",
+        },
+    },
+    "loggers": {
+        "django.db.backends": {
+            "handlers": [
+                "file",  # "console"
+            ],
+            "level": "DEBUG" if DEBUG else "INFO",
+        },
+        "djangocore": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+        },
+        "api": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+        },
+    },
+}
+# Логгер который используется в API
+logger_api = logging.getLogger("api")
+# Логгер который используется для общей логики Django
+logger_djangocore = logging.getLogger("djangocore")
+
+
+print("Settings: ", dict(DEBUG=DEBUG))

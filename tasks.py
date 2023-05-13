@@ -94,12 +94,13 @@ def restart(ctx, prod=False, detach=False):
 def down(ctx, prod=False):
     """Остановить docker-compose"""
     ConfToRoot(ctx, prod)
-    ctx.run(f"docker-compose down")
+    ctx.run("docker-compose down")
     RootToConf(ctx)
 
 
 @task
 def build(ctx, prod=False):
+    """Собрать docker-compose"""
     ConfToRoot(ctx, prod)
     ctx.run(f"docker-compose build {LIST_PROD_APP}" if prod else "docker-compose build")
     RootToConf(ctx)
@@ -119,6 +120,7 @@ def logs(ctx, prod=False):
 
 @task
 def ConfToRoot(ctx, prod=False):
+    """Копировать конфигурационные файлы в корен проекта"""
     shutil.copyfile(
         DOCKERFILE_DJANGO_PROD if prod else DOCKERFILE_DJANGO_DEV,
         DOCKERFILE_DJANGO,
@@ -127,6 +129,7 @@ def ConfToRoot(ctx, prod=False):
 
 @task
 def RootToConf(ctx):
+    """Отчистка конфигурационных файлов из кореня проекта"""
     with suppress(FileNotFoundError):
         os.remove(DOCKERFILE_DJANGO)
 
