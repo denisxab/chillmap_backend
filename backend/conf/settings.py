@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 
 from .settings_local import (
     ALLOWED_HOSTS_SELECT,
@@ -9,6 +10,12 @@ from .settings_local import (
     HOST_SRERVER_STATIC,
     SECRET_KEY_SELECT,
 )
+
+
+if "pytest" in sys.argv[0] or "test" in sys.argv:
+    """Настройки при тестирование"""
+    DEBUG_SELECT = False
+
 
 SERVER_VERSION = "0.0.3"
 

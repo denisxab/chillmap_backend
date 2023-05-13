@@ -40,7 +40,7 @@ ANSIBLE_HIDE_SKIP = "export ANSIBLE_DISPLAY_SKIPPED_HOSTS=no &&"
 def publish(ctx, limit):
     """Отправить проект на прод
 
-    limit: Ограничить выполннение только дял указных серверов, если указать `all`, то выполнится для всех
+    limit: Ограничить выполннение только для указных серверов, если указать `all`, то выполнится для всех
     """
     # Сборка Vue.js приложения на локальной машине перед диплоем
     ctx.run(f"docker build -t dockerfile_vue_prod -f {DOCKERFILE_VUE_BUILD} .")
