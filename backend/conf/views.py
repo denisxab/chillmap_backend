@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .settings import SERVER_VERSION, logger_api
+from .settings import SERVER_VERSION
 from .settings_local import (
     HOST_SRERVER_FRONT_DEV,
     HOST_SRERVER_FRONT_PROD,
@@ -13,7 +13,6 @@ class GetUrlsView(APIView):
     """Показать спсиок хостов"""
 
     def get(self, request, *args, **kwargs):
-        logger_api.info("Вызов: Get Urls")
         return Response(
             {
                 # Хост для раздачи сатических файлов
@@ -33,5 +32,4 @@ class AboutView(APIView):
     """Показать список хостов"""
 
     def get(self, request, *args, **kwargs):
-        logger_api.info("Вызов: About")
         return Response({"version": SERVER_VERSION})

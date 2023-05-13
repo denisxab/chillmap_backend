@@ -1,4 +1,5 @@
 from api.utils import get_address_from_coord
+from conf.settings import logger_api
 from django.db import models
 
 from .base_model import ModelInteger, ModelUUID
@@ -120,3 +121,9 @@ class PlaceInMap(ModelUUID):
                 self.address = f"{self.cord_x},{self.cord_y}"
                 print(f"Ошибка при получении адреса: '{self.address}'")
         super().save(*args, **kwargs)
+        logger_api.info(f"Успешно создано нового места: {self}")
+
+    def delete(self, using=None, keep_parents=False):
+        res = super().delete(using, keep_parents)
+        logger_api.info(f"Успешно удаление места: {self}")
+        return res
