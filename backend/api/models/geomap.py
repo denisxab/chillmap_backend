@@ -61,10 +61,19 @@ class ChannelGeomap(ModelInteger):
     )
     shard = models.SmallIntegerField("Номер шарда", default=1)
 
+    default_coord_x = models.CharField(
+        "Точка по умолчанию всех мест в группе X", max_length=20
+    )
+    default_coord_y = models.CharField(
+        "Точка по умолчанию всех мест в группе Y", max_length=20
+    )
+
+
     class Meta:
         verbose_name = "Канал с местами"
         verbose_name_plural = "Каналы с местами"
         db_table = "channel_geomap"
+        unique_together = ("default_coord_x", "default_coord_y")
 
     def __str__(self) -> str:
         return self.name

@@ -85,6 +85,8 @@ class ChannelGeomapSerializers(MixinInteger, MixinUrl, serializers.ModelSerializ
             "arial_in_map",
             "arial_in_map_obj",
             "shard",
+            "default_coord_x",
+            "default_coord_y",
         )
         url = "channel_geomap"
 
