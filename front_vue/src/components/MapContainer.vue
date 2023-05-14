@@ -257,6 +257,45 @@ export default {
                 this.markersLayer.getSource().addFeature(marker);
             }
         },
+
+      // _setMarkersFromGeomap(){
+      //         // TODO: Доделать 
+      //     const settings_type_place =
+      //             this.$store.state.geomap.settings_type_place;
+      //         const element = JSON.parse(res.data);
+      //         const item = element.type_place;
+      //         const img_url = settings_type_place[item].img_url;
+      //         const img_size = [
+      //             settings_type_place[item].img_size_w,
+      //             settings_type_place[item].img_size_h,
+      //         ];
+      //         const style = {
+      //             imgUrl: ParseUrlSrc(img_url),
+      //             imgSize: img_size,
+      //         };
+      //         // Формируем краткую информацию о месте. Рейтинг:Имя
+      //         style["labelText"] = `${
+      //             // Максимум 12 баллов
+      //             element.rating % 13
+      //         }:${
+      //             // Максимальная длинна названия 16 символов
+      //             element.simpl_name.substring(0, 16)
+      //         }`;
+      //         const coord =
+      //             this.$store.state.geomap.RefMapContainer._parseCoordFromOpenstreetmap(
+      //                 `${element.cord_x},${element.cord_y}`
+      //             );
+      //         // Своиства которы будут храниться в маркере
+      //         let PropertiesMark = element;
+      //         PropertiesMark["name_marker"] = settings_type_place[item].name;
+      //         PropertiesMark["coord"] = [coord.latitude, coord.longitude];
+      //         // 2.2.1 Устанавливаем маркеры
+      //         this.$store.state.geomap.RefMapContainer.setMarkers(
+      //             coord,
+      //             PropertiesMark,
+      //             style
+      //         );
+      // }
         // Установить маркер на место в которые было совершено нажатие
         setSelectMarker(coord: TCoord | undefined) {
             // longitude: долгота

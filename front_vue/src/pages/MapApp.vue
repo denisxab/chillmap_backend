@@ -2,26 +2,43 @@
     <div id="main_box">
         <!-- Всплывающий слой -->
         <div v-show="view_component" class="over_box">
-            <OverBox @hidden_over_box="hidden_over_box" :view_component="view_component" />
+            <OverBox
+                @hidden_over_box="hidden_over_box"
+                :view_component="view_component" />
         </div>
         <!-- Блок с картой -->
         <div class="up_box">
-            <MapContainer ref="MapContainer" @onMarkerClick="HandleMarkerClick" @onEmptyMapClick="HandleEmptyMapClick" />
+            <MapContainer
+                ref="MapContainer"
+                @onMarkerClick="HandleMarkerClick"
+                @onEmptyMapClick="HandleEmptyMapClick" />
         </div>
         <!-- Блок с краткой информацией -->
         <div class="down_box">
             <!-- Кнопка для показания большей информации -->
             <div ref="d_show_map_detail" class="d_show_map_detail">
                 <!-- Стрелка вверх.  -->
-                <input class="show_map_detail" type="image" v-show="is_show_map_detail" ref="show_map_detail"
+                <input
+                    class="show_map_detail"
+                    type="image"
+                    v-show="is_show_map_detail"
+                    ref="show_map_detail"
                     @click="ShowExtraFeaturesWindow" />
                 <!-- Иконка для перехода в подробную информацию о месте -->
-                <input class="show_map_detail" type="image" v-show="!is_show_map_detail" ref="show_map_detail_place"
+                <input
+                    class="show_map_detail"
+                    type="image"
+                    v-show="!is_show_map_detail"
+                    ref="show_map_detail_place"
                     @click="ShowPlaceDetailsInfo" />
             </div>
             <!-- Отображает координаты, на которые было совершено нажатие мышью -->
             <div class="map_coord_click">
-                <input type="text" :value="coordinat_click" id="map_coord_click_input" placeholder="широта,долгота"
+                <input
+                    type="text"
+                    :value="coordinat_click"
+                    id="map_coord_click_input"
+                    placeholder="широта,долгота"
                     readonly />
             </div>
             <!-- Поверхностная информация о месте -->
@@ -49,7 +66,13 @@ import MapContainer from "@/components/MapContainer.vue";
 import FacileFromMarker from "@/components/FacileFromMarker.vue";
 import OverBox from "@/components/OverBox.vue";
 import MapBrowserEvent from "ol/MapBrowserEvent";
-import { ParseUrlSrc, ParseUrlBackend, clone, DownloadFromUrl, TFromUrl } from "@/helper";
+import {
+    ParseUrlSrc,
+    ParseUrlBackend,
+    clone,
+    DownloadFromUrl,
+    TFromUrl,
+} from "@/helper";
 import { UrlGetParams, UrlGetParamsTypeView, TCoord } from "@/interface";
 
 // ФОТО
@@ -67,7 +90,6 @@ export const type_place_list_url = ParseUrlBackend("@/api/v1/type_place/");
 export const place_url = ParseUrlBackend("@/api/v1/place/");
 // URL для получения списка каналов
 export const channel_geomap = ParseUrlBackend("@/api/v1/channel_geomap/");
-
 
 export default {
     name: "MapApp",
@@ -96,10 +118,14 @@ export default {
         this.$store.commit(
             `geomap/Update_url_geomap`,
             ParseUrlSrc(geomap_list_from_channel_url) +
-            this.$store.state.geomap.select_channel_geomap.id
+                this.$store.state.geomap.select_channel_geomap.id
+        );
+        this.$store.commit(
+            "geomap/Update_RefMapContainer",
+            this.$refs["MapContainer"]
         );
         // 3. Инициализировать карту
-        this.$refs["MapContainer"]._initMap(
+        this.$store.state.geomap.RefMapContainer._initMap(
             this.$store.state.geomap.coordinat_click,
             this.$store.state.geomap.select_zoom,
             this.$store.state.geomap.url_geomap
@@ -177,14 +203,13 @@ export default {
                         router: this.$router,
                         route: this.$route,
                     });
-                }
-                else {
-                    console.error('Не удалось получить список каналов')
+                } else {
+                    console.error("Не удалось получить список каналов");
                 }
             } else {
                 console.log("Не указан ID канала");
-                this.$router.push({ name: 'list_channels' });
-                return
+                this.$router.push({ name: "list_channels" });
+                return;
             }
             // 2. Получить масштаб карты из URL
             let zoom = parseInt(query["z"]);
@@ -197,15 +222,19 @@ export default {
             this.$store.dispatch(`geomap/Update_coordinat_click`, {
                 coord:
                     query[UrlGetParams.latitude] &&
-                        query[UrlGetParams.longitude]
+                    query[UrlGetParams.longitude]
                         ? {
-                            latitude: query[UrlGetParams.latitude],
-                            longitude: query[UrlGetParams.longitude],
-                        }
+                              latitude: query[UrlGetParams.latitude],
+                              longitude: query[UrlGetParams.longitude],
+                          }
                         : {
-                            latitude: this.$store.state.geomap.select_channel_geomap.default_coord_x,
-                            longitude: this.$store.state.geomap.select_channel_geomap.default_coord_y,
-                        },
+                              latitude:
+                                  this.$store.state.geomap.select_channel_geomap
+                                      .default_coord_x,
+                              longitude:
+                                  this.$store.state.geomap.select_channel_geomap
+                                      .default_coord_y,
+                          },
                 router: this.$router,
                 route: this.$route,
             });
@@ -287,7 +316,8 @@ export default {
             background: $ЦветФона;
         }
 
-        .map_detail {}
+        .map_detail {
+        }
     }
 }
 </style>

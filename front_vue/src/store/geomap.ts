@@ -31,6 +31,8 @@ export const geomap = {
             select_channel_geomap: <TChannelGeomapObj>undefined,
             // Ссылка для скачивания geomap
             url_geomap: <string>undefined,
+            // Ссылка на компонент с картой MapContainer
+            RefMapContainer: <object>undefined
         };
     },
     mutations: {
@@ -60,6 +62,9 @@ export const geomap = {
         Update_url_geomap(state, newValue: string) {
             state.url_geomap = ParseUrlSrc(newValue);
         },
+        Update_RefMapContainer(state, newValue: object) {
+            state.RefMapContainer = newValue
+        }
     },
     actions: {
         // Обновить координаты в фокуса

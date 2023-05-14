@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { DownloadFromUrl, PostJsonFromUrl } from "@/helper";
+import { DownloadFromUrl, ParseUrlSrc, PostJsonFromUrl } from "@/helper";
 import { TCoord, TTypePlaceObj, TWhatTodoObj } from "@/interface";
 import {
     arrow_up,
@@ -69,7 +69,7 @@ export default {
         async create_geomap() {
             console.log("Отправка: создание нового места");
             const coord: TCoord = this.$store.state.geomap.coordinat_click;
-
+            console.log(this.$refs);
             const req = {
                 cord_x: coord.latitude,
                 cord_y: coord.longitude,
@@ -86,8 +86,50 @@ export default {
                 alert("Успешное создание нового места");
                 this.hidden_elm();
                 this.$emit("hiddenOverBox");
+                // Если произошло успешное создание,
+                // 1. TODO: Добавляем маркер на карту
+                const settings_type_place =
+                    this.$store.state.geomap.settings_type_place;
+                const element = JSON.parse(res.data);
+                const item = element.type_place;
+                const img_url = settings_type_place[item].img_url;
+                const img_size = [
+                    settings_type_place[item].img_size_w,
+                    settings_type_place[item].img_size_h,
+                ];
+                const style = {
+                    imgUrl: ParseUrlSrc(img_url),
+                    imgSize: img_size,
+                };
+                // Формируем краткую информацию о месте. Рейтинг:Имя
+                style["labelText"] = `${
+                    // Максимум 12 баллов
+                    element.rating % 13
+                }:${
+                    // Максимальная длинна названия 16 символов
+                    element.simpl_name.substring(0, 16)
+                }`;
+                const coord =
+                    this.$store.state.geomap.RefMapContainer._parseCoordFromOpenstreetmap(
+                        `${element.cord_x},${element.cord_y}`
+                    );
+                // Своиства которы будут храниться в маркере
+                let PropertiesMark = element;
+                PropertiesMark["name_marker"] = settings_type_place[item].name;
+                PropertiesMark["coord"] = [coord.latitude, coord.longitude];
+                // 2.2.1 Устанавливаем маркеры
+                this.$store.state.geomap.RefMapContainer.setMarkers(
+                    coord,
+                    PropertiesMark,
+                    style
+                );
+                // 2. Переходим на карту
+                this.$router.push({
+                    name: "main_map",
+                    query: this.$route.query,
+                });
             } else {
-                alert("Ошибка создания нового места");
+                alert(`Ошибка создания нового места: ${res.data}`);
             }
         },
 

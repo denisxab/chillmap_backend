@@ -11,7 +11,6 @@ from .settings_local import (
     SECRET_KEY_SELECT,
 )
 
-
 if "pytest" in sys.argv[0] or "test" in sys.argv:
     """Настройки при тестирование"""
     DEBUG_SELECT = False
@@ -194,6 +193,3 @@ LOGGING = {
 logger_api = logging.getLogger("api")
 # Логгер который используется для общей логики Django
 logger_djangocore = logging.getLogger("djangocore")
-
-
-print("Settings: ", dict(DEBUG=DEBUG))
