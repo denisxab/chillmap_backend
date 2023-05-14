@@ -65,6 +65,10 @@ export interface TChannelGeomapObj {
     arial_in_map: number;
     arial_in_map_obj: TArialObj;
     shard: number;
+    // Координаты по умолчанию для группы X
+    default_coord_x: string;
+    // Координаты по умолчанию для группы Y
+    default_coord_y: string;
 }
 
 export interface TGeomap {
@@ -116,8 +120,8 @@ export interface TChannelGeomapPlace extends TChannelGeomapObj {
 }
 
 // --------------------
-export interface TPropertiesMark extends TGeomap {}
-export interface Tchannel_geomapJson {}
+export interface TPropertiesMark extends TGeomap { }
+export interface Tchannel_geomapJson { }
 
 // ------------------------------------------------- //
 

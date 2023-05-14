@@ -78,7 +78,7 @@ export default {
                 simpl_name: this.shortName,
                 rating: this.rating,
                 address: "",
-                channel_geomap: this.$store.state.geomap.select_channel_geomap,
+                channel_geomap: this.$store.state.geomap.select_channel_geomap.id,
                 what_todo: this.todo.map((element) => element.id),
                 type_place: this.typePlace.id,
             };

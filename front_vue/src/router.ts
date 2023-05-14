@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import VueRouter from "vue-router";
 import MapApp from "@/pages/MapApp.vue";
+import SelectChenel from "@/pages/SelectChenel.vue";
 
 const routes: VueRouter.RouteRecordRaw[] = [
     /*
-	Сюда добавляем пути к компанентам
-	*/
+    Сюда добавляем пути к компанентам
+    */
     // Статичный путь.
     // {
     //     path: "/Путь",
@@ -23,6 +24,12 @@ const routes: VueRouter.RouteRecordRaw[] = [
         component: MapApp,
         // redirect: { name: "main_map" },
     },
+
+    {
+        path: '/channels',
+        name: 'list_channels',
+        component: SelectChenel
+    }
     // {
     // path: "/map",
     // },

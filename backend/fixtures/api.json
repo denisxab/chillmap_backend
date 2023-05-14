@@ -115,8 +115,8 @@
             "name": "Пивные СПБ",
             "arial_in_map": 1,
             "shard": 1,
-            "default_coord_x": "59.93180637674294",
-            "default_coord_y": "30.312664909452113"
+            "default_coord_x": "59.93180637674290",
+            "default_coord_y": "30.312664909452110"
         }
     },
     {
@@ -126,8 +126,8 @@
             "name": "Продуктовые СПБ",
             "arial_in_map": 1,
             "shard": 1,
-            "default_coord_x": "59.93180637674290",
-            "default_coord_y": "30.312664909452110"
+            "default_coord_x": "60.01368671430444",
+            "default_coord_y": "30.257596352517258"
         }
     },
     {

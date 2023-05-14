@@ -5,6 +5,7 @@ import {
     UrlGetParams,
     UrlGetParamsTypeView,
     TSettingsPlace,
+    TChannelGeomapObj,
 } from "@/interface";
 import { ParseUrlSrc, clone } from "@/helper";
 
@@ -21,16 +22,13 @@ export const geomap = {
             // Текущие выбранное место
             select_PropertiesMark: <TPropertiesMark>undefined,
             // Координаты на которое совершено нажатие, или фокусировка
-            coordinat_click: <TCoord>{
-                latitude: 59.859292472503114,
-                longitude: 30.169246265131953,
-            },
+            coordinat_click: <TCoord>{},
             // Текущие приближение карты
             select_zoom: <number>16,
             // Режим просмотра
             type_view: <string>UrlGetParamsTypeView.main_map,
             // Текущий id канала для просмотра
-            select_channel_geomap: <number>1,
+            select_channel_geomap: <TChannelGeomapObj>undefined,
             // Ссылка для скачивания geomap
             url_geomap: <string>undefined,
         };

@@ -4,6 +4,9 @@
             <div class="row" @click="handleClick('add_place')">
                 Создать новое место в выбранной точки
             </div>
+            <div class="row" @click="channel_list">
+                Список каналов
+            </div>
             <div class="row" @click="handleClick('login')">Вход</div>
             <div class="row" @click="handleClick('registration')">
                 Регистрация
@@ -11,10 +14,7 @@
             <div class="row" @click="handleClick('about')">О проекте</div>
         </div>
         <div class="box_select_elm">
-            <AddPlace
-                ref="add_place"
-                v-show="select_elm === 'add_place'"
-                @hidden_elm="hidden_elm"
+            <AddPlace ref="add_place" v-show="select_elm === 'add_place'" @hidden_elm="hidden_elm"
                 @hiddenOverBox="hiddenOverBox" />
         </div>
     </div>
@@ -37,6 +37,10 @@ export default {
         async handleClick(link: string) {
             await this.$refs[link].show();
             this.select_elm = link;
+        },
+        channel_list() {
+            this.$router.push({ name: 'list_channels' })
+            return
         },
         hidden_elm() {
             this.select_elm = undefined;
