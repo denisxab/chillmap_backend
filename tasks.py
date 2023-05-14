@@ -45,17 +45,9 @@ def publish(ctx, limit):
     limit: Ограничить выполннение только для указных серверов, если указать `all`, то выполнится для всех
     """
     # Выполнить сборку VUE если это необходимо
-    buildVue(ctx)
+    buildVueIfNotExist(ctx)
     # Выполнить диплой
-    with ctx.cd("ansible"):
-        if limit == "all":
-            ctx.run(
-                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml publush.yml"
-            )
-        else:
-            ctx.run(
-                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml publush.yml --limit {limit}"
-            )
+    runAnsibleScript(ctx, limit, "publush.yml")
 
 
 @task
@@ -65,11 +57,19 @@ def dump(ctx, limit):
 
     limit: Ограничить выполннение только дял указных серверов, если указать `all`, то выполнится для всех
     """
-    with ctx.cd("ansible"):
-        if limit == "all":
-            ctx.run("ansible-playbook -i inventory.yml dump_api.yml")
-        else:
-            ctx.run(f"ansible-playbook -i inventory.yml dump_api.yml  --limit {limit}")
+    runAnsibleScript(ctx, limit, "dump_api.yml")
+
+
+@task
+def deletePgdata(ctx, limit):
+    """Удаление папки pgdata из серверов
+
+    Это может быть необходимо если внесены большие правки в БД
+    И единственный способ исправить конфликт, это удалить БД
+
+    limit: Ограничить выполннение только дял указных серверов, если указать `all`, то выполнится для всех
+    """
+    runAnsibleScript(ctx, limit, "delete_pgdata.yml")
 
 
 ######################
@@ -142,7 +142,7 @@ def RootToConf(ctx):
 
 
 @task
-def buildVue(ctx):
+def buildVueIfNotExist(ctx):
     """Скомпелировать VUE проект, если он был изменен"""
 
     def get_value_from_yaml(yaml_file, key):
@@ -223,9 +223,26 @@ def get_folder_sha256(folder_path: pathlib.Path):
     return sha256_hash.hexdigest()
 
 
+def runAnsibleScript(ctx, limit: str, path_script: str):
+    """Выполнить указанный ansible скрипт
+
+    limit: Ограничить выполннение только для указных серверов, если указать `all`, то выполнится для всех
+    """
+    with ctx.cd("ansible"):
+        if limit == "all":
+            ctx.run(
+                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml {path_script}"
+            )
+        else:
+            ctx.run(
+                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml {path_script} --limit {limit}"
+            )
+
+
 prod_namespace = Collection()
 prod_namespace.add_task(publish)
 prod_namespace.add_task(dump)
+prod_namespace.add_task(deletePgdata)
 
 dck_namespace = Collection()
 dck_namespace.add_task(run)
@@ -233,7 +250,7 @@ dck_namespace.add_task(restart)
 dck_namespace.add_task(down)
 dck_namespace.add_task(build)
 dck_namespace.add_task(logs)
-dck_namespace.add_task(buildVue)
+dck_namespace.add_task(buildVueIfNotExist)
 
 mv_namespace = Collection()
 mv_namespace.add_task(ConfToRoot)

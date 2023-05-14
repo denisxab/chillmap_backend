@@ -1,21 +1,28 @@
 <template>
-    <div class="channel-list">
+    <div class="container">
         <h1>Список каналов</h1>
-        <div v-for="channel in channels" :key="channel.id">
-            <button class="channel-button" @click="selectChannel(channel)">{{ channel.name }}</button>
+        <div class="box_extra" v-show="select_elm == undefined">
+            <VButton
+                class="row"
+                v-for="channel in channels"
+                :key="channel.id"
+                :value="channel.name"
+                @click="selectChannel(channel)" />
         </div>
     </div>
 </template>
 
-<script lang="ts" >
+<script lang="ts">
 import { channel_geomap } from "@/pages/MapApp.vue";
 import { DownloadFromUrl, TFromUrl } from "@/helper";
 import { UrlGetParams, TChannelGeomapObj } from "@/interface";
+import VButton from "@/stylecomponents/VButton.vue";
 
 export default {
+    components: { VButton },
     data() {
         return {
-            channels: <TChannelGeomapObj[]>[]
+            channels: <TChannelGeomapObj[]>[],
         };
     },
     async mounted() {
@@ -23,27 +30,24 @@ export default {
     },
     methods: {
         async fetchChannels() {
-            const channels: TFromUrl = await DownloadFromUrl(
-                channel_geomap
-            );
+            const channels: TFromUrl = await DownloadFromUrl(channel_geomap);
             if (channels.ok) {
                 this.channels = channels.data;
-            }
-            else {
-                console.error('Не удалось получить список каналов')
+            } else {
+                console.error("Не удалось получить список каналов");
             }
         },
 
         selectChannel(channel: TChannelGeomapObj) {
-            this.$store.dispatch('geomap/Update_select_channel', {
+            this.$store.dispatch("geomap/Update_select_channel", {
                 channel: channel,
                 router: this.$router,
                 route: this.$route,
             });
-            const c = UrlGetParams.channel
-            this.$router.push({ name: 'main_map', query: { c: channel.id } });
-            return
-        }
+            const c = UrlGetParams.channel;
+            this.$router.push({ name: "main_map", query: { c: channel.id } });
+            return;
+        },
     },
 };
 </script>
@@ -51,34 +55,42 @@ export default {
 <style scoped lang="scss">
 @import "@/gcolor.scss";
 
-h1 {
-    color: $h_color;
-    background: transparent;
-    text-align: center;
-}
-
-.channel-list {
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.channel-button {
-    display: block;
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: $ЦветФона;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f0f0f0;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    height: 100%;
 }
 
-.channel-button:hover {
-    background-color: #e0e0e0;
+h1 {
+    margin-bottom: 1rem;
+    background: transparent;
+    color: $БазовыйЦветТекста;
 }
 
-.channel-button:focus {
-    outline: none;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+.box_extra {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+    width: 50%;
+
+    .row {
+        box-shadow: 0px 0px 4rem 0.7rem $ЦветФонаВсплывающегоОкна;
+        border-radius: 0.5rem;
+        margin-top: 0.1rem;
+        background: transparent;
+        outline: none;
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+        text-align: left;
+
+        &:hover {
+            background: $ЦветФонаВсплывающегоОкна;
+        }
+    }
 }
 </style>

@@ -36,7 +36,7 @@ import {
     TFromUrl,
     whattodoIdFromName,
 } from "@/helper";
-import ParamsList from "@/components/ParamsList.vue";
+import ParamsList from "@/stylecomponents/ParamsList.vue";
 
 // Формирует URL для скачивания ppd файла, по указному id места
 export function template_download_ppd_file(id: number) {

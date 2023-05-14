@@ -16,11 +16,10 @@ class ModelUUID(models.Model):
 
 
 class ModelInteger(models.Model):
-    id = models.IntegerField(
+    id = models.AutoField(
         primary_key=True,
-        default=int,
-        verbose_name="Идентификатор записи Int",
-        # editable=False,
+        verbose_name="Идентификатор записи",
+        editable=True,
     )
 
     class Meta:

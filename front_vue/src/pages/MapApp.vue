@@ -182,7 +182,6 @@ export default {
                     console.error('Не удалось получить список каналов')
                 }
             } else {
-                // TODO: Сделать вывод списка каналов, если не было указания никакого канала в URL
                 console.log("Не указан ID канала");
                 this.$router.push({ name: 'list_channels' });
                 return

@@ -45,7 +45,7 @@
 </template>
 <script lang="ts">
 import { ParseUrlSrc, getAddress, whattodoIdFromName } from "@/helper";
-import ParamsList from "@/components/ParamsList.vue";
+import ParamsList from "@/stylecomponents/ParamsList.vue";
 import { TPropertiesMark } from "@/interface";
 
 const name_marker = ParseUrlSrc("@/img/name_marker.svg");

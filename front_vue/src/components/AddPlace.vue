@@ -7,7 +7,7 @@
         </label>
         <label class="row">
             <div class="label">* Рейтинг места:</div>
-            <input v-model="rating" type="number" min="0" max="5" />
+            <input v-model="rating" type="number" min="1" max="5" />
         </label>
         <label class="row">
             <div class="label">* What to do:</div>
@@ -25,11 +25,7 @@
                 </option>
             </select>
         </label>
-        <input
-            class="send_bt"
-            type="button"
-            value="Отправить"
-            @click="create_geomap" />
+        <VButton class="send_bt" value="Отправить" @clickBt="create_geomap" />
         <input
             ref="hidden_elm"
             class="hidden_elm"
@@ -47,9 +43,11 @@ import {
     type_place_list_url,
     what_todo_url,
 } from "@/pages/MapApp.vue";
+import VButton from "@/stylecomponents/VButton.vue";
 
 export default {
     emits: ["hidden_elm", "hiddenOverBox"],
+    components: { VButton },
     mounted() {
         this.$refs["hidden_elm"].src = arrow_up;
         this.show();
@@ -57,7 +55,7 @@ export default {
     data() {
         return {
             shortName: "",
-            rating: 0,
+            rating: 1,
             todo: [] as TWhatTodoObj[],
             typePlace: {} as TTypePlaceObj,
             todoOptions: [] as TWhatTodoObj[],
@@ -78,7 +76,8 @@ export default {
                 simpl_name: this.shortName,
                 rating: this.rating,
                 address: "",
-                channel_geomap: this.$store.state.geomap.select_channel_geomap.id,
+                channel_geomap:
+                    this.$store.state.geomap.select_channel_geomap.id,
                 what_todo: this.todo.map((element) => element.id),
                 type_place: this.typePlace.id,
             };
@@ -139,9 +138,11 @@ export default {
         font-size: 1rem;
         text-align: left;
         flex-direction: row;
+
         &:hover {
             background: $ЦветФонаВсплывающегоОкна;
         }
+
         .label {
             margin-right: 0.5rem;
             width: 8rem;
@@ -149,6 +150,7 @@ export default {
             font-weight: bold;
             display: inline;
         }
+
         input,
         select {
             flex: 1;
@@ -157,16 +159,22 @@ export default {
             color: $БазовыйЦветТекста;
             background: $ЦветФонаВсплывающегоОкна;
         }
+
         .todo {
             height: 6rem;
         }
     }
+
     .send_bt {
         margin-bottom: 0.8rem;
         font-size: 1.3rem;
+
         &:hover {
             background: $ЦветФонаВсплывающегоОкна;
         }
+
+        background: transparent;
+        box-shadow: 0px 0px 0.1rem 0.1rem $ЦветФонаВсплывающегоОкна;
     }
 }
 </style>

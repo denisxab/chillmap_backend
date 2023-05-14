@@ -1,0 +1,15 @@
+---
+- name: Удаление папки pgdata из серверов
+  # Это может быть необходимо если внесены большие правки в БД
+  # И единственный способ исправить конфликт, это удалить БД
+  hosts: all
+  become: true
+  vars:
+    name_app: chillmap_backend
+    path_app: "/app/{{ name_app }}"
+    path_pgdata: "{{ path_app }}/pgdata"
+  tasks:
+    - name: Удалить папка pgdata
+      file:
+        path: "{{ path_pgdata }}"
+        state: absent
