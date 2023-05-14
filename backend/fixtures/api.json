@@ -42,10 +42,17 @@
         }
     },
     {
+        "model": "api.whattodo",
+        "pk": 6,
+        "fields": {
+            "todo": "Заняться спортом"
+        }
+    },
+    {
         "model": "api.typeplace",
         "pk": 0,
         "fields": {
-            "name": "Спортзалы",
+            "name": "Спортзал",
             "img_url": "@/img/gym.png",
             "img_size_w": 0.25,
             "img_size_h": 0.25
@@ -102,10 +109,61 @@
         }
     },
     {
+        "model": "api.typeplace",
+        "pk": 6,
+        "fields": {
+            "name": "Торговый цент",
+            "img_url": "@/img/point.png",
+            "img_size_w": 0.3,
+            "img_size_h": 0.3
+        }
+    },
+    {
+        "model": "api.typeplace",
+        "pk": 7,
+        "fields": {
+            "name": "Кафе",
+            "img_url": "@/img/coffe.png",
+            "img_size_w": 0.7,
+            "img_size_h": 0.7
+        }
+    },
+    {
+        "model": "api.typeplace",
+        "pk": 8,
+        "fields": {
+            "name": "Ресторан",
+            "img_url": "@/img/point.png",
+            "img_size_w": 0.3,
+            "img_size_h": 0.3
+        }
+    },
+    {
+        "model": "api.typeplace",
+        "pk": 9,
+        "fields": {
+            "name": "Ларёк",
+            "img_url": "@/img/stall.png",
+            "img_size_w": 0.9,
+            "img_size_h": 0.9
+        }
+    },
+    {
         "model": "api.arialinmap",
         "pk": 1,
         "fields": {
             "name": "Санкт-Петербург - радиус 200км от дворцовой площади"
+        }
+    },
+    {
+        "model": "api.channelgeomap",
+        "pk": 0,
+        "fields": {
+            "name": "Спортзалы СПБ",
+            "arial_in_map": 1,
+            "shard": 1,
+            "default_coord_x": "59.971952559656046",
+            "default_coord_y": "30.255183549765853"
         }
     },
     {
@@ -162,13 +220,13 @@
         "model": "api.placeinmap",
         "pk": "173dc35e-7efa-4f2c-9868-dd9d5a9e8178",
         "fields": {
-            "simpl_name": "Люди любят х",
+            "simpl_name": "Люди любят хлеб",
             "cord_x": "60.011744189767455",
             "cord_y": "30.25332837704526",
             "rating": 2,
             "address": "22 к1, Комендантский проспект, Озеро Долгое, округ Озеро Долгое, Санкт-Петербург, Северо-Западный федеральный округ, 197372, Россия",
             "channel_geomap": 2,
-            "type_place": 0,
+            "type_place": 7,
             "what_todo": [2, 3]
         }
     },
@@ -210,7 +268,7 @@
             "rating": 2,
             "address": "Комендантский проспект",
             "channel_geomap": 2,
-            "type_place": 2,
+            "type_place": 9,
             "what_todo": [0]
         }
     },
@@ -282,20 +340,6 @@
             "channel_geomap": 1,
             "type_place": 1,
             "what_todo": [2]
-        }
-    },
-    {
-        "model": "api.placeinmap",
-        "pk": "d5454491-5e52-4a64-9c26-9b398486ca1c",
-        "fields": {
-            "simpl_name": "Люди любят хлею",
-            "cord_x": "60.009747348230746",
-            "cord_y": "30.256059729519645",
-            "rating": 3,
-            "address": "16 к1, Комендантский проспект, Озеро Долгое, округ Озеро Долгое, Санкт-Петербург, Северо-Западный федеральный округ, 197372, Россия",
-            "channel_geomap": 2,
-            "type_place": 1,
-            "what_todo": [0, 2, 5]
         }
     },
     {
