@@ -39,7 +39,9 @@
         </div>
         <!-- Чем тут можно заняться -->
         <div class="cel">
-            <ParamsList v-if="whattodo && whattodo.length > 0" :params_list="whattodo" />
+            <ParamsList
+                v-if="whattodo && whattodo.length > 0"
+                :params_list="whattodo" />
         </div>
     </div>
 </template>
@@ -47,6 +49,7 @@
 import { ParseUrlSrc, getAddress, whattodoIdFromName } from "@/helper";
 import ParamsList from "@/stylecomponents/ParamsList.vue";
 import { TPropertiesMark } from "@/interface";
+import { mapState } from "vuex";
 
 const name_marker = ParseUrlSrc("@/img/name_marker.svg");
 const simpl_name = ParseUrlSrc("@/img/simpl_name.svg");
@@ -70,27 +73,29 @@ export default {
         this.$refs["img_rating"].src = rating;
         this.$refs["img_address"].src = address;
     },
-    methods: {
-
-    },
     watch: {
         props_component: {
             async handler(newValue: TPropertiesMark) {
                 // Эти данные берутся из поверхностной информации
-                this.name_marker = this.$store.state.geomap.settings_type_place[newValue.type_place].name;
+                this.name_marker =
+                    this.settings_type_place[newValue.type_place].name;
                 this.simpl_name = newValue.simpl_name;
                 this.rating = newValue.rating;
                 this.address = newValue.address;
                 this.whattodo = whattodoIdFromName(newValue);
-                this.address = await getAddress(newValue.cord_x, newValue.cord_y)
+                this.address = await getAddress(
+                    newValue.cord_x,
+                    newValue.cord_y
+                );
             },
             deep: true,
         },
     },
     computed: {
+        ...mapState("geomap", ["settings_type_place", "select_PropertiesMark"]),
         // Отслеживание изменений выбранного маркера
         props_component() {
-            return this.$store.state.geomap.select_PropertiesMark;
+            return this.select_PropertiesMark;
         },
     },
 };

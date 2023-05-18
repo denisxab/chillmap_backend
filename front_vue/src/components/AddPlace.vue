@@ -35,8 +35,8 @@
 </template>
 
 <script lang="ts">
-import { DownloadFromUrl, ParseUrlSrc, PostJsonFromUrl } from "@/helper";
-import { TCoord, TTypePlaceObj, TWhatTodoObj } from "@/interface";
+import { DownloadFromUrl, PostJsonFromUrl } from "@/helper";
+import { TCoord, TGeomap, TTypePlaceObj, TWhatTodoObj } from "@/interface";
 import {
     arrow_up,
     place_url,
@@ -44,6 +44,7 @@ import {
     what_todo_url,
 } from "@/pages/MapApp.vue";
 import VButton from "@/stylecomponents/VButton.vue";
+import { mapState } from "vuex";
 
 export default {
     emits: ["hidden_elm", "hiddenOverBox"],
@@ -62,13 +63,20 @@ export default {
             typePlaceOptions: [] as TTypePlaceObj[],
         };
     },
+    computed: {
+        ...mapState("geomap", [
+            "select_channel_geomap",
+            "coordinat_click",
+            "RefMapContainer",
+        ]),
+    },
     methods: {
         hidden_elm() {
             this.$emit("hidden_elm");
         },
         async create_geomap() {
             console.log("Отправка: создание нового места");
-            const coord: TCoord = this.$store.state.geomap.coordinat_click;
+            const coord: TCoord = this.coordinat_click;
             console.log(this.$refs);
             const req = {
                 cord_x: coord.latitude,
@@ -76,8 +84,7 @@ export default {
                 simpl_name: this.shortName,
                 rating: this.rating,
                 address: "",
-                channel_geomap:
-                    this.$store.state.geomap.select_channel_geomap.id,
+                channel_geomap: this.select_channel_geomap.id,
                 what_todo: this.todo.map((element) => element.id),
                 type_place: this.typePlace.id,
             };
@@ -87,41 +94,9 @@ export default {
                 this.hidden_elm();
                 this.$emit("hiddenOverBox");
                 // Если произошло успешное создание,
-                // 1. TODO: Добавляем маркер на карту
-                const settings_type_place =
-                    this.$store.state.geomap.settings_type_place;
-                const element = JSON.parse(res.data);
-                const item = element.type_place;
-                const img_url = settings_type_place[item].img_url;
-                const img_size = [
-                    settings_type_place[item].img_size_w,
-                    settings_type_place[item].img_size_h,
-                ];
-                const style = {
-                    imgUrl: ParseUrlSrc(img_url),
-                    imgSize: img_size,
-                };
-                // Формируем краткую информацию о месте. Рейтинг:Имя
-                style["labelText"] = `${
-                    // Максимум 12 баллов
-                    element.rating % 13
-                }:${
-                    // Максимальная длинна названия 16 символов
-                    element.simpl_name.substring(0, 16)
-                }`;
-                const coord =
-                    this.$store.state.geomap.RefMapContainer._parseCoordFromOpenstreetmap(
-                        `${element.cord_x},${element.cord_y}`
-                    );
-                // Своиства которы будут храниться в маркере
-                let PropertiesMark = element;
-                PropertiesMark["name_marker"] = settings_type_place[item].name;
-                PropertiesMark["coord"] = [coord.latitude, coord.longitude];
-                // 2.2.1 Устанавливаем маркеры
-                this.$store.state.geomap.RefMapContainer.setMarkers(
-                    coord,
-                    PropertiesMark,
-                    style
+                // 1. Добавляем маркер на карту
+                this.RefMapContainer._setMarkersFromGeomap(
+                    <TGeomap>JSON.parse(res.data)
                 );
                 // 2. Переходим на карту
                 this.$router.push({

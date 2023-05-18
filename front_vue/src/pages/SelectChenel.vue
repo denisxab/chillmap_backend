@@ -17,6 +17,7 @@ import { channel_geomap } from "@/pages/MapApp.vue";
 import { DownloadFromUrl, TFromUrl } from "@/helper";
 import { UrlGetParams, TChannelGeomapObj } from "@/interface";
 import VButton from "@/stylecomponents/VButton.vue";
+import { mapActions } from "vuex";
 
 export default {
     components: { VButton },
@@ -29,6 +30,7 @@ export default {
         await this.fetchChannels();
     },
     methods: {
+        ...mapActions("geomap", ["Update_select_channel"]),
         async fetchChannels() {
             const channels: TFromUrl = await DownloadFromUrl(channel_geomap);
             if (channels.ok) {
@@ -39,7 +41,7 @@ export default {
         },
 
         selectChannel(channel: TChannelGeomapObj) {
-            this.$store.dispatch("geomap/Update_select_channel", {
+            this.Update_select_channel({
                 channel: channel,
                 router: this.$router,
                 route: this.$route,

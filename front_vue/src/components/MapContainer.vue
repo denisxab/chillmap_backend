@@ -31,7 +31,13 @@ import { DownloadFromUrl, ParseUrlSrc, TFromUrl } from "@/helper";
 import Stroke from "ol/style/Stroke";
 import MapEvent from "ol/MapEvent";
 import MapBrowserEvent from "ol/MapBrowserEvent";
-import { TCoord, TChannelGeomapPlace } from "@/interface";
+import {
+    TCoord,
+    TChannelGeomapPlace,
+    TGeomap,
+    TSettingsPlace,
+} from "@/interface";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 
 // Картинка маркера по умолчанию
 const imgPont = ParseUrlSrc("@/img/default_point.png");
@@ -99,6 +105,18 @@ export default {
     },
 
     methods: {
+        ...mapMutations("geomap", [
+            "Update_select_zoom",
+            "Update_geomap_json",
+            "Update_settings_type_place",
+        ]),
+
+        ...mapActions("geomap", [
+            "Update_coordinat_click",
+            "Update_select_PropertiesMark",
+            "Update_coordinat_click",
+        ]),
+
         // Инициализировать карту. Используется такой вариант для того чтобы дождаться async mounted`
         _initMap(
             default_coord: TCoord,
@@ -161,17 +179,11 @@ export default {
         // ----------- Основные функции для работы с Openlayers -------------
         // Приблизить карту
         ZoomMap() {
-            this.$store.commit(
-                `geomap/Update_select_zoom`,
-                this.$store.state.geomap.select_zoom + 1
-            );
+            this.Update_select_zoom(this.select_zoom + 1);
         },
         // отдалить карту
         UnZoomMap() {
-            this.$store.commit(
-                `geomap/Update_select_zoom`,
-                this.$store.state.geomap.select_zoom - 1
-            );
+            this.Update_select_zoom(this.select_zoom - 1);
         },
         // Сфокусировать карту в указанные координаты
         setCoordinates(coord: TCoord | undefined, IfSetMark = false) {
@@ -258,44 +270,34 @@ export default {
             }
         },
 
-      // _setMarkersFromGeomap(){
-      //         // TODO: Доделать 
-      //     const settings_type_place =
-      //             this.$store.state.geomap.settings_type_place;
-      //         const element = JSON.parse(res.data);
-      //         const item = element.type_place;
-      //         const img_url = settings_type_place[item].img_url;
-      //         const img_size = [
-      //             settings_type_place[item].img_size_w,
-      //             settings_type_place[item].img_size_h,
-      //         ];
-      //         const style = {
-      //             imgUrl: ParseUrlSrc(img_url),
-      //             imgSize: img_size,
-      //         };
-      //         // Формируем краткую информацию о месте. Рейтинг:Имя
-      //         style["labelText"] = `${
-      //             // Максимум 12 баллов
-      //             element.rating % 13
-      //         }:${
-      //             // Максимальная длинна названия 16 символов
-      //             element.simpl_name.substring(0, 16)
-      //         }`;
-      //         const coord =
-      //             this.$store.state.geomap.RefMapContainer._parseCoordFromOpenstreetmap(
-      //                 `${element.cord_x},${element.cord_y}`
-      //             );
-      //         // Своиства которы будут храниться в маркере
-      //         let PropertiesMark = element;
-      //         PropertiesMark["name_marker"] = settings_type_place[item].name;
-      //         PropertiesMark["coord"] = [coord.latitude, coord.longitude];
-      //         // 2.2.1 Устанавливаем маркеры
-      //         this.$store.state.geomap.RefMapContainer.setMarkers(
-      //             coord,
-      //             PropertiesMark,
-      //             style
-      //         );
-      // }
+        _setMarkersFromGeomap(place: TGeomap) {
+            /* Добавить маркер на карту из объекта Geomap */
+            const settings_type_place = <TSettingsPlace>(
+                this.settings_type_place
+            );
+            const item = settings_type_place[place.type_place];
+            const style = {
+                imgUrl: ParseUrlSrc(item.img_url),
+                imgSize: [item.img_size_w, item.img_size_h],
+            };
+            // Формируем краткую информацию о месте. Рейтинг:Имя
+            style["labelText"] = `${
+                // Максимум 12 баллов
+                place.rating % 13
+            }:${
+                // Максимальная длинна названия 16 символов
+                place.simpl_name.substring(0, 16)
+            }`;
+            const coord = this.RefMapContainer._parseCoordFromOpenstreetmap(
+                `${place.cord_x},${place.cord_y}`
+            );
+            // Своиства которы будут храниться в маркере
+            let PropertiesMark = place;
+            PropertiesMark["name_marker"] = item.name;
+            PropertiesMark["coord"] = [coord.latitude, coord.longitude];
+            // 2.2.1 Устанавливаем маркеры
+            this.setMarkers(coord, PropertiesMark, style);
+        },
         // Установить маркер на место в которые было совершено нажатие
         setSelectMarker(coord: TCoord | undefined) {
             // longitude: долгота
@@ -320,20 +322,15 @@ export default {
         },
         // Загрузить geomap_ИмяТочкиРадиусов.json и обновить все маркеры мест на карте, в соответствие с этим файлом
         async updateSelectGeomap(url_download: string) {
-            const geomap: TFromUrl = await DownloadFromUrl(
-                url_download
-            );
+            const geomap: TFromUrl = await DownloadFromUrl(url_download);
             if (geomap.ok) {
                 const geomap_json = <TChannelGeomapPlace>geomap.data;
                 // Убираем с карты маркеры от прошлых места
                 this.ClearMarkers(this.markersLayer);
                 // Заносим Geomap в глобальное хранилище
-                this.$store.commit("geomap/Update_geomap_json", geomap_json);
+                this.Update_geomap_json(geomap_json);
                 // Отображаем места на карте
-                this.ShowPlaceFromExternal(
-                    this.markersLayer,
-                    this.$store.state.geomap.geomap_json
-                );
+                this.ShowPlaceFromExternal(this.markersLayer, this.geomap_json);
             } else {
                 console.error("Ошибка: Ответ geomap пустой");
             }
@@ -353,40 +350,11 @@ export default {
             layer.setVisible(true);
             // Получить настройки для типов и сохранить их  в store
             const settings_type_place = self_geomap.places.settings;
-            this.$store.commit(
-                "geomap/Update_settings_type_place",
-                settings_type_place
-            );
+            this.Update_settings_type_place(settings_type_place);
             //! Перебрать места и отобразить их на месте
             for (let item in self_geomap.places.place) {
                 self_geomap.places.place[item].forEach((element) => {
-                    const img_url = settings_type_place[item].img_url;
-                    const img_size = [
-                        settings_type_place[item].img_size_w,
-                        settings_type_place[item].img_size_h,
-                    ];
-                    const style = {
-                        imgUrl: ParseUrlSrc(img_url),
-                        imgSize: img_size,
-                    };
-                    // Формируем краткую информацию о месте. Рейтинг:Имя
-                    style["labelText"] = `${
-                        // Максимум 12 баллов
-                        element.rating % 13
-                    }:${
-                        // Максимальная длинна названия 16 символов
-                        element.simpl_name.substring(0, 16)
-                    }`;
-                    const coord = this._parseCoordFromOpenstreetmap(
-                        `${element.cord_x},${element.cord_y}`
-                    );
-                    // Своиства которы будут храниться в маркере
-                    let PropertiesMark = element;
-                    PropertiesMark["name_marker"] =
-                        settings_type_place[item].name;
-                    PropertiesMark["coord"] = [coord.latitude, coord.longitude];
-                    // 2.2.1 Устанавливаем маркеры
-                    this.setMarkers(coord, PropertiesMark, style);
+                    this._setMarkersFromGeomap(element);
                 });
             }
         },
@@ -424,7 +392,7 @@ export default {
                 "EPSG:4326"
             ).reverse();
             // Сохраняем нажатые координаты в глобальное хранилище
-            this.$store.dispatch(`geomap/Update_coordinat_click`, {
+            this.Update_coordinat_click({
                 coord: {
                     latitude: coord[0],
                     longitude: coord[1],
@@ -462,13 +430,13 @@ export default {
             // Кастомные свойства у нажатого маркера
             const PropertiesMark = feat.getProperties();
             // Сохраняем в ГХ текущие выбранное место;
-            this.$store.dispatch(`geomap/Update_select_PropertiesMark`, {
+            this.Update_select_PropertiesMark({
                 mark: PropertiesMark,
                 router: this.$router,
                 route: this.$route,
             });
             // Координаты фокусировки равны = координатам нажатого места
-            this.$store.dispatch(`geomap/Update_coordinat_click`, {
+            this.Update_coordinat_click({
                 coord: {
                     latitude: PropertiesMark.coord[0],
                     longitude: PropertiesMark.coord[1],
@@ -482,10 +450,7 @@ export default {
         },
         // Обработка изменение масштаба карты
         HandleZoom(evt: MapEvent) {
-            this.$store.commit(
-                `geomap/Update_select_zoom`,
-                this.view_select.values_.zoom
-            );
+            this.Update_select_zoom(this.view_select.values_.zoom);
         },
         //-------------------------------------------------------------
 
@@ -514,6 +479,14 @@ export default {
         layers_select(): Collection<BaseLayer> {
             return this.map.getLayers();
         },
+
+        ...mapState("geomap", [
+            "select_zoom",
+            "settings_type_place",
+            "RefMapContainer",
+            "geomap_json",
+        ]),
+        ...mapGetters("geomap", ["coordinat_click_cord"]),
     },
 };
 </script>

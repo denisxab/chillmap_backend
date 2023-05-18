@@ -66,6 +66,17 @@ export const geomap = {
             state.RefMapContainer = newValue
         }
     },
+    getters: {
+        // Координаты фокусировки
+        coordinat_click_cord: state => {
+            const c = <TCoord | undefined>state.coordinat_click;
+            if (c) {
+                return [c.latitude, c.longitude];
+            }
+            return [];
+        }
+    },
+
     actions: {
         // Обновить координаты в фокуса
         Update_coordinat_click(

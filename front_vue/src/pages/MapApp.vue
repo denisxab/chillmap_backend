@@ -36,7 +36,7 @@
             <div class="map_coord_click">
                 <input
                     type="text"
-                    :value="coordinat_click"
+                    :value="coordinat_click_cord"
                     id="map_coord_click_input"
                     placeholder="широта,долгота"
                     readonly />
@@ -74,6 +74,7 @@ import {
     TFromUrl,
 } from "@/helper";
 import { UrlGetParams, UrlGetParamsTypeView, TCoord } from "@/interface";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 
 // ФОТО
 export const arrow_up = ParseUrlSrc("@/img/arrow_up.svg");
@@ -115,35 +116,40 @@ export default {
         // 1. Парсить URL и занести данные в Store
         await this.Mounted_ParseUrl();
         // 2. URL для получения списка мест в указном канале
-        this.$store.commit(
-            `geomap/Update_url_geomap`,
+        this.Update_url_geomap(
             ParseUrlSrc(geomap_list_from_channel_url) +
-                this.$store.state.geomap.select_channel_geomap.id
+                this.select_channel_geomap.id
         );
-        this.$store.commit(
-            "geomap/Update_RefMapContainer",
-            this.$refs["MapContainer"]
-        );
+        this.Update_RefMapContainer(this.$refs["MapContainer"]);
         // 3. Инициализировать карту
-        this.$store.state.geomap.RefMapContainer._initMap(
-            this.$store.state.geomap.coordinat_click,
-            this.$store.state.geomap.select_zoom,
-            this.$store.state.geomap.url_geomap
+        this.RefMapContainer._initMap(
+            this.coordinat_click,
+            this.select_zoom,
+            this.url_geomap
         );
     },
     computed: {
-        // Координаты фокусировки
-        coordinat_click() {
-            const c = <TCoord | undefined>(
-                this.$store.state.geomap.coordinat_click
-            );
-            if (c) {
-                return [c.latitude, c.longitude];
-            }
-            return [];
-        },
+        ...mapState("geomap", [
+            "select_channel_geomap",
+            "coordinat_click",
+            "select_zoom",
+            "url_geomap",
+            "RefMapContainer",
+        ]),
+        ...mapGetters("geomap", ["coordinat_click_cord"]),
     },
     methods: {
+        ...mapMutations("geomap", [
+            "Update_select_zoom",
+            "Update_url_geomap",
+            "Update_RefMapContainer",
+        ]),
+
+        ...mapActions("geomap", [
+            "Update_coordinat_click",
+            "Update_select_channel",
+            "Update_type_view",
+        ]),
         // Сфокусироваться на указанных координатах
         setCoordinates(coord: string, IfSetMark = false) {
             this.$refs["MapContainer"].setCoordinates(
@@ -192,13 +198,13 @@ export default {
             let query = clone(this.$route.query);
             // 1. Получить канал из URL
             const channel = parseInt(query["c"]);
-            if (channel) {
+            if (channel !== undefined) {
                 const channels: TFromUrl = await DownloadFromUrl(
                     channel_geomap + channel
                 );
                 if (channels.ok) {
                     const channels_json = channels.data;
-                    this.$store.dispatch("geomap/Update_select_channel", {
+                    this.Update_select_channel({
                         channel: channels_json,
                         router: this.$router,
                         route: this.$route,
@@ -216,10 +222,9 @@ export default {
             if (!zoom) {
                 zoom = 16;
             }
-            this.$store.commit(`geomap/Update_select_zoom`, zoom);
+            this.Update_select_zoom(zoom);
             // 3. Получить координаты для фокусировки
-
-            this.$store.dispatch(`geomap/Update_coordinat_click`, {
+            this.Update_coordinat_click({
                 coord:
                     query[UrlGetParams.latitude] &&
                     query[UrlGetParams.longitude]
@@ -229,17 +234,15 @@ export default {
                           }
                         : {
                               latitude:
-                                  this.$store.state.geomap.select_channel_geomap
-                                      .default_coord_x,
+                                  this.select_channel_geomap.default_coord_x,
                               longitude:
-                                  this.$store.state.geomap.select_channel_geomap
-                                      .default_coord_y,
+                                  this.select_channel_geomap.default_coord_y,
                           },
                 router: this.$router,
                 route: this.$route,
             });
             // 4. Обновляем тип отображения
-            this.$store.dispatch(`geomap/Update_type_view`, {
+            this.Update_type_view({
                 type_view: query[UrlGetParams.type_view]
                     ? query[UrlGetParams.type_view]
                     : UrlGetParamsTypeView.main_map,

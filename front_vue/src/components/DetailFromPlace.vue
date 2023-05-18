@@ -4,16 +4,24 @@
         <!-- Информация вв иде ключ значения -->
         <div class="row" v-for="(item, index) in view_list" :key="index">
             <div class="title">{{ item.title }}</div>
-            <div class="view_list_data" v-for="(item2, index2) in item.data" :key="index2">
+            <div
+                class="view_list_data"
+                v-for="(item2, index2) in item.data"
+                :key="index2">
                 <div class="name" v-if="item2.name">{{ item2.name }}</div>
                 <div class="value">
                     <div class="list" v-if="typeof item2.value == 'object'">
                         <ParamsList :params_list="item2.value" />
                     </div>
-                    <a target="_blank" :href="item2.value" v-else-if="
-                        typeof item2.value == 'string' &&
-                        item2.value.includes('://')
-                    ">{{ item2.value }}</a>
+                    <a
+                        target="_blank"
+                        :href="item2.value"
+                        v-else-if="
+                            typeof item2.value == 'string' &&
+                            item2.value.includes('://')
+                        "
+                        >{{ item2.value }}</a
+                    >
                     <span v-else>
                         {{ item2.value }}
                     </span>
@@ -37,6 +45,7 @@ import {
     whattodoIdFromName,
 } from "@/helper";
 import ParamsList from "@/stylecomponents/ParamsList.vue";
+import { mapState } from "vuex";
 
 // Формирует URL для скачивания ppd файла, по указному id места
 export function template_download_ppd_file(id: number) {
@@ -110,8 +119,9 @@ export default {
         // Распарсить подробные данные о месте, и записать их в нужные переменные
         parse_ppd(ppd: Tpublic_place_details) {
             this.AveragePopulation = EAveragePopulation[ppd.AveragePopulation];
-            this.AverageCostVisit = `${ppd.AverageCostVisit.value} ${EAverageCostVisit[ppd.AverageCostVisit.currency]
-                }`;
+            this.AverageCostVisit = `${ppd.AverageCostVisit.value} ${
+                EAverageCostVisit[ppd.AverageCostVisit.currency]
+            }`;
             this.InternetСontacts = ppd.InternetСontacts;
             this.FavoritesCountMore = `более ${ppd.FavoritesCountMore}`;
         },
@@ -127,7 +137,8 @@ export default {
         props_component: {
             handler(newValue: TPropertiesMark) {
                 // Эти данные берутся из поверхностной информации
-                this.name_marker = this.$store.state.geomap.settings_type_place[newValue.type_place].name;
+                this.name_marker =
+                    this.settings_type_place[newValue.type_place].name;
                 this.rating = newValue.rating;
                 this.simpl_name = newValue.simpl_name;
                 this.address = newValue.address;
@@ -139,9 +150,11 @@ export default {
         },
     },
     computed: {
+        ...mapState("geomap", ["settings_type_place", "select_PropertiesMark"]),
+
         // Отслеживание изменений выбранного маркера
         props_component() {
-            return this.$store.state.geomap.select_PropertiesMark;
+            return this.select_PropertiesMark;
         },
         // Формируем список который будет отображаться в HTML
         view_list(): Tview_list_item[] {
@@ -274,7 +287,6 @@ export default {
     }
 
     a {
-
         /*
         Псевдокласс	Описание
         a:link	Определяет стиль для обычной не посещенной ссылки.
@@ -282,15 +294,20 @@ export default {
         a:active	Определяет стиль для активной ссылки. Активной ссылка становится при нажатии на нее.
         a:hover	Определяет стиль для ссылки при наведении на нее мышью.
         */
-        &:link {}
+        &:link {
+        }
 
-        &:visited {}
+        &:visited {
+        }
 
-        &:focus {}
+        &:focus {
+        }
 
-        &:hover {}
+        &:hover {
+        }
 
-        &:active {}
+        &:active {
+        }
 
         //  Убрать подчёркивание ссылки
         text-decoration: none;
