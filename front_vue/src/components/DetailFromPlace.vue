@@ -28,6 +28,13 @@
                 </div>
             </div>
         </div>
+        <div class="box_edit_geomap">
+            <input
+                @click="clickUpdateGeomap"
+                class="edit_geomap"
+                type="image"
+                ref="edit_geomap" />
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -46,6 +53,7 @@ import {
 } from "@/helper";
 import ParamsList from "@/stylecomponents/ParamsList.vue";
 import { mapState } from "vuex";
+export const img_edit_geomap = ParseUrlSrc("@/img/edit_geomap.png");
 
 // Формирует URL для скачивания ppd файла, по указному id места
 export function template_download_ppd_file(id: number) {
@@ -98,6 +106,10 @@ export default {
             InternetСontacts: <TInternetСontacts>Def_InternetСontacts(),
         };
     },
+    mounted() {
+        // Иконка для редактирования информации о месте
+        this.$refs["edit_geomap"].src = img_edit_geomap;
+    },
     // Методы
     methods: {
         // Функция для обновления данных в компоненте, она асинхронна потому что скачивает файл с подробными данными о месте
@@ -132,6 +144,8 @@ export default {
             this.InternetСontacts = Def_InternetСontacts();
             this.FavoritesCountMore = undefined;
         },
+
+        clickUpdateGeomap() {},
     },
     watch: {
         props_component: {
@@ -232,6 +246,17 @@ export default {
 <style lang="scss" scoped>
 @import "@/gcolor.scss";
 
+.box_edit_geomap {
+    text-align: center;
+    .edit_geomap {
+        width: 4.5rem;
+        height: 5rem;
+        &:hover {
+            box-shadow: 0px 0px 2rem 0.7rem $ЦветФонаВсплывающегоОкна;
+            border-radius: 0.5rem;
+        }
+    }
+}
 .box {
     margin: 0.3rem;
     display: flex;
