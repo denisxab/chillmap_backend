@@ -197,8 +197,8 @@ export default {
             // 0. Текущие GET параметры в URL
             let query = clone(this.$route.query);
             // 1. Получить канал из URL
-            const channel = parseInt(query["c"]);
-            if (channel !== undefined) {
+            const channel: any = parseInt(query["c"]);
+            if (!isNaN(channel)) {
                 const channels: TFromUrl = await DownloadFromUrl(
                     channel_geomap + channel
                 );
