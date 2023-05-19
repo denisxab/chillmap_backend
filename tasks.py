@@ -77,10 +77,10 @@ def deletePgdata(ctx, limit):
 
 
 @task
-def testDjango(ctx):
+def testDjango(ctx, prod=False):
     """Выполнить тесты Django в контейнере"""
     print("Запуск 1::::::::::::;;")
-    restart(ctx, prod=True, detach=True, list_prod_app=LIST_TEST_DJANGO_APP)
+    restart(ctx, prod=prod, detach=True, list_prod_app=LIST_TEST_DJANGO_APP)
     print("Запуск 2::::::::::::;;")
     # command = "pytest"
     # ctx.run(f"docker-compose exec app {command}", pty=True)
