@@ -32,6 +32,7 @@ FILE_ALL = [
     *FILE_PROD,
 ]
 LIST_PROD_APP = " ".join(["app", "db", "nginx_vue", "nginx_static"])
+LIST_DEV_APP = " ".join(["app", "db", "nginx_vue", "nginx_static", "vue_dev_server"])
 LIST_TEST_DJANGO_APP = " ".join(["app", "db"])
 
 # Скрыть из вывода в консоли задачи который skip
@@ -94,9 +95,11 @@ def testDjango(ctx, prod=False):
 def build(ctx, prod=False, list_prod_app: str = ""):
     """Собрать docker-compose"""
     ConfToRoot(ctx, prod)
-    if not list_prod_app:
+    if prod and not list_prod_app:
         list_prod_app = LIST_PROD_APP
-    ctx.run(f"docker-compose build {list_prod_app}" if prod else "docker-compose build")
+    if not prod and not list_prod_app:
+        list_prod_app = LIST_DEV_APP
+    ctx.run(f"docker-compose build {list_prod_app}")
     RootToConf(ctx)
 
 
@@ -105,19 +108,16 @@ def run(ctx, prod=False, detach=False, list_prod_app: str = ""):
     """Запустить docker-compose"""
     ConfToRoot(ctx, prod)
     build_html()
-    if not list_prod_app:
+    if prod and not list_prod_app:
         list_prod_app = LIST_PROD_APP
-    ctx.run(
-        f"docker-compose up {'-d' if detach else ''} {list_prod_app}"
-        if prod
-        else "docker-compose up"
-    )
+    if not prod and not list_prod_app:
+        list_prod_app = LIST_DEV_APP
+    ctx.run(f"docker-compose up {'-d' if detach else ''} {list_prod_app}")
     RootToConf(ctx)
 
 
 @task
 def restart(ctx, prod=False, detach=False, list_prod_app: str = ""):
-    print("list_prod_app: ", list_prod_app)
     """Перезапустить docker-compose"""
     down(ctx, prod)
     build(ctx, prod, list_prod_app)
