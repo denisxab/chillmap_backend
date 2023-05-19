@@ -2,7 +2,7 @@
 FROM python:3.11
 
 # Установка рабочей директории
-WORKDIR /app
+WORKDIR /app_django
 
 COPY ./backend/pyproject.toml ./backend/poetry.lock ./
 
