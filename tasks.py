@@ -39,13 +39,14 @@ ANSIBLE_HIDE_SKIP = "export ANSIBLE_DISPLAY_SKIPPED_HOSTS=no &&"
 
 
 @task
-def publish(ctx, limit):
+def publish(ctx, limit, build_vue=False):
     """Отправить проект на прод
 
     limit: Ограничить выполннение только для указных серверов, если указать `all`, то выполнится для всех
     """
     # Выполнить сборку VUE если это необходимо
-    buildVueIfNotExist(ctx)
+    if build_vue:
+        buildVueIfNotExist(ctx)
     # Выполнить диплой
     runAnsibleScript(ctx, limit, "publush.yml")
 

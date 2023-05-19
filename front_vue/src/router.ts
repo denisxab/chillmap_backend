@@ -19,17 +19,18 @@ const routes: VueRouter.RouteRecordRaw[] = [
     //     redirect: { name: "main" },
     // },
     {
+        path: '/channels',
+        name: 'list_channels',
+        component: SelectChenel
+    },
+    {
         path: "/",
         name: "main_map",
         component: MapApp,
         // redirect: { name: "main_map" },
     },
 
-    {
-        path: '/channels',
-        name: 'list_channels',
-        component: SelectChenel
-    }
+
     // {
     // path: "/map",
     // },
