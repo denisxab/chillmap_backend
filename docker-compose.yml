@@ -15,8 +15,8 @@ services:
     ports:
       - "${HOST_PORT_DJANGO}:8181"
     # Примонтирование локальной директории к контейнеру
-    volumes:
-      - ./backend:/app_django
+    # volumes:
+      # - ./backend:/app_django
     # Переменные окружения
     environment:
       POSTGRES_HOST: db # Хост для подключения к БД
