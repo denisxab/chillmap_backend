@@ -16,7 +16,7 @@ services:
       - "${HOST_PORT_DJANGO}:8181"
     # Примонтирование локальной директории к контейнеру
     volumes:
-      - ./backend:/app_django:ro
+      - /var/jenkins_home/workspace/chillmap_test/backend:/app_django:ro
     # Переменные окружения
     environment:
       POSTGRES_HOST: db # Хост для подключения к БД
