@@ -117,7 +117,7 @@ def run(ctx, prod=False, detach=False, list_prod_app: str = ""):
 
 @task
 def restart(ctx, prod=False, detach=False, list_prod_app: str = ""):
-    print("prod: ", prod)
+    print("list_prod_app: ", list_prod_app)
     """Перезапустить docker-compose"""
     down(ctx, prod)
     build(ctx, prod, list_prod_app)
