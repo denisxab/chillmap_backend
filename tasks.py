@@ -3,6 +3,8 @@ import os
 import pathlib
 import re
 import shutil
+import threading
+import time
 from contextlib import suppress
 
 import yaml
@@ -30,6 +32,7 @@ FILE_ALL = [
     *FILE_PROD,
 ]
 LIST_PROD_APP = " ".join(["app", "db", "nginx_vue", "nginx_static"])
+LIST_TEST_DJANGO_APP = " ".join(["app", "db"])
 
 # Скрыть из вывода в консоли задачи который skip
 ANSIBLE_HIDE_SKIP = "export ANSIBLE_DISPLAY_SKIPPED_HOSTS=no &&"
@@ -73,17 +76,39 @@ def deletePgdata(ctx, limit):
     runAnsibleScript(ctx, limit, "delete_pgdata.yml")
 
 
+@task
+def testDjango(ctx):
+    """Выполнить тесты Django в контейнере"""
+    print("Запуск 1::::::::::::;;")
+    restart(ctx, prod=True, detach=True, list_prod_app=LIST_TEST_DJANGO_APP)
+    print("Запуск 2::::::::::::;;")
+    command = "pytest "
+    ctx.run(f"docker-compose exec app {command}", pty=True)
+
+
 ######################
 # Взаимодействие с docker-compose
 
 
 @task
-def run(ctx, prod=False, detach=False):
+def build(ctx, prod=False, list_prod_app: str = ""):
+    """Собрать docker-compose"""
+    ConfToRoot(ctx, prod)
+    if not list_prod_app:
+        list_prod_app = LIST_PROD_APP
+    ctx.run(f"docker-compose build {list_prod_app}" if prod else "docker-compose build")
+    RootToConf(ctx)
+
+
+@task
+def run(ctx, prod=False, detach=False, list_prod_app: str = ""):
     """Запустить docker-compose"""
     ConfToRoot(ctx, prod)
     build_html()
+    if not list_prod_app:
+        list_prod_app = LIST_PROD_APP
     ctx.run(
-        f"docker-compose up {'-d' if detach else ''} {LIST_PROD_APP}"
+        f"docker-compose up {'-d' if detach else ''} {list_prod_app}"
         if prod
         else "docker-compose up"
     )
@@ -91,11 +116,11 @@ def run(ctx, prod=False, detach=False):
 
 
 @task
-def restart(ctx, prod=False, detach=False):
+def restart(ctx, prod=False, detach=False, list_prod_app: str = ""):
     """Перезапустить docker-compose"""
     down(ctx, prod)
-    build(ctx, prod)
-    run(ctx, prod, detach)
+    build(ctx, prod, list_prod_app)
+    run(ctx, prod, detach, list_prod_app)
 
 
 @task
@@ -103,14 +128,6 @@ def down(ctx, prod=False):
     """Остановить docker-compose"""
     ConfToRoot(ctx, prod)
     ctx.run("docker-compose down")
-    RootToConf(ctx)
-
-
-@task
-def build(ctx, prod=False):
-    """Собрать docker-compose"""
-    ConfToRoot(ctx, prod)
-    ctx.run(f"docker-compose build {LIST_PROD_APP}" if prod else "docker-compose build")
     RootToConf(ctx)
 
 
@@ -244,6 +261,7 @@ prod_namespace = Collection()
 prod_namespace.add_task(publish)
 prod_namespace.add_task(dump)
 prod_namespace.add_task(deletePgdata)
+prod_namespace.add_task(testDjango)
 
 dck_namespace = Collection()
 dck_namespace.add_task(run)

@@ -38,7 +38,7 @@ class PlaceTests(APITestCase):
 
         self.place_in_map.what_todo.add(self.what_todo)
 
-    def test_getplace(self):
+    def test_place_detail(self):
         except_data = {
             "id": str(self.place_in_map.id),
             "self_url": f"http://testserver/api/v1/place/{self.place_in_map.id}/",
@@ -59,6 +59,8 @@ class PlaceTests(APITestCase):
                     "name": self.arial_in_map.name,
                 },
                 "shard": self.channel_geomap.shard,
+                "default_coord_x": "",
+                "default_coord_y": "",
             },
             "what_todo": [self.what_todo.id],
             "what_todo_obj": [
@@ -81,9 +83,9 @@ class PlaceTests(APITestCase):
         url = reverse("place-detail", kwargs={"pk": str(self.place_in_map.id)})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, except_data)
+        self.assertEqual(response.json(), except_data)
 
-    def test_getplace(self):
+    def test_channel_geomap_place_detail(self):
         except_data = {
             "id": self.channel_geomap.id,
             "self_url": f"http://testserver/api/v1/channel_geomap_place/{self.channel_geomap.id}/",
@@ -128,6 +130,8 @@ class PlaceTests(APITestCase):
                     }
                 },
             },
+            "default_coord_x": "",
+            "default_coord_y": "",
         }
         url = reverse(
             "channel_geomap_place-detail", kwargs={"pk": str(self.channel_geomap.id)}
