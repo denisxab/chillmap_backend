@@ -26,6 +26,4 @@ CMD python manage.py migrate && \
     make css_to_drf && \
     make loaddata && \ 
     python manage.py collectstatic --noinput && \
-    tail -f /dev/null
-    # TODO:
-    # daphne conf.asgi:application -b 0.0.0.0 -p 8181
+    daphne conf.asgi:application -b 0.0.0.0 -p 8181
