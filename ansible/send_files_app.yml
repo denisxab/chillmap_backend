@@ -39,6 +39,14 @@
         repo: "{{ git_url }}"
         dest: "{{ path_app }}"
         update: yes
+      register: git_clone
+      ignore_errors: yes
+
+    - name: Очистка директории при неудачном клонирование проекта {{ name_app }}
+      file:
+        path: "{{ path_app }}"
+        state: absent
+      when: git_clone is failed
 
 - name: Проверка наличия директории проекта {{ name_app }}
   stat:
