@@ -82,8 +82,8 @@ def testDjango(ctx):
     print("Запуск 1::::::::::::;;")
     restart(ctx, prod=True, detach=True, list_prod_app=LIST_TEST_DJANGO_APP)
     print("Запуск 2::::::::::::;;")
-    command = "ls"
-    ctx.run(f"docker-compose exec app {command}", pty=True)
+    # command = "pytest"
+    # ctx.run(f"docker-compose exec app {command}", pty=True)
 
 
 ######################
