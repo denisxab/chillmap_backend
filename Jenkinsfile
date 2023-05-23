@@ -8,13 +8,13 @@ pipeline {
 
     stages {
         stage('Lint Python'){
-            stages{
-                sh 'flake8 .'
+            steps {
+                sh "flake8 ."
             }
         }
 
         stage('Test Django'){
-            steps{
+            steps {
                 sh "invoke prod.testDjango --echo"
             }
         }
