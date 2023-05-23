@@ -1,4 +1,4 @@
 FROM python:latest
 
-RUN pip install invoke python-dotenv
+RUN pip install invoke python-dotenv flake8
 
