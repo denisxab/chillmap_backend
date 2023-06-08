@@ -3,13 +3,11 @@ import os
 import pathlib
 import re
 import shutil
-import threading
-import time
 from contextlib import suppress
 
 import yaml
 from dotenv import dotenv_values
-from invoke import Collection, Context, task
+from invoke import Collection, task
 
 DOCKERFILE_DJANGO_DEV = "./conf_build/Dockerfile_Django_Dev"
 DOCKERFILE_DJANGO_PROD = "./conf_build/Dockerfile_Django_Prod"

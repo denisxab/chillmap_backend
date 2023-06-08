@@ -3,21 +3,21 @@
   hosts: all
   become: true
   vars:
-    path_app: "/app/chillmap_backend"
-    app_name: "app"
+      path_app: "/app/chillmap_backend"
+      app_name: "app"
   tasks:
-    - name: Выполнить команду invoke
-      command:
-        cmd: invoke mv.ConfToRoot --prod --echo
-        chdir: "{{ path_app }}"
+      - name: Выполнить команду invoke
+        command:
+            cmd: invoke mv.ConfToRoot --prod --echo
+            chdir: "{{ path_app }}"
 
-    - name: Выполнить команду docker-compose
-      command:
-        cmd: "docker-compose exec {{ app_name }} make dump_api"
-        chdir: "{{ path_app }}"
+      - name: Выполнить команду docker-compose
+        command:
+            cmd: "docker-compose exec {{ app_name }} make dump_api"
+            chdir: "{{ path_app }}"
 
-    - name: Копировать файл с сервера на локальную машину
-      fetch:
-        src: "{{ path_app }}/backend/fixtures/api.json"
-        dest: "../backend/fixtures/{{ ansible_host }}api.json"
-        flat: yes
+      - name: Копировать файл с сервера на локальную машину
+        fetch:
+            src: "{{ path_app }}/backend/fixtures/api.json"
+            dest: "../backend/fixtures/{{ ansible_host }}api.json"
+            flat: yes
