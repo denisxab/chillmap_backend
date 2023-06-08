@@ -89,7 +89,7 @@ services:
   vue_dev_server:
     build:
       context: .
-      dockerfile: ./conf_build/Dockerfile_Vue_Dev
+      dockerfile: ./devops/conf_build/Dockerfile_Vue_Dev
     restart: always
     volumes:
       - ./front_vue:/app

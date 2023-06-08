@@ -14,7 +14,7 @@
         block:
             - name: Копировать файл с сервера на локальную машину
               synchronize:
-                  src: "../.gitignore"
+                  src: "../../.gitignore"
                   dest: "{{ path_app }}/.gitignore"
                   delete: yes
 
@@ -28,7 +28,7 @@
 
             - name: Копирование проекта на удаленный сервер
               synchronize:
-                  src: "../../"
+                  src: "../../../"
                   dest: "{{ path_app }}"
                   delete: yes
                   recursive: yes

@@ -9,12 +9,12 @@ import yaml
 from dotenv import dotenv_values
 from invoke import Collection, task
 
-DOCKERFILE_DJANGO_DEV = "./conf_build/Dockerfile_Django_Dev"
-DOCKERFILE_DJANGO_PROD = "./conf_build/Dockerfile_Django_Prod"
+DOCKERFILE_DJANGO_DEV = "./devops/conf_build/Dockerfile_Django_Dev"
+DOCKERFILE_DJANGO_PROD = "./devops/conf_build/Dockerfile_Django_Prod"
 DOCKERFILE_DJANGO = "./Dockerfile_Django"
 #
-DOCKERFILE_VUE_DEV = "./conf_build/Dockerfile_Vue_Dev"
-DOCKERFILE_VUE_BUILD = "./conf_build/Dockerfile_Vue_Build"
+DOCKERFILE_VUE_DEV = "./devops/conf_build/Dockerfile_Vue_Dev"
+DOCKERFILE_VUE_BUILD = "./devops/conf_build/Dockerfile_Vue_Build"
 DOCKERFILE_VUE = "./Dockerfile_Vue"
 
 
@@ -185,9 +185,12 @@ def buildVueIfNotExist(ctx):
         front_vue_hash = front_vue_hash_select
         insert_value_to_yaml("app_config.yml", "front_vue_hash", front_vue_hash)
         # Сборка Vue.js приложения на локальной машине перед диплоем
-        ctx.run(f"docker build -t dockerfile_vue_prod -f {DOCKERFILE_VUE_BUILD} .")
         ctx.run(
-            "docker run -v ./front_vue:/app -v /app/node_modules dockerfile_vue_prod"
+            f"docker build -t dockerfile_vue_prod -f {DOCKERFILE_VUE_BUILD} .", pty=True
+        )
+        ctx.run(
+            "docker run -v ./front_vue:/app -v /app/node_modules dockerfile_vue_prod",
+            pty=True,
         )
         ctx.run("sudo chown $USER:$USER -R ./front_vue")
 
@@ -245,14 +248,16 @@ def runAnsibleScript(ctx, limit: str, path_script: str):
 
     limit: Ограничить выполннение только для указных серверов, если указать `all`, то выполнится для всех
     """
-    with ctx.cd("ansible"):
+    with ctx.cd("./devops/ansible"):
         if limit == "all":
             ctx.run(
-                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml {path_script}"
+                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml {path_script}",
+                pty=True,
             )
         else:
             ctx.run(
-                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml {path_script} --limit {limit}"
+                f"{ANSIBLE_HIDE_SKIP} ansible-playbook -i inventory.yml {path_script} --limit {limit}",
+                pty=True,
             )
 
 

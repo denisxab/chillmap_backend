@@ -20,7 +20,7 @@
 ## Зависимости для invoke
 
 ```bash
-pip install python-dotenv invoke
+pip install python-dotenv invoke PyYAML
 ```
 
 ## Запустить диплой
