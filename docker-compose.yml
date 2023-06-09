@@ -1,5 +1,5 @@
 # Версия Docker Compose
-version: '3.3'
+version: "3.3"
 
 # Описание сервисов
 services:
@@ -17,7 +17,7 @@ services:
     # Примонтирование локальной директории к контейнеру
     # Проброс не работает в Jenkins
     # volumes:
-      # - ./backend:/app_django
+    # - ./backend:/app_django
     # Переменные окружения
     environment:
       POSTGRES_HOST: db # Хост для подключения к БД
@@ -60,11 +60,16 @@ services:
     restart: always
     # Пробрасывание порта
     ports:
-      - "${HOST_PORT_NGINX_VUE}:80"
+      - "443:443"
+      - "80:80"
     # Примонтирование локальной директории к контейнеру
     volumes:
-      - ./front_vue/dist:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - "./front_vue/dist:/usr/share/nginx/html"
+      - "./devops/conf_build/nginx_vue.conf:/etc/nginx/conf.d/default.conf"
+      # Путь к вашему SSL-сертификату
+      - "./devops/ssl/certificate.crt:/etc/ssl/certs/nginx.crt:ro"
+      # Путь к вашему приватному ключу SSL-сертификата
+      - "./devops/ssl/private_key:/etc/ssl/private/nginx.key:ro"
 
   # Описание сервиса "nginx_static"
   # Используется для раздачи изображений
@@ -82,7 +87,7 @@ services:
       - ./front_vue/static:/usr/share/nginx/html
       # Проброс для статических файлов Django
       - ./backend/static:/usr/share/nginx/html/static_django
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./devops/conf_build/nginx_static.conf:/etc/nginx/conf.d/default.conf
 
   # Описание сервиса "vue"
   # Dev сервер для Vue.js, запускается только в DEV режиме. На проде не запускается

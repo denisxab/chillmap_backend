@@ -12,3 +12,5 @@ front_vue/node_modules
 inventory.yml
 Dockerfile_Django
 .pytest_cache
+certificate.crt
+private_key
