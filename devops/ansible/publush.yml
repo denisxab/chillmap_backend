@@ -52,25 +52,25 @@
         import_tasks: install_invoke_and_docker_compose.yml
 
       # Пока не рализован HTTPS, проблема в том что все приложения должны так же работать по HTTPS, в том числе Django
-      - name: Создать SSL сертифкаты на сервере если их нет
-        when: is_ssl == 'true'
-        block:
-            - name: Узнать наличие файла certificate.crt
-              stat:
-                  path: "{{path_app}}/devops/ssl/certificate.crt"
+      # - name: Создать SSL сертифкаты на сервере если их нет
+      #   when: is_ssl == 'true'
+      #   block:
+      #       - name: Узнать наличие файла certificate.crt
+      #         stat:
+      #             path: "{{path_app}}/devops/ssl/certificate.crt"
 
-              register: stat_certificate
+      #         register: stat_certificate
 
-            - name: Узнать наличие файла private_key
-              stat:
-                  path: "{{path_app}}/devops/ssl/private_key"
-              register: stat_private_key
+      #       - name: Узнать наличие файла private_key
+      #         stat:
+      #             path: "{{path_app}}/devops/ssl/private_key"
+      #         register: stat_private_key
 
-            - name: Создать SSL сертифкаты если их нет
-              command:
-                  cmd: invoke ssl.create
-                  chdir: "{{ path_app }}"
-              when: not stat_certificate.stat.exists and not stat_private_key.stat.exists
+      #       - name: Создать SSL сертифкаты если их нет
+      #         command:
+      #             cmd: invoke ssl.create
+      #             chdir: "{{ path_app }}"
+      #         when: not stat_certificate.stat.exists and not stat_private_key.stat.exists
 
       - name: Перезапуск проекта
         command:

@@ -75,7 +75,7 @@ def build(ctx, prod=False, list_prod_app: str = ""):
         list_prod_app = LIST_PROD_APP
     if not prod and not list_prod_app:
         list_prod_app = LIST_DEV_APP
-    ctx.run(f"docker-compose build {list_prod_app}")
+    ctx.run(f"docker-compose build {list_prod_app}", pty=True)
     RootToConf(ctx)
 
 
@@ -88,7 +88,7 @@ def run(ctx, prod=False, detach=False, list_prod_app: str = ""):
         list_prod_app = LIST_PROD_APP
     if not prod and not list_prod_app:
         list_prod_app = LIST_DEV_APP
-    ctx.run(f"docker-compose up {'-d' if detach else ''} {list_prod_app}")
+    ctx.run(f"docker-compose up {'-d' if detach else ''} {list_prod_app}", pty=True)
     RootToConf(ctx)
 
 

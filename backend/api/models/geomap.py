@@ -68,7 +68,6 @@ class ChannelGeomap(ModelInteger):
         "Точка по умолчанию всех мест в группе Y", max_length=20
     )
 
-
     class Meta:
         verbose_name = "Канал с местами"
         verbose_name_plural = "Каналы с местами"
@@ -136,3 +135,21 @@ class PlaceInMap(ModelUUID):
         res = super().delete(using, keep_parents)
         logger_api.info(f"Успешно удаление места: {self}")
         return res
+
+
+class TypePermissionToken(ModelInteger):
+    """Типы прав для токена"""
+
+    description = models.CharField("Описание типа", max_length=255)
+
+
+class TokenPermission(ModelUUID):
+    """Токены которые дают различные права"""
+
+    token = models.CharField("Токен", max_length=255)
+    type_permission = models.ManyToManyField(
+        to=TypePermissionToken, related_name="type_permissions"
+    )
+    count_use = models.SmallIntegerField(
+        "Количество использований токена", max_length=256
+    )
